@@ -20,7 +20,9 @@
 
 ## Step 1 — Pick the new tag
 
-Decide semver tags upstream (examples: `prom/prometheus:v2.55.2`, `grafana/grafana:11.5.0`). Check release notes for breaking changes.
+Decide semver tags upstream (examples: `prom/prometheus:v2.55.2`, `grafana/grafana:12.4.2`). Check release notes for breaking changes.
+
+**Grafana:** `grafana/grafana:<version>` is the **Alpine** image; `grafana/grafana:<version>-ubuntu` is **Ubuntu**. Use the same tag when running `imagetools inspect` that you intend to deploy (pins differ per variant).
 
 ## Step 2 — Pull the amd64 variant (optional but useful)
 

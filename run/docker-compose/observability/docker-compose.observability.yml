@@ -110,8 +110,8 @@ services:
       - loki
 
   grafana:
-    # Tag (linux/amd64): 11.4.0
-    image: grafana/grafana@sha256:8d938a1c52b018c60cb3583657e038054387aa18a74f09a865c99a522481f7ac
+    # Tag (linux/amd64): 12.4.2 (Alpine; not grafana/grafana:12.4.2-ubuntu)
+    image: grafana/grafana@sha256:9419d74cb14745b96cf7068c6c5de30851d63ee45bfbe6387d48b12e62146ea4
     platform: linux/amd64
     restart: unless-stopped
     environment:
