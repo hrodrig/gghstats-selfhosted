@@ -191,7 +191,7 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats
 
 ## Kubernetes Helm
 
-**Recommended:** install from the **Helm repository** published with this project on **GitHub Pages** (packaged chart + `index.yaml`). The exact base URL follows the usual pattern for this repository:
+**Recommended:** install from the **Helm repository** on **GitHub Pages** ([**`index.yaml`**](https://hrodrig.github.io/gghstats-selfhosted/index.yaml); chart packages are attached to [GitHub Releases](https://github.com/hrodrig/gghstats-selfhosted/releases) as **`gghstats-<version>.tgz`**).
 
 ```bash
 helm repo add gghstats https://hrodrig.github.io/gghstats-selfhosted
@@ -201,7 +201,7 @@ helm install gghstats gghstats/gghstats -n gghstats --create-namespace -f my-val
 
 Use **`helm show values gghstats/gghstats`** (after `helm repo update`) or the copy in the repo browser to build **`my-values.yaml`** (image tag, secrets, persistence). Pick any namespace with **`-n`** (here **`gghstats`**).
 
-If **`index.yaml`** is not published yet, `helm repo add` will fail — use **from this repository** below until the Helm repo is live.
+If **`helm repo add`** fails (network, Pages outage, or first minutes after a new release), try again later or install **from this repository** below.
 
 **From this repository (sources, templates, contributing):** the chart under **`run/kubernetes/helm/gghstats/`** is the same chart; clone it to inspect YAML, open issues, or install without the published repo:
 
