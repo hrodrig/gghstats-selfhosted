@@ -1,7 +1,10 @@
 # gghstats-selfhosted
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
+[![gghstats app](https://img.shields.io/badge/app-hrodrig%2Fgghstats-181717?logo=github)](https://github.com/hrodrig/gghstats)
 
 ![gghstats-selfhosted — Docker, Compose, Helm, run/](assets/gghstats-selfhosted-hero.png)
 
@@ -9,7 +12,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 
 **Demo:** [gghstats.hermesrodriguez.com](https://gghstats.hermesrodriguez.com) · Observability example: [gghstats-obs.hermesrodriguez.com](https://gghstats-obs.hermesrodriguez.com)
 
-**Policies:** [Community and policies](#community-and-policies) — changelog, contributing, security, code of conduct, agent guidelines.
+**Policies:** [Community and policies](#community-and-policies), [community standards](#community-standards) — changelog, contributing, security, code of conduct, agent guidelines.
 
 ---
 
@@ -26,6 +29,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Repository layout](#repository-layout)
 - [Versioning](#versioning)
 - [Community and policies](#community-and-policies)
+- [Community standards](#community-standards)
 - [License](#license)
 
 ---
@@ -271,6 +275,21 @@ run/
 | **[AGENTS.md](AGENTS.md)** | Guidelines for AI coding agents (Cursor, etc.) working in this repo. |
 
 **Application** issues (bugs, features in the Go app or UI) belong in **[gghstats](https://github.com/hrodrig/gghstats)** — not here.
+
+**[↑ Contents](#table-of-contents)**
+
+---
+
+## Community standards
+
+- License: [`LICENSE`](LICENSE)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Code of conduct: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
+- Security policy: [`SECURITY.md`](SECURITY.md)
+- Changelog: [`CHANGELOG.md`](CHANGELOG.md)
+- Agent guidelines: [`AGENTS.md`](AGENTS.md)
+
+Thanks for self-hosting **[gghstats](https://github.com/hrodrig/gghstats)** with these manifests. We would love to hear how **easy or difficult** it was to run **gghstats** self-hosted (Compose, Helm, `docker run`, observability, or anything in [`run/`](run/)). Share feedback in **[GitHub Issues](https://github.com/hrodrig/gghstats-selfhosted/issues)** or, if enabled for this repository, **Discussions**.
 
 **[↑ Contents](#table-of-contents)**
 
