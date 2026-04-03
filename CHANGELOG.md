@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-04-03
+
+### Fixed
+
+- **Release Charts workflow:** create an **orphan `gh-pages`** branch when missing so **chart-releaser** does not fail with **`fatal: invalid reference: origin/gh-pages`** on the first chart upload.
+
 ## [0.1.1] - 2026-04-03
 
 ### Fixed
@@ -27,6 +33,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.2
 [0.1.1]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.1
 [0.1.0]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.0
