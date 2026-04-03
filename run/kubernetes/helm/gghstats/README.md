@@ -18,6 +18,19 @@ helm install gghstats gghstats/gghstats -n gghstats --create-namespace -f my-val
 
 Use **`helm show values gghstats/gghstats`** to dump defaults. If **`helm repo add`** fails, the index may not be published yet — use **from a git clone** below.
 
+### GitHub token (Kubernetes secret)
+
+Prefer **not** storing the PAT in **`my-values.yaml`**. Defaults in **`values.yaml`** expect a Secret named **`gghstats-secret`** with key **`github-token`**. Create it before **`helm install`** (replace **`YOUR_GITHUB_TOKEN`**):
+
+```bash
+kubectl create namespace gghstats
+kubectl create secret generic gghstats-secret \
+  -n gghstats \
+  --from-literal=github-token=YOUR_GITHUB_TOKEN
+```
+
+Leave **`githubToken.value`** empty so the chart does not render the token into release manifests. If **`githubToken.existingSecret`** is set, it overrides the Secret name the Deployment mounts (see **`templates/deployment.yaml`**).
+
 ### Install from a git clone (sources and templates)
 
 From the **repository root** of [gghstats-selfhosted](https://github.com/hrodrig/gghstats-selfhosted):

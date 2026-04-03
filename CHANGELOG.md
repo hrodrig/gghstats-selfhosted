@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Documentation (Helm):** `kubectl create secret` example for **`gghstats-secret`** / **`github-token`** in root **README** and **`run/kubernetes/helm/gghstats/README.md`** (keep PAT out of **`my-values.yaml`**).
 - **Documentation:** clarify **repository name** (**`gghstats-selfhosted`**) vs **Helm chart directory/name** (**`run/kubernetes/helm/gghstats/`**, chart **`gghstats`**) and vs **chart-releaser** GitHub Release names (**`gghstats-<version>`**) vs **Git tags** (**`v<semver>`**).
 - **GitHub Pages (`gh-pages`):** add **`index.html`** landing and expand **`README.md`**; **`index.yaml`** remains the chart index (updated by chart-releaser on **`v*`** tags). Root **README** notes that Helm only needs the Pages base URL.
 

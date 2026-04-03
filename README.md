@@ -208,7 +208,18 @@ helm repo update
 helm install gghstats gghstats/gghstats -n gghstats --create-namespace -f my-values.yaml
 ```
 
-Use **`helm show values gghstats/gghstats`** (after `helm repo update`) or the copy in the repo browser to build **`my-values.yaml`** (image tag, secrets, persistence). Pick any namespace with **`-n`** (here **`gghstats`**).
+**GitHub token (recommended):** do **not** put the PAT in **`my-values.yaml`**. Create a secret that matches the chart defaults (**`secretName`:** `gghstats-secret`, **`secretKey`:** `github-token` — see **`githubToken`** in [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml)). Replace **`YOUR_GITHUB_TOKEN`** with your [classic or fine-grained PAT](https://github.com/hrodrig/gghstats/blob/main/README.md) (repo scope as needed):
+
+```bash
+kubectl create namespace gghstats
+kubectl create secret generic gghstats-secret \
+  -n gghstats \
+  --from-literal=github-token=YOUR_GITHUB_TOKEN
+```
+
+Then run **`helm install`** (omit **`--create-namespace`** if the namespace already exists). Keep **`githubToken.value:`** empty in **`my-values.yaml`** so Helm does not embed the token in a release manifest.
+
+Use **`helm show values gghstats/gghstats`** (after `helm repo update`) or the copy in the repo browser to build **`my-values.yaml`** (image tag, persistence, resources, etc.). Pick any namespace with **`-n`** (here **`gghstats`**); if you use another name, use the same namespace in **`kubectl`** and **`helm`** and adjust **`my-values.yaml`** if you reference the secret explicitly.
 
 If **`helm repo add`** fails (network, Pages outage, or first minutes after a new release), try again later or install **from this repository** below.
 
