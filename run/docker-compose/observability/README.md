@@ -275,6 +275,26 @@ Grafana-on-Traefik is handled by **[`docker-compose.observability.traefik.yml`](
 | `gghstats_http_request_duration_seconds` | Labels `method`, `route` — latency histogram. |
 | Go / process | `go_*`, `process_*` (where the OS supports the process collector). |
 
+### Example: Grafana Explore (Prometheus)
+
+With Prometheus scraping **`gghstats`** and Grafana’s **Explore** tab using the provisioned Prometheus data source, you should see **`gghstats_*`** metrics in the metric picker:
+
+![Grafana Explore — `gghstats_*` metrics in the metric selector](../../../assets/grafana-explore-gghstats-metrics.png)
+
+Example query — HTTP request rate (per second) over a 5-minute window:
+
+```promql
+rate(gghstats_http_requests_total[5m])
+```
+
+![Grafana Explore — request rate by route and status](../../../assets/grafana-promql-gghstats-http-rate.png)
+
+**How to read it:** `rate(...[5m])` is an average requests-per-second over the last five minutes. The **`route="metrics"`** series is often the largest line: Prometheus scrapes **`GET /metrics`** on a fixed interval, so that traffic is expected. UI and API routes appear when users hit the app. To emphasize browser traffic only, exclude the scrape path, for example:
+
+```promql
+sum(rate(gghstats_http_requests_total{route!="metrics"}[5m])) by (route, status)
+```
+
 ### Security (metrics)
 
 Treat `/metrics` as sensitive: scrape on the **internal** network, firewall Prometheus → gghstats, or protect the route if it is ever exposed publicly.

@@ -176,16 +176,47 @@ export GGHSTATS_HOST_DATA=/home/gghstats/gghstats-data
 mkdir -p "$GGHSTATS_HOST_DATA"
 cp run/docker-compose/observability/observability.env.example "${GGHSTATS_HOST_DATA}/.env.observability"
 # Edit "${GGHSTATS_HOST_DATA}/.env.observability" — set GRAFANA_ADMIN_PASSWORD at minimum (must match GGHSTATS_HOST_DATA used for Traefik / main .env)
+```
 
+**Expose Grafana on HTTPS via Traefik (public hostname)** — use this if you want Grafana on the internet with the **same** Traefik / Let’s Encrypt as gghstats (recommended once DNS is ready):
+
+1. In **`"${GGHSTATS_HOST_DATA}/.env.observability"`**, set a dedicated FQDN and matching root URL (must match what users open in the browser):
+
+   ```bash
+   GRAFANA_HOSTNAME=gghstats-obs.example.com
+   GRAFANA_ROOT_URL=https://gghstats-obs.example.com
+   ```
+
+2. **DNS:** point **`GRAFANA_HOSTNAME`** to this host (A/AAAA or CNAME), same idea as **`GGHSTATS_HOSTNAME`** for the main app.
+
+3. Start the stack with **both** Compose files (the second file adds Traefik **labels** only; it does not add another Traefik container). Use **both** `-f` lines on every `up` / `pull` / `down` that recreates Grafana, or HTTPS routing breaks until you fix it.
+
+```bash
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+  -f run/docker-compose/observability/docker-compose.observability.yml \
+  -f run/docker-compose/observability/docker-compose.observability.traefik.yml \
+  up -d
+```
+
+**Local / LAN only (no Traefik route for Grafana)** — Grafana on **`http://localhost:${GRAFANA_PORT:-3000}`**; omit **`docker-compose.observability.traefik.yml`**:
+
+```bash
 docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
   -f run/docker-compose/observability/docker-compose.observability.yml up -d
 ```
 
-**Check / troubleshoot / HTTPS overlay for Grafana:** **[run/docker-compose/observability/README.md](run/docker-compose/observability/README.md)** (curl checks, SSH tunnel, `down -v`).
+**Check / troubleshoot / SSH tunnel:** **[run/docker-compose/observability/README.md](run/docker-compose/observability/README.md)** (curl checks, `down -v`).
 
-**Remove (containers + stack volumes):**
+**Remove (containers + stack volumes):** use the **same** `-f` list you used for `up`. Examples:
 
 ```bash
+# If you started with Traefik overlay (two files), remove with two files:
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+  -f run/docker-compose/observability/docker-compose.observability.yml \
+  -f run/docker-compose/observability/docker-compose.observability.traefik.yml \
+  down -v
+
+# If you started with only the base file:
 docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
   -f run/docker-compose/observability/docker-compose.observability.yml down -v
 ```
