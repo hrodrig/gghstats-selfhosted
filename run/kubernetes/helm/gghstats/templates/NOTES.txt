@@ -1,0 +1,25 @@
+gghstats has been deployed. It is a self-hosted GitHub repository traffic dashboard (see https://github.com/hrodrig/gghstats).
+
+Release: {{ .Release.Name }}  Namespace: {{ .Release.Namespace }}
+
+1. Check the workload:
+   kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "gghstats.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+
+2. Reach the web UI:
+{{- if contains "LoadBalancer" .Values.service.type }}
+   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch: kubectl get svc -n {{ .Release.Namespace }} -w {{ include "gghstats.fullname" . }}
+{{- else if contains "NodePort" .Values.service.type }}
+   export NODE_PORT=$(kubectl get svc -n {{ .Release.Namespace }} {{ include "gghstats.fullname" . }} -o jsonpath="{.spec.ports[0].nodePort}")
+   export NODE_IP=$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[?(@.type=='ExternalIP')].address}")
+   echo "Try http://${NODE_IP}:${NODE_PORT}/"
+{{- else }}
+   Service type is {{ .Values.service.type }}. Port-forward (example local port 8080):
+   kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "gghstats.fullname" . }} 8080:{{ .Values.service.port }}
+   Then open http://127.0.0.1:8080/
+{{- end }}
+
+3. GitHub token: the app reads `GGHSTATS_GITHUB_TOKEN` from Secret `{{ default .Values.githubToken.secretName .Values.githubToken.existingSecret }}`, key `{{ .Values.githubToken.secretKey }}`. If Pods crash-loop or logs show auth errors, create or update that Secret (see deployment repo README) and restart the workload.
+
+Documentation: https://github.com/hrodrig/gghstats/blob/main/README.md
+Deployment manifests repo: https://github.com/hrodrig/gghstats-selfhosted

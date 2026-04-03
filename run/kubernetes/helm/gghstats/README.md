@@ -45,6 +45,8 @@ This path is the **same chart** as the published package; use it to read **`temp
 
 See **`values.yaml`** for image repository, tag, persistence, **resource requests/limits**, and environment variables. The application’s configuration is documented in the main **[gghstats](https://github.com/hrodrig/gghstats)** repository.
 
+**After `helm install`:** Helm prints **post-install notes** from **`templates/NOTES.txt`** (what the app is, how to reach the UI, GitHub token Secret). The short **`DESCRIPTION: Install complete`** line in Helm’s status block is generic and cannot be replaced with product marketing copy — use the notes for operator guidance.
+
 **Validation:** **`values.schema.json`** requires **`resources.requests`** and **`resources.limits`** (cpu + memory). `helm install` / `helm template` fail if `resources` is omitted or cleared (e.g. `--set resources=null`).
 
 **Security:** the chart sets **`podSecurityContext`** / **`containerSecurityContext`** so the workload runs **non-root** (UID/GID **1000**, matching the upstream image) with **`readOnlyRootFilesystem: true`**. The database and SQLite sidecars use **`env.dbPath`** under the **`/data`** mount; **`/tmp`** is a small **`emptyDir`** for runtime temp files. Set **`readOnlyRootFilesystem: false`** under **`containerSecurityContext`** only if a custom image needs writes elsewhere.
