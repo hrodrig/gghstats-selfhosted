@@ -198,6 +198,8 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats
 
 **Recommended:** install from the **Helm repository** on **GitHub Pages** ([**`index.yaml`**](https://hrodrig.github.io/gghstats-selfhosted/index.yaml); chart packages are attached to [GitHub Releases](https://github.com/hrodrig/gghstats-selfhosted/releases) as **`gghstats-<version>.tgz`**).
 
+**GitHub Pages:** The [Pages URL](https://hrodrig.github.io/gghstats-selfhosted/) serves **`index.yaml`** for Helm and includes a short **HTML landing** for humans. **`helm repo add`** only needs the HTTPS base URL — you do not have to open the site in a browser.
+
 **Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.3.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.3`**) per **`VERSION`**.
 
 ```bash
