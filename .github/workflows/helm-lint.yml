@@ -1,0 +1,59 @@
+# Validates the gghstats Helm chart on every PR and on pushes that touch the chart.
+# Catches template errors, values.schema.json issues (via helm lint), and invalid Kubernetes objects.
+name: Helm chart
+
+on:
+  pull_request:
+    paths:
+      - "run/kubernetes/helm/**"
+      - ".github/workflows/helm-lint.yml"
+  push:
+    branches: [main, develop]
+    paths:
+      - "run/kubernetes/helm/**"
+      - ".github/workflows/helm-lint.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      CHART_DIR: run/kubernetes/helm/gghstats
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.30.0
+
+      - name: helm lint
+        run: helm lint "$CHART_DIR"
+
+      - name: helm template + kubectl dry-run (default values)
+        run: |
+          helm template test-rel "$CHART_DIR" --namespace test-ns | kubectl apply --dry-run=client -f -
+
+      - name: helm template + kubectl dry-run (persistence disabled)
+        run: |
+          helm template test-rel "$CHART_DIR" --namespace test-ns \
+            --set persistence.enabled=false | kubectl apply --dry-run=client -f -
+
+      - name: helm template + kubectl dry-run (inline GitHub token Secret)
+        run: |
+          helm template test-rel "$CHART_DIR" --namespace test-ns \
+            --set githubToken.value=ci-placeholder-token | kubectl apply --dry-run=client -f -
+
+      - name: helm template + kubectl dry-run (existing Secret for token)
+        run: |
+          helm template test-rel "$CHART_DIR" --namespace test-ns \
+            --set githubToken.existingSecret=my-imported-secret | kubectl apply --dry-run=client -f -

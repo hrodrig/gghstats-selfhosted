@@ -7,8 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-04-02
+
+### Added
+
+- **CI:** [`.github/workflows/helm-lint.yml`](.github/workflows/helm-lint.yml) — **`helm lint`** and **`helm template`** piped to **`kubectl apply --dry-run=client`** for default values, **`persistence.enabled=false`**, inline **`githubToken.value`**, and **`githubToken.existingSecret`**.
+
 ### Changed
 
+- **Release `0.1.4`:** root **[`VERSION`](VERSION)** and **`Chart.yaml` `version:`** — chart **`0.1.4`** packages **`templates/NOTES.txt`** and prior chart/doc updates that shipped after **`0.1.3`** without a new chart semver.
 - **Versioning policy:** **`VERSION`** (repo) and **`Chart.yaml` `version:`** (Helm package) may diverge — bump chart **`version:`** only when **`run/kubernetes/helm/gghstats/`** changes. Updated **README**, **AGENTS.md**, **CONTRIBUTING.md**, and **`.cursor/rules`** (`version-sync`, `git-flow`, `documentation-and-layout`, `readme-root`).
 - **Helm chart:** add **`templates/NOTES.txt`** so **`helm install`** prints post-install steps (what **gghstats** is, **`kubectl`** checks, port-forward / NodePort / LoadBalancer hints, GitHub token Secret). The **`DESCRIPTION: Install complete`** line in Helm’s summary is not customizable product text — use these notes for that.
 - **Documentation (Helm):** `kubectl create secret` example for **`gghstats-secret`** / **`github-token`** in root **README** and **`run/kubernetes/helm/gghstats/README.md`** (keep PAT out of **`my-values.yaml`**).
@@ -48,7 +55,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.4
 [0.1.3]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.3
 [0.1.2]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.2
 [0.1.1]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.1
