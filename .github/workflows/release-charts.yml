@@ -1,6 +1,9 @@
 # Publishes Helm charts to GitHub Pages (index.yaml + .tgz on gh-pages) and creates chart GitHub Releases.
 # Runs when a release tag v* is pushed (same cadence as repo VERSION tags on main).
 # Chart.yaml `version:` must match the tag without the leading v (e.g. tag v0.2.0 → version: 0.2.0).
+# chart-releaser only packages charts with file changes vs the last baseline commit; the tagged commit
+# must include a diff under run/kubernetes/helm/ (e.g. bump Chart.yaml version) or the job succeeds with
+# “No chart changes detected” and does not update gh-pages.
 # See: https://github.com/helm/chart-releaser-action
 # Repo Settings → Pages: Source = branch gh-pages, folder / (root).
 name: Release Charts
