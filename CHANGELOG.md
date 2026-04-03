@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-04-04
+
 ### Changed
 
 - **Documentation:** Compose examples use **`${GGHSTATS_HOST_DATA}/.env`** and **`docker compose --env-file …`** everywhere; **`run/common/.env.example`** and related READMEs no longer recommend copying `.env` to the repository root as the default path.
@@ -38,7 +40,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.3
 [0.1.2]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.2
 [0.1.1]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.1
 [0.1.0]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.0
