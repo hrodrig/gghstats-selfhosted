@@ -10,7 +10,7 @@ Thank you for helping improve these deployment manifests.
 
 ## Checks before submitting
 
-- Paths under **`run/`** match the documented layout; **`docker compose … config`** succeeds when a minimal `.env` is provided.
+- Paths under **`run/`** match the documented layout; **`docker compose … config`** succeeds when a minimal env file is provided (e.g. **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** with **`GGHSTATS_HOST_DATA`** set, or a dev **`./.env`** at the repo root with defaults). For observability: **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** and **`-p gghstats-obs`**.
 - **English** for README and comments.
 - If you bump **[`VERSION`](VERSION)**, keep the README badge, Helm **`Chart.yaml`** `version:`, and **CHANGELOG** aligned; see **Versioning** in the root README.
 

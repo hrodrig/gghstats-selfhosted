@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Documentation:** Compose examples use **`${GGHSTATS_HOST_DATA}/.env`** and **`docker compose --env-file …`** everywhere; **`run/common/.env.example`** and related READMEs no longer recommend copying `.env` to the repository root as the default path.
+- **Observability:** **`observability.env.example`**, **`run/README.md`**, **`run/common/README.md`**, and **`run/docker-compose/observability/README.md`** describe the same pattern for **`${GGHSTATS_HOST_DATA}/.env.observability`** (including Traefik prerequisites with **`--env-file`** for the main stack).
+
 ## [0.1.2] - 2026-04-03
 
 ### Fixed

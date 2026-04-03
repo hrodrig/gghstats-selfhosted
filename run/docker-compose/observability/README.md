@@ -6,7 +6,15 @@ This documentation lives in **[gghstats-selfhosted](https://github.com/hrodrig/g
 
 ### Where to put `.env.observability`
 
-Do **not** keep the populated file inside this git clone. Copy [`observability.env.example`](observability.env.example) to **`${GGHSTATS_HOST_DATA}/.env.observability`** (same absolute directory you use for SQLite and the main Compose **`.env`** — see root **[README.md](../../../README.md#persistent-data-and-secrets)**). Export **`GGHSTATS_HOST_DATA`** in your shell before running the commands below, or substitute a literal path in every **`--env-file`** argument.
+Do **not** keep the populated file inside this git clone. Use the **same host directory** as your main stack: **`${GGHSTATS_HOST_DATA}`** must match the path you set in **`${GGHSTATS_HOST_DATA}/.env`** (SQLite + main secrets).
+
+1. **`export GGHSTATS_HOST_DATA=/home/gghstats/gghstats-data`** (example — use your real path).
+2. **`mkdir -p "$GGHSTATS_HOST_DATA"`** if needed.
+3. **`cp run/docker-compose/observability/observability.env.example "${GGHSTATS_HOST_DATA}/.env.observability"`**
+4. Edit **`"${GGHSTATS_HOST_DATA}/.env.observability"`** (at minimum **`GRAFANA_ADMIN_PASSWORD`** before the first Grafana start).
+5. Run **`docker compose`** from the **repository root** with **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** on **every** invocation (`up`, `down`, `pull`, `ps`, `logs`, …). If **`GGHSTATS_HOST_DATA`** is not in your shell, use the same literal path in each **`--env-file`** argument.
+
+See comments at the top of **[`observability.env.example`](observability.env.example)** and root **[README.md](../../../README.md#persistent-data-and-secrets)**.
 
 ## What gghstats includes (built in)
 
@@ -106,17 +114,19 @@ Traefik picks up Grafana by Docker labels on the shared network; no new Traefik 
 
 ### Prerequisites
 
-1. **Start the production stack first** so the external network `gghstats_edge` exists:
+1. **Start the production (Traefik) stack first** so the external network **`gghstats_edge`** exists — use the **same** **`GGHSTATS_HOST_DATA`** and main env file as everywhere else:
 
    ```bash
-   docker compose -f run/docker-compose/traefik/docker-compose.yml up -d
+   export GGHSTATS_HOST_DATA=/home/gghstats/gghstats-data
+   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/traefik/docker-compose.yml up -d
    ```
 
 2. **Metrics enabled on gghstats** (default). If you set `GGHSTATS_METRICS=false` on the app, Prometheus has nothing to scrape.
 
-3. **Environment file:**
+3. **Observability env file** (same **`GGHSTATS_HOST_DATA`** as step 1):
 
    ```bash
+   mkdir -p "$GGHSTATS_HOST_DATA"
    cp run/docker-compose/observability/observability.env.example "${GGHSTATS_HOST_DATA}/.env.observability"
    # edit "${GGHSTATS_HOST_DATA}/.env.observability" — set GRAFANA_ADMIN_PASSWORD (and optional ports / GF_SERVER_ROOT_URL)
    ```

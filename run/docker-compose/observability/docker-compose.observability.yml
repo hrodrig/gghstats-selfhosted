@@ -6,9 +6,9 @@
 #
 # Prerequisites
 # -------------
-# 1. Start the production stack first so the external network `gghstats_edge` exists:
-#      docker compose -f run/docker-compose/traefik/docker-compose.yml up -d
-# 2. Copy observability.env.example → ${GGHSTATS_HOST_DATA}/.env.observability (outside the git clone) and set GRAFANA_ADMIN_PASSWORD.
+# 1. Start the production stack first so the external network `gghstats_edge` exists (same GGHSTATS_HOST_DATA as main .env):
+#      docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/traefik/docker-compose.yml up -d
+# 2. Copy observability.env.example → ${GGHSTATS_HOST_DATA}/.env.observability (same GGHSTATS_HOST_DATA as ${GGHSTATS_HOST_DATA}/.env); set GRAFANA_ADMIN_PASSWORD.
 # 3. Ensure gghstats exposes /metrics (default; do not set GGHSTATS_METRICS=false on the app).
 #
 # Start (from repository root, project name gghstats-obs):

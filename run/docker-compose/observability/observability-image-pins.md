@@ -92,7 +92,7 @@ Current services and upstream repositories:
 
 ## Step 5 — Verify locally
 
-From the repository root, with **`GGHSTATS_HOST_DATA`** set and a minimal **`${GGHSTATS_HOST_DATA}/.env.observability`** containing `GRAFANA_ADMIN_PASSWORD`:
+From the repository root, with **`GGHSTATS_HOST_DATA`** exported and a minimal **`${GGHSTATS_HOST_DATA}/.env.observability`** (copy from **`observability.env.example`**, set at least **`GRAFANA_ADMIN_PASSWORD`**):
 
 ```bash
 docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \

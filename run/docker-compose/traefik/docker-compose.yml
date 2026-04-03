@@ -5,8 +5,10 @@
 #   - Ports 80 and 443 reachable from the internet (80 for redirect + ACME HTTP-01)
 #
 # Usage (from repository root):
-#   cp run/common/.env.example .env   # set GGHSTATS_GITHUB_TOKEN, GGHSTATS_HOSTNAME, ACME_EMAIL
-#   docker compose -f run/docker-compose/traefik/docker-compose.yml up -d
+#   export GGHSTATS_HOST_DATA=/path/on/host
+#   mkdir -p "$GGHSTATS_HOST_DATA"
+#   cp run/common/.env.example "${GGHSTATS_HOST_DATA}/.env"   # edit; set GGHSTATS_HOST_DATA inside the file
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/traefik/docker-compose.yml up -d
 #
 # Local dev without Traefik: use run/docker-compose/minimal/docker-compose.yml instead.
 #

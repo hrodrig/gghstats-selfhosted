@@ -45,7 +45,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 | **Prometheus / Grafana / Loki** (after Traefik) | [Observability optional](#observability-optional) |
 | **Kubernetes** | [Kubernetes Helm](#kubernetes-helm) |
 
-Shared env template for Compose and image tags: **[`run/common/.env.example`](run/common/.env.example)**. Deeper walkthroughs: **[`run/README.md`](run/README.md)**.
+Shared env template for Compose: copy **[`run/common/.env.example`](run/common/.env.example)** to **`${GGHSTATS_HOST_DATA}/.env`**, set **`GGHSTATS_HOST_DATA`** inside that file, and pass **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** to Compose. Deeper walkthroughs: **[`run/README.md`](run/README.md)**.
 
 **[↑ Contents](#table-of-contents)**
 
@@ -113,10 +113,12 @@ docker stop gghstats && docker rm gghstats
 ```bash
 git clone https://github.com/hrodrig/gghstats-selfhosted.git
 cd gghstats-selfhosted
-cp run/common/.env.example .env
-# Edit .env: GGHSTATS_GITHUB_TOKEN, GGHSTATS_VERSION, and optionally GGHSTATS_HOST_DATA
+export GGHSTATS_HOST_DATA=/home/gghstats/gghstats-data
+mkdir -p "$GGHSTATS_HOST_DATA"
+cp run/common/.env.example "${GGHSTATS_HOST_DATA}/.env"
+# Edit "${GGHSTATS_HOST_DATA}/.env": GGHSTATS_GITHUB_TOKEN, GGHSTATS_VERSION, and GGHSTATS_HOST_DATA (same path as above)
 
-docker compose -f run/docker-compose/minimal/docker-compose.yml up -d
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/minimal/docker-compose.yml up -d
 ```
 
 **Check:** `curl -sS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8080/` (or your `GGHSTATS_PORT`).
@@ -124,7 +126,7 @@ docker compose -f run/docker-compose/minimal/docker-compose.yml up -d
 **Remove:**
 
 ```bash
-docker compose -f run/docker-compose/minimal/docker-compose.yml down
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/minimal/docker-compose.yml down
 ```
 
 **More:** [run/docker-compose/minimal/README.md](run/docker-compose/minimal/README.md)
@@ -142,11 +144,13 @@ docker compose -f run/docker-compose/minimal/docker-compose.yml down
 ```bash
 git clone https://github.com/hrodrig/gghstats-selfhosted.git
 cd gghstats-selfhosted
-cp run/common/.env.example .env
-# Edit .env: GGHSTATS_GITHUB_TOKEN, GGHSTATS_HOSTNAME, ACME_EMAIL, GGS_UID, GGS_GID,
-#            GGHSTATS_VERSION, and optionally GGHSTATS_HOST_DATA (absolute path for SQLite)
+export GGHSTATS_HOST_DATA=/home/gghstats/gghstats-data
+mkdir -p "$GGHSTATS_HOST_DATA"
+cp run/common/.env.example "${GGHSTATS_HOST_DATA}/.env"
+# Edit "${GGHSTATS_HOST_DATA}/.env": GGHSTATS_GITHUB_TOKEN, GGHSTATS_HOSTNAME, ACME_EMAIL, GGS_UID, GGS_GID,
+# GGHSTATS_VERSION, and GGHSTATS_HOST_DATA (same absolute path as above — SQLite lives next to this file)
 
-docker compose -f run/docker-compose/traefik/docker-compose.yml up -d
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/traefik/docker-compose.yml up -d
 ```
 
 **Check:** `curl -sS -o /dev/null -w '%{http_code}\n' https://your-hostname/` after DNS and TLS succeed.
@@ -154,7 +158,7 @@ docker compose -f run/docker-compose/traefik/docker-compose.yml up -d
 **Remove:**
 
 ```bash
-docker compose -f run/docker-compose/traefik/docker-compose.yml down
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/traefik/docker-compose.yml down
 ```
 
 **More:** [run/docker-compose/traefik/README.md](run/docker-compose/traefik/README.md)
@@ -165,12 +169,13 @@ docker compose -f run/docker-compose/traefik/docker-compose.yml down
 
 ## Observability optional
 
-**Goal:** Prometheus, Grafana, Loki, etc. **Requires** the Traefik stack above so network **`gghstats_edge`** exists.
+**Goal:** Prometheus, Grafana, Loki, etc. **Requires** the Traefik stack above so network **`gghstats_edge`** exists. Use the **same** **`GGHSTATS_HOST_DATA`** as your main **`${GGHSTATS_HOST_DATA}/.env`** (SQLite and secrets in one host directory).
 
 ```bash
 export GGHSTATS_HOST_DATA=/home/gghstats/gghstats-data
+mkdir -p "$GGHSTATS_HOST_DATA"
 cp run/docker-compose/observability/observability.env.example "${GGHSTATS_HOST_DATA}/.env.observability"
-# Edit .env.observability — set GRAFANA_ADMIN_PASSWORD at minimum (same GGHSTATS_HOST_DATA as your main .env)
+# Edit "${GGHSTATS_HOST_DATA}/.env.observability" — set GRAFANA_ADMIN_PASSWORD at minimum (must match GGHSTATS_HOST_DATA used for Traefik / main .env)
 
 docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
   -f run/docker-compose/observability/docker-compose.observability.yml up -d
@@ -231,7 +236,7 @@ helm uninstall gghstats -n gghstats
 
 *Recommended on servers:* colocate SQLite and env files outside the clone (see below).
 
-Keep **SQLite**, **`.env`**, and **`.env.observability`** in one directory (e.g. `/home/gghstats/gghstats-data/`) and set **`GGHSTATS_HOST_DATA`** to that path. Run Compose with **`--env-file /path/to/.env`** from the repo root — see comments in [`run/common/.env.example`](run/common/.env.example).
+Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/.env.observability`** in one host directory (e.g. `/home/gghstats/gghstats-data/`). Set **`GGHSTATS_HOST_DATA`** inside the main **`.env`** to that absolute path. Run Compose from the clone root with **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** for the app stacks and **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** for observability (`-p gghstats-obs`). See [`run/common/.env.example`](run/common/.env.example) and [`run/docker-compose/observability/observability.env.example`](run/docker-compose/observability/observability.env.example).
 
 **[↑ Contents](#table-of-contents)**
 
@@ -258,7 +263,7 @@ run/
 ## Versioning
 
 - **[`VERSION`](VERSION)** — semver of **this** repo (manifests). When you change it, align: the **Version** badge in this README, **`version:`** in the Helm chart’s **`Chart.yaml`**, and (if you ship a release entry) **CHANGELOG.md**; on **`main`**, use Git tags **`v<semver>`** (e.g. `v0.2.0`).
-- **`GGHSTATS_VERSION`** in **`.env`** — **container image** tag on GHCR ([gghstats releases](https://github.com/hrodrig/gghstats/releases)), not the same as **`VERSION`**.
+- **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`** (or the env file you pass to Compose) — **container image** tag on GHCR ([gghstats releases](https://github.com/hrodrig/gghstats/releases)), not the same as **`VERSION`**.
 
 **[↑ Contents](#table-of-contents)**
 
