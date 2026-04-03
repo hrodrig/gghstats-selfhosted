@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.4-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.5-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -200,7 +200,7 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats
 
 **GitHub Pages:** The [Pages URL](https://hrodrig.github.io/gghstats-selfhosted/) serves **`index.yaml`** for Helm and includes a short **HTML landing** for humans. **`helm repo add`** only needs the HTTPS base URL — you do not have to open the site in a browser.
 
-**Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.4.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.4`**) per **`VERSION`**.
+**Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.5.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.5`**) per **`VERSION`**.
 
 ```bash
 helm repo add gghstats https://hrodrig.github.io/gghstats-selfhosted
@@ -280,7 +280,7 @@ run/
 ## Versioning
 
 - **[`VERSION`](VERSION)** — semver of **this repository** (Compose, docs, `run/`, etc.). When you change it, align the **Version** badge in this README and (if you keep a release entry) **CHANGELOG.md**; on **`main`**, tag with **`v<semver>`** (e.g. `v0.2.0`). This number is **not** tied to the Helm chart on every bump.
-- **Helm chart (`run/kubernetes/helm/gghstats/Chart.yaml` → `version:`)** — semver of the **chart package** published to [GitHub Pages](https://hrodrig.github.io/gghstats-selfhosted/index.yaml) / [Releases](https://github.com/hrodrig/gghstats-selfhosted/releases). Bump **`version:`** when the chart itself changes (templates, `values`, etc.). It may **lag** behind **`VERSION`** (e.g. repo `0.2.0`, chart `0.1.4` until you edit the chart). [chart-releaser](https://github.com/helm/chart-releaser) may skip publishing if **`run/kubernetes/helm/`** did not change — expected for docs-only repo releases.
+- **Helm chart (`run/kubernetes/helm/gghstats/Chart.yaml` → `version:`)** — semver of the **chart package** published to [GitHub Pages](https://hrodrig.github.io/gghstats-selfhosted/index.yaml) / [Releases](https://github.com/hrodrig/gghstats-selfhosted/releases). Bump **`version:`** when the chart itself changes (templates, `values`, etc.). It may **lag** behind **`VERSION`** (e.g. repo `0.2.0`, chart `0.1.5` until you edit the chart). [chart-releaser](https://github.com/helm/chart-releaser) may skip publishing if **`run/kubernetes/helm/`** did not change — expected for docs-only repo releases.
 - **`Chart.yaml` → `appVersion`** — **gghstats** application / image line; align with [gghstats releases](https://github.com/hrodrig/gghstats/releases) when you bump the deployed image story.
 - **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`** (or the env file you pass to Compose) — **container image** tag on GHCR ([gghstats releases](https://github.com/hrodrig/gghstats/releases)), not the same as **`VERSION`**.
 

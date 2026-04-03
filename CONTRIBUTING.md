@@ -11,9 +11,71 @@ Thank you for helping improve these deployment manifests.
 ## Checks before submitting
 
 - Paths under **`run/`** match the documented layout; **`docker compose … config`** succeeds when a minimal env file is provided (e.g. **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** with **`GGHSTATS_HOST_DATA`** set, or a dev **`./.env`** at the repo root with defaults). For observability: **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** and **`-p gghstats-obs`**.
-- **Helm:** PRs and pushes that touch **`run/kubernetes/helm/`** run [**.github/workflows/helm-lint.yml**](.github/workflows/helm-lint.yml) — **`helm lint`** and **`helm template`** piped to **`kubectl apply --dry-run=client --validate=false`** (no cluster in CI; **`--validate=false`** avoids OpenAPI fetch to a missing apiserver).
+- **Helm:** If your PR changes **`run/kubernetes/helm/`**, run **[Helm chart validation (same as CI)](#helm-chart-validation-same-as-ci)** below. GitHub Actions runs [**.github/workflows/helm-lint.yml**](.github/workflows/helm-lint.yml) on those paths.
 - **English** for README and comments.
 - If you bump **[`VERSION`](VERSION)**, keep the README **Version** badge and **CHANGELOG** aligned. Bump **`Chart.yaml` `version:`** only when **`run/kubernetes/helm/gghstats/`** changes and you intend to publish a **new chart package** — **`VERSION`** and chart **`version:`** do not need to match on every release (see **Versioning** in the root README).
+
+### Helm chart validation (same as CI)
+
+Replicate locally what [.github/workflows/helm-lint.yml](.github/workflows/helm-lint.yml) does: **`helm lint`** (Chart metadata, **`values.schema.json`**, template syntax) and **`helm template`** piped to **[kubeconform](https://github.com/yannh/kubeconform)** (rendered manifests validated against Kubernetes OpenAPI schemas **without** a cluster). **`kubectl apply --dry-run=client`** is **not** used in CI: recent kubectl builds may still contact **`localhost:8080`** for API discovery and fail where no apiserver exists.
+
+#### Requirements
+
+| Tool | Purpose | Version in CI (reference) |
+|------|---------|---------------------------|
+| **Helm** | `helm lint`, `helm template` | [v3.16.4](https://github.com/helm/helm/releases) (any recent **Helm 3** is usually fine) |
+| **kubeconform** | Validate YAML against K8s resource schemas | [v0.7.0](https://github.com/yannh/kubeconform/releases) — align with **`KUBECONFORM_VERSION`** in **helm-lint.yml** when you need bit-for-bit parity |
+
+Install **kubeconform**, for example: **`brew install kubeconform`**, or download a release tarball for your OS/architecture from the [kubeconform releases](https://github.com/yannh/kubeconform/releases) page.
+
+Set **`KUBERNETES_VERSION`** to the same value as **`KUBERNETES_VERSION`** in **helm-lint.yml** (currently **`1.30.0`**). That flag selects which upstream Kubernetes OpenAPI schemas kubeconform uses; change it here when the workflow changes.
+
+#### Commands (run from the repository root)
+
+```bash
+export CHART_DIR=run/kubernetes/helm/gghstats
+export KUBERNETES_VERSION=1.30.0
+
+helm lint "$CHART_DIR"
+
+helm template test-rel "$CHART_DIR" --namespace test-ns | \
+  kubeconform -strict -kubernetes-version "$KUBERNETES_VERSION" -summary -
+
+helm template test-rel "$CHART_DIR" --namespace test-ns \
+  --set persistence.enabled=false | \
+  kubeconform -strict -kubernetes-version "$KUBERNETES_VERSION" -summary -
+
+helm template test-rel "$CHART_DIR" --namespace test-ns \
+  --set githubToken.value=ci-placeholder-token | \
+  kubeconform -strict -kubernetes-version "$KUBERNETES_VERSION" -summary -
+
+helm template test-rel "$CHART_DIR" --namespace test-ns \
+  --set githubToken.existingSecret=my-imported-secret | \
+  kubeconform -strict -kubernetes-version "$KUBERNETES_VERSION" -summary -
+```
+
+#### Expected kubeconform summaries
+
+With the current templates, **`kubeconform -summary`** should report **Valid** only (no invalid/errors). Approximate **resource counts** (each **`---`** document):
+
+| Scenario | Typical count | Notes |
+|----------|---------------|--------|
+| Default values | 3 | PVC, Service, Deployment |
+| **`persistence.enabled=false`** | 2 | No PVC |
+| **`githubToken.value`** set (inline Secret) | 4 | Adds **`Secret`** |
+| **`githubToken.existingSecret`** set | 3 | No chart-managed Secret; Deployment references the existing Secret name |
+
+If counts change after you edit templates, trust the workflow steps in **helm-lint.yml** and the rendered YAML, not this table.
+
+#### Optional: validation with a real cluster
+
+If you use **kind**, **minikube**, or another cluster and **`kubectl`** points at it, you can additionally run server-side dry-run (not required for CI parity):
+
+```bash
+helm template test-rel run/kubernetes/helm/gghstats --namespace test-ns | kubectl apply --dry-run=server -f -
+```
+
+Use the same **`helm template`** flags as in the kubeconform scenarios to exercise each path.
 
 ## Release flow (this repo)
 

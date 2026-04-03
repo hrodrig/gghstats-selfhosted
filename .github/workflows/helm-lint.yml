@@ -1,7 +1,7 @@
 # Validates the gghstats Helm chart on every PR and on pushes that touch the chart.
-# Catches template errors, values.schema.json issues (via helm lint), and manifest shape (kubectl dry-run).
-# kubectl apply --dry-run=client uses --validate=false: there is no apiserver on the runner; otherwise kubectl
-# tries to fetch OpenAPI schemas from the default cluster URL and fails (connection refused).
+# helm lint: Chart.yaml, values.schema.json, template syntax.
+# kubeconform: rendered YAML vs Kubernetes OpenAPI schemas (no cluster; kubectl apply --dry-run
+# still talks to localhost:8080 for discovery on recent kubectl — connection refused in CI).
 name: Helm chart
 
 on:
@@ -19,6 +19,11 @@ on:
 permissions:
   contents: read
 
+env:
+  KUBECONFORM_VERSION: v0.7.0
+  # Keep in sync with validation expectations (kubeconform -kubernetes-version).
+  KUBERNETES_VERSION: "1.30.0"
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -33,29 +38,34 @@ jobs:
         with:
           version: v3.16.4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: v1.30.0
+      - name: Install kubeconform
+        run: |
+          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" | tar xz
+          sudo mv kubeconform /usr/local/bin/
+          kubeconform -v
 
       - name: helm lint
         run: helm lint "$CHART_DIR"
 
-      - name: helm template + kubectl dry-run (default values)
+      - name: helm template + kubeconform (default values)
         run: |
-          helm template test-rel "$CHART_DIR" --namespace test-ns | kubectl apply --dry-run=client --validate=false -f -
+          helm template test-rel "$CHART_DIR" --namespace test-ns | \
+            kubeconform -strict -kubernetes-version "${KUBERNETES_VERSION}" -summary -
 
-      - name: helm template + kubectl dry-run (persistence disabled)
+      - name: helm template + kubeconform (persistence disabled)
         run: |
           helm template test-rel "$CHART_DIR" --namespace test-ns \
-            --set persistence.enabled=false | kubectl apply --dry-run=client --validate=false -f -
+            --set persistence.enabled=false | \
+            kubeconform -strict -kubernetes-version "${KUBERNETES_VERSION}" -summary -
 
-      - name: helm template + kubectl dry-run (inline GitHub token Secret)
+      - name: helm template + kubeconform (inline GitHub token Secret)
         run: |
           helm template test-rel "$CHART_DIR" --namespace test-ns \
-            --set githubToken.value=ci-placeholder-token | kubectl apply --dry-run=client --validate=false -f -
+            --set githubToken.value=ci-placeholder-token | \
+            kubeconform -strict -kubernetes-version "${KUBERNETES_VERSION}" -summary -
 
-      - name: helm template + kubectl dry-run (existing Secret for token)
+      - name: helm template + kubeconform (existing Secret for token)
         run: |
           helm template test-rel "$CHART_DIR" --namespace test-ns \
-            --set githubToken.existingSecret=my-imported-secret | kubectl apply --dry-run=client --validate=false -f -
+            --set githubToken.existingSecret=my-imported-secret | \
+            kubeconform -strict -kubernetes-version "${KUBERNETES_VERSION}" -summary -

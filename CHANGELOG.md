@@ -7,9 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-04-03
+
+### Added
+
+- **Helm chart:** **`Chart.yaml` `icon`** — [`assets/gghstats-selfhosted-icon.png`](assets/gghstats-selfhosted-icon.png) (512×512, derived from the README hero) for Helm / Artifact Hub UIs; **`raw.githubusercontent.com`** URL on **`main`**.
+- **Documentation:** [CONTRIBUTING.md](CONTRIBUTING.md) — section **Helm chart validation (same as CI)** (tooling requirements, CI version pins, full **`helm lint`** / **`kubeconform`** command block, expected resource counts per scenario, optional **`kubectl apply --dry-run=server`** with a cluster). [Chart README](run/kubernetes/helm/gghstats/README.md) points to that section.
+
 ### Fixed
 
-- **Helm CI:** [`.github/workflows/helm-lint.yml`](.github/workflows/helm-lint.yml) — add **`kubectl apply --validate=false`** so the job does not try to download OpenAPI schemas from a cluster URL on GitHub-hosted runners (no apiserver; previous runs failed with **connection refused** to **`localhost:8080`**).
+- **Helm CI:** [`.github/workflows/helm-lint.yml`](.github/workflows/helm-lint.yml) — replace **`kubectl apply --dry-run=client`** with **[kubeconform](https://github.com/yannh/kubeconform)** (`helm template … | kubeconform`). Pin **kubeconform** to **[v0.7.0](https://github.com/yannh/kubeconform/releases/tag/v0.7.0)**. Recent **`kubectl`** still contacts **`localhost:8080`** for API discovery even with **`--validate=false`**, so CI failed with **connection refused**; kubeconform validates manifests **without** a cluster.
 
 ## [0.1.4] - 2026-04-02
 
@@ -59,7 +66,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.5
 [0.1.4]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.4
 [0.1.3]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.3
 [0.1.2]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.2
