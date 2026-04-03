@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Helm chart repo · gghstats (self-hosted)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; color: #1a1a1a; }
+    h1 { font-size: 1.35rem; margin-top: 0; }
+    h2 { font-size: 1.1rem; margin-top: 1.5rem; }
+    a { color: #0969da; }
+    code { background: #f6f8fa; padding: 0.12em 0.35em; border-radius: 4px; font-size: 0.92em; }
+    pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: 0.88rem; }
+    .muted { color: #656d76; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>Helm repository · gghstats</h1>
+  <p class="muted">This site hosts the Helm chart <strong>index</strong> for deploying
+    <a href="https://github.com/hrodrig/gghstats">gghstats</a> on Kubernetes.
+    It is published from <a href="https://github.com/hrodrig/gghstats-selfhosted">gghstats-selfhosted</a>
+    (deployment manifests and chart sources).</p>
+  <p>Helm clients fetch <a href="index.yaml"><code>index.yaml</code></a> from this base URL — a browser is optional.</p>
+
+  <h2>Add the repo and install</h2>
+  <pre><code>helm repo add gghstats https://hrodrig.github.io/gghstats-selfhosted
+helm repo update
+helm install gghstats gghstats/gghstats -n gghstats --create-namespace -f my-values.yaml</code></pre>
+
+  <p class="muted">Full docs: <a href="https://github.com/hrodrig/gghstats-selfhosted/blob/main/README.md">gghstats-selfhosted README</a>
+    · Application: <a href="https://github.com/hrodrig/gghstats">hrodrig/gghstats</a></p>
+</body>
+</html>
