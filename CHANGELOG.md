@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Helm CI:** [`.github/workflows/helm-lint.yml`](.github/workflows/helm-lint.yml) — add **`kubectl apply --validate=false`** so the job does not try to download OpenAPI schemas from a cluster URL on GitHub-hosted runners (no apiserver; previous runs failed with **connection refused** to **`localhost:8080`**).
+
 ## [0.1.4] - 2026-04-02
 
 ### Added

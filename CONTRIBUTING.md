@@ -11,7 +11,7 @@ Thank you for helping improve these deployment manifests.
 ## Checks before submitting
 
 - Paths under **`run/`** match the documented layout; **`docker compose … config`** succeeds when a minimal env file is provided (e.g. **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** with **`GGHSTATS_HOST_DATA`** set, or a dev **`./.env`** at the repo root with defaults). For observability: **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** and **`-p gghstats-obs`**.
-- **Helm:** PRs and pushes that touch **`run/kubernetes/helm/`** run [**.github/workflows/helm-lint.yml**](.github/workflows/helm-lint.yml) — **`helm lint`** and **`helm template`** with **`kubectl apply --dry-run=client`** on several value sets.
+- **Helm:** PRs and pushes that touch **`run/kubernetes/helm/`** run [**.github/workflows/helm-lint.yml**](.github/workflows/helm-lint.yml) — **`helm lint`** and **`helm template`** piped to **`kubectl apply --dry-run=client --validate=false`** (no cluster in CI; **`--validate=false`** avoids OpenAPI fetch to a missing apiserver).
 - **English** for README and comments.
 - If you bump **[`VERSION`](VERSION)**, keep the README **Version** badge and **CHANGELOG** aligned. Bump **`Chart.yaml` `version:`** only when **`run/kubernetes/helm/gghstats/`** changes and you intend to publish a **new chart package** — **`VERSION`** and chart **`version:`** do not need to match on every release (see **Versioning** in the root README).
 

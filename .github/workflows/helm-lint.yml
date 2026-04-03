@@ -1,5 +1,7 @@
 # Validates the gghstats Helm chart on every PR and on pushes that touch the chart.
-# Catches template errors, values.schema.json issues (via helm lint), and invalid Kubernetes objects.
+# Catches template errors, values.schema.json issues (via helm lint), and manifest shape (kubectl dry-run).
+# kubectl apply --dry-run=client uses --validate=false: there is no apiserver on the runner; otherwise kubectl
+# tries to fetch OpenAPI schemas from the default cluster URL and fails (connection refused).
 name: Helm chart
 
 on:
@@ -41,19 +43,19 @@ jobs:
 
       - name: helm template + kubectl dry-run (default values)
         run: |
-          helm template test-rel "$CHART_DIR" --namespace test-ns | kubectl apply --dry-run=client -f -
+          helm template test-rel "$CHART_DIR" --namespace test-ns | kubectl apply --dry-run=client --validate=false -f -
 
       - name: helm template + kubectl dry-run (persistence disabled)
         run: |
           helm template test-rel "$CHART_DIR" --namespace test-ns \
-            --set persistence.enabled=false | kubectl apply --dry-run=client -f -
+            --set persistence.enabled=false | kubectl apply --dry-run=client --validate=false -f -
 
       - name: helm template + kubectl dry-run (inline GitHub token Secret)
         run: |
           helm template test-rel "$CHART_DIR" --namespace test-ns \
-            --set githubToken.value=ci-placeholder-token | kubectl apply --dry-run=client -f -
+            --set githubToken.value=ci-placeholder-token | kubectl apply --dry-run=client --validate=false -f -
 
       - name: helm template + kubectl dry-run (existing Secret for token)
         run: |
           helm template test-rel "$CHART_DIR" --namespace test-ns \
-            --set githubToken.existingSecret=my-imported-secret | kubectl apply --dry-run=client -f -
+            --set githubToken.existingSecret=my-imported-secret | kubectl apply --dry-run=client --validate=false -f -
