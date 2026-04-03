@@ -1,0 +1,38 @@
+# Deny-all by default
+*
+.*
+
+# Allowlist: repository metadata
+!.gitignore
+!VERSION
+!LICENSE
+!README.md
+!AGENTS.md
+!CHANGELOG.md
+!CONTRIBUTING.md
+!CODE_OF_CONDUCT.md
+!SECURITY.md
+
+# Images (README hero, etc.)
+!assets/
+!assets/**
+
+# GitHub Actions
+!.github/
+!.github/workflows/
+!.github/workflows/**
+
+# Deployment tree
+!run/
+!run/**
+
+# SQLite placeholder at repo root (DB files stay ignored below)
+!data/
+!data/.keep
+
+# Generated noise
+.DS_Store
+*.db
+data/*.db
+*.db-shm
+*.db-wal

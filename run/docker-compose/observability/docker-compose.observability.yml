@@ -1,0 +1,131 @@
+# Optional observability stack (Prometheus, Grafana, Loki, Promtail, Node Exporter) aligned with
+# run/docker-compose/traefik/docker-compose.yml (Traefik + gghstats).
+#
+# Images are pinned by digest (linux/amd64); each service sets platform: linux/amd64.
+# When bumping versions, update digests using observability-image-pins.md (same directory).
+#
+# Prerequisites
+# -------------
+# 1. Start the production stack first so the external network `gghstats_edge` exists:
+#      docker compose -f run/docker-compose/traefik/docker-compose.yml up -d
+# 2. Copy observability.env.example → ${GGHSTATS_HOST_DATA}/.env.observability (outside the git clone) and set GRAFANA_ADMIN_PASSWORD.
+# 3. Ensure gghstats exposes /metrics (default; do not set GGHSTATS_METRICS=false on the app).
+#
+# Start (from repository root, project name gghstats-obs):
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+#     -f run/docker-compose/observability/docker-compose.observability.yml up -d
+#
+# Stop / ps / logs / pull — use the SAME --env-file (Compose interpolates the file on every command):
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+#     -f run/docker-compose/observability/docker-compose.observability.yml ps
+#
+# Stop:
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+#     -f run/docker-compose/observability/docker-compose.observability.yml down
+#
+# URLs (defaults): Grafana http://localhost:${GRAFANA_PORT:-3000}  Prometheus http://localhost:${PROMETHEUS_PORT:-9090}
+# Do not expose Grafana/Prometheus/Loki to the public internet without TLS and strong auth.
+#
+# Optional HTTPS for Grafana via Traefik (same VPS, no edits to traefik/docker-compose.yml):
+#   add -f run/docker-compose/observability/docker-compose.observability.traefik.yml
+#   and set GRAFANA_HOSTNAME + GRAFANA_ROOT_URL in .env.observability
+# If you use that overlay, ALWAYS pass BOTH -f files on every up/pull/down that recreates Grafana — otherwise
+#   Grafana comes back without Traefik labels and HTTPS routing breaks until you re-apply the traefik compose.
+# See README.md in this directory (curl checks on the VPS + SSH tunnel for local UI review without exposing ports).
+
+name: gghstats-obs
+
+networks:
+  edge:
+    external: true
+    name: gghstats_edge
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+
+services:
+  prometheus:
+    # Tag (linux/amd64): v2.55.1
+    image: prom/prometheus@sha256:b1935d181b6dd8e9c827705e89438815337e1b10ae35605126f05f44e5c6940f
+    platform: linux/amd64
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    volumes:
+      - prometheus_data:/prometheus
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    networks:
+      - edge
+
+  # Host metrics for dashboards such as Grafana.com ID 1860 (Node Exporter Full).
+  node-exporter:
+    # Tag (linux/amd64): v1.8.2
+    image: prom/node-exporter@sha256:065914c03336590ebed517e7df38520f0efb44465fde4123c3f6b7328f5a9396
+    platform: linux/amd64
+    restart: unless-stopped
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/rootfs
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "${NODE_EXPORTER_PORT:-9100}:9100"
+    networks:
+      - edge
+
+  loki:
+    # Tag (linux/amd64): 3.3.2
+    image: grafana/loki@sha256:e9d0a18363c9c3022aef6793a7e135000d11127fb0e18b89de08b1e21e629d60
+    platform: linux/amd64
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki_data:/loki
+    networks:
+      - edge
+
+  promtail:
+    # Tag (linux/amd64): 3.3.2
+    image: grafana/promtail@sha256:718dcfc1efae307b1d3d29604bbe3714b842f171bb9a071570c9b82865800992
+    platform: linux/amd64
+    restart: unless-stopped
+    command: -config.file=/etc/promtail/config.yml
+    volumes:
+      - ./observability/promtail-config.yaml:/etc/promtail/config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    networks:
+      - edge
+    depends_on:
+      - loki
+
+  grafana:
+    # Tag (linux/amd64): 11.4.0
+    image: grafana/grafana@sha256:8d938a1c52b018c60cb3583657e038054387aa18a74f09a865c99a522481f7ac
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD in your observability env file (--env-file)}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-http://localhost:3000}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    networks:
+      - edge
+    depends_on:
+      - prometheus
+      - loki

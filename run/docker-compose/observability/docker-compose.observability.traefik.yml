@@ -1,0 +1,35 @@
+# Optional overlay: expose Grafana via the Traefik instance from run/docker-compose/traefik/docker-compose.yml (HTTPS + Let's Encrypt).
+#
+# Traefik itself is NOT defined here — it stays in that file. This file only adds Docker labels
+# so Traefik discovers Grafana on gghstats_edge (same network name as prod).
+#
+# Prerequisites
+# -------------
+# 1. run/docker-compose/traefik/docker-compose.yml is running (Traefik + gghstats; ACME_EMAIL and DNS for the main app already work).
+# 2. DNS: GRAFANA_HOSTNAME must resolve to this VPS. A/AAAA to the server IP, or CNAME to a hostname that already does — both valid.
+# 3. ${GGHSTATS_HOST_DATA}/.env.observability sets at least:
+#      GRAFANA_HOSTNAME=gghstats-obs.my-domain.com
+#      GRAFANA_ROOT_URL=https://gghstats-obs.my-domain.com   # must match public URL (Grafana redirects / cookies)
+#
+# Start observability stack WITH this file (from repository root):
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+#     -f run/docker-compose/observability/docker-compose.observability.yml \
+#     -f run/docker-compose/observability/docker-compose.observability.traefik.yml \
+#     up -d
+#
+# Re-deploys: whenever you run up/pull/down on the observability stack, use BOTH -f lines above. If you apply only
+#   docker-compose.observability.yml, Grafana is recreated without these labels and Traefik stops exposing Grafana
+#   until you run up -d again with this file included.
+#
+# You can keep or remove the published host port (GRAFANA_PORT) in the base file; HTTPS access uses 443 via Traefik.
+
+services:
+  grafana:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=gghstats_edge
+      - traefik.http.routers.grafana.rule=Host(`${GRAFANA_HOSTNAME:?set GRAFANA_HOSTNAME in your observability env file (--env-file; DNS must point to this host)}`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls=true
+      - traefik.http.routers.grafana.tls.certresolver=le
+      - traefik.http.services.grafana.loadbalancer.server.port=3000

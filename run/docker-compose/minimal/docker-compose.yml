@@ -1,0 +1,23 @@
+# json-file log rotation (avoids unbounded container log growth on disk).
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  gghstats:
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.1.2}
+    container_name: gghstats
+    restart: unless-stopped
+    environment:
+      - GGHSTATS_GITHUB_TOKEN=${GGHSTATS_GITHUB_TOKEN}
+      - GGHSTATS_PORT=${GGHSTATS_PORT:-8080}
+      - GGHSTATS_FILTER=${GGHSTATS_FILTER:-*}
+      - GGHSTATS_SYNC_INTERVAL=${GGHSTATS_SYNC_INTERVAL:-1h}
+    ports:
+      - "${GGHSTATS_PORT:-8080}:${GGHSTATS_PORT:-8080}"
+    volumes:
+      # Host path for SQLite (prefer absolute, e.g. /var/lib/gghstats). Default: repo data/ via path relative to this file.
+      - ${GGHSTATS_HOST_DATA:-../../../data}:/data
+    logging: *default-logging
