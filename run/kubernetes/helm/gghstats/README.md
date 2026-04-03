@@ -4,6 +4,8 @@
 
 This chart installs **gghstats** from the published container image.
 
+**Path vs repository name:** In a clone of **[gghstats-selfhosted](https://github.com/hrodrig/gghstats-selfhosted)**, this chart is the directory **`run/kubernetes/helm/gghstats/`**. The segment **`gghstats`** is the **Helm chart name** (matches **`name:`** in **`Chart.yaml`**) and the workload it deploys — not the GitHub repo name (**`gghstats-selfhosted`**). The application source code lives in **[hrodrig/gghstats](https://github.com/hrodrig/gghstats)**.
+
 ### Install from the Helm repository (recommended)
 
 The project publishes packaged charts and **`index.yaml`** on **GitHub Pages** (same GitHub project). Install without cloning:
