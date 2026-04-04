@@ -4,6 +4,8 @@
 
 **Traefik** terminates HTTPS (Let’s Encrypt) and routes to **gghstats** on the **`gghstats_edge`** Docker network. No host port is published for gghstats; only **80** and **443** for Traefik.
 
+**Shortcut:** [`run/scripts/compose-stack.sh`](../../scripts/compose-stack.sh) — e.g. `./run/scripts/compose-stack.sh traefik up -d`.
+
 From the **repository root**:
 
 ```bash

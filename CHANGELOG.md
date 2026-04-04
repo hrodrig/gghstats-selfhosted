@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`run/scripts/compose-stack.sh`** — wrapper for **`docker compose`** on **minimal**, **Traefik**, and **observability** stacks (correct **`--env-file`**, **`-f`**, project **`gghstats-obs`**); **`--traefik`** for the observability Grafana overlay file. **`run/scripts/README.md`**; links from **`run/README.md`**, root **README**, and Compose READMEs.
+
 ## [0.1.6] - 2026-04-04
 
 ### Changed

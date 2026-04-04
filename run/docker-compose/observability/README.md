@@ -4,6 +4,8 @@
 
 This documentation lives in **[gghstats-selfhosted](https://github.com/hrodrig/gghstats-selfhosted)** under **`run/docker-compose/observability/`**. Command examples assume **`docker compose` is run from the repository root** unless noted otherwise.
 
+**Shortcut:** [`run/scripts/compose-stack.sh`](../../scripts/compose-stack.sh) — e.g. `./run/scripts/compose-stack.sh observability up -d`, or `./run/scripts/compose-stack.sh --traefik observability up -d` when using the [Traefik overlay for Grafana](#grafana-behind-traefik-https-public-hostname).
+
 ### Where to put `.env.observability`
 
 Do **not** keep the populated file inside this git clone. Use the **same host directory** as your main stack: **`${GGHSTATS_HOST_DATA}`** must match the path you set in **`${GGHSTATS_HOST_DATA}/.env`** (SQLite + main secrets).

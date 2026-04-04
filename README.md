@@ -282,7 +282,7 @@ helm uninstall gghstats -n gghstats
 
 *Recommended on servers:* colocate SQLite and env files outside the clone (see below).
 
-Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/.env.observability`** in one host directory (e.g. `/home/gghstats/gghstats-data/`). Set **`GGHSTATS_HOST_DATA`** inside the main **`.env`** to that absolute path. Run Compose from the clone root with **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** for the app stacks and **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** for observability (`-p gghstats-obs`). See [`run/common/.env.example`](run/common/.env.example) and [`run/docker-compose/observability/observability.env.example`](run/docker-compose/observability/observability.env.example).
+Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/.env.observability`** in one host directory (e.g. `/home/gghstats/gghstats-data/`). Set **`GGHSTATS_HOST_DATA`** inside the main **`.env`** to that absolute path. Run Compose from the clone root with **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** for the app stacks and **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** for observability (`-p gghstats-obs`). See [`run/common/.env.example`](run/common/.env.example) and [`run/docker-compose/observability/observability.env.example`](run/docker-compose/observability/observability.env.example). Optional helper: **[`run/scripts/compose-stack.sh`](run/scripts/compose-stack.sh)** (`./run/scripts/compose-stack.sh --help`).
 
 **[↑ Contents](#table-of-contents)**
 
@@ -293,6 +293,7 @@ Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/
 ```text
 run/
 ├── common/.env.example          # Shared vars for Compose + image tag
+├── scripts/                     # compose-stack.sh (docker compose helper)
 ├── standalone/{linux,macos,windows}/
 ├── docker/                      # docker run
 ├── docker-compose/
