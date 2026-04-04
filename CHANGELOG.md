@@ -7,9 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-04-04
+
 ### Added
 
-- **`run/scripts/compose-stack.sh`** — wrapper for **`docker compose`** on **minimal**, **Traefik**, and **observability** stacks (correct **`--env-file`**, **`-f`**, project **`gghstats-obs`**); **`--traefik`** for the observability Grafana overlay file. **`run/scripts/README.md`**; links from **`run/README.md`**, root **README**, and Compose READMEs.
+- **`run/scripts/compose-stack.sh`** — wrapper for **`docker compose`** on **minimal**, **Traefik**, and **observability** stacks (correct **`--env-file`**, **`-f`**, project **`gghstats-obs`**); **`--traefik`** for the observability Grafana overlay file. Help text documents **traefik** before **observability** for the shared **`gghstats_edge`** network. **`run/scripts/README.md`**; links from **`run/README.md`**, root **README**, and Compose READMEs.
 
 ## [0.1.6] - 2026-04-04
 
@@ -77,7 +79,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.7
 [0.1.6]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.6
 [0.1.5]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.5
 [0.1.4]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.4

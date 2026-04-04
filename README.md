@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.6-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.7-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -231,7 +231,7 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats
 
 **GitHub Pages:** The [Pages URL](https://hrodrig.github.io/gghstats-selfhosted/) serves **`index.yaml`** for Helm and includes a short **HTML landing** for humans. **`helm repo add`** only needs the HTTPS base URL — you do not have to open the site in a browser.
 
-**Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.6.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.6`**) per **`VERSION`**.
+**Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.6.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.7`**) per **`VERSION`**.
 
 ```bash
 helm repo add gghstats https://hrodrig.github.io/gghstats-selfhosted
