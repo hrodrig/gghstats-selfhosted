@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-04-04
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.1.3`** ([gghstats v0.1.3](https://github.com/hrodrig/gghstats/releases/tag/v0.1.3)): [`run/common/.env.example`](run/common/.env.example), Compose image defaults, Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and docs.
+- **Helm chart:** bump **`version:`** to **0.1.6** and **`appVersion`** to **0.1.3**.
+
 ## [0.1.5] - 2026-04-03
 
 ### Added
@@ -66,7 +73,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.6
 [0.1.5]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.5
 [0.1.4]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.4
 [0.1.3]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.3

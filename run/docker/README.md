@@ -14,12 +14,12 @@ docker run -d \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
-  ghcr.io/hrodrig/gghstats:v0.1.2
+  ghcr.io/hrodrig/gghstats:v0.1.3
 ```
 
 Replace the path with your own (e.g. `/var/lib/gghstats`). Avoid **`$(pwd)/data`** in production — it depends on the current working directory and is easy to mis-mount.
 
-The image tag must match a published **GHCR** image from [gghstats releases](https://github.com/hrodrig/gghstats/releases) — same value as **`GGHSTATS_VERSION`** in **[`run/common/.env.example`](../common/.env.example)** (e.g. `v0.1.2`). For **all** environment variables supported by the binary/container, see the upstream **[`.env.example`](https://github.com/hrodrig/gghstats/blob/main/.env.example)** on **`main`** in the gghstats repository.
+The image tag must match a published **GHCR** image from [gghstats releases](https://github.com/hrodrig/gghstats/releases) — same value as **`GGHSTATS_VERSION`** in **[`run/common/.env.example`](../common/.env.example)** (e.g. `v0.1.3`). For **all** environment variables supported by the binary/container, see the upstream **[`.env.example`](https://github.com/hrodrig/gghstats/blob/main/.env.example)** on **`main`** in the gghstats repository.
 
 For **Compose-based** setups (persistent layout, Traefik, observability), use **`run/docker-compose/`** instead.
 
