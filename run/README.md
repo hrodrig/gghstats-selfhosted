@@ -13,9 +13,12 @@ export GGHSTATS_HOST_DATA=/path/to/your/gghstats-data
 ./run/scripts/compose-stack.sh minimal up -d
 ./run/scripts/compose-stack.sh traefik down
 ./run/scripts/compose-stack.sh --traefik observability up -d
+# Traefik + gghstats only, or Traefik + gghstats + observability (ordered up/down/restart):
+./run/scripts/compose-stack.sh prod restart
+./run/scripts/compose-stack.sh full restart
 ```
 
-Stacks: **`minimal`**, **`traefik`**, **`observability`**. Pass any Compose subcommand (`up`, `down`, `restart`, `logs`, `ps`, `pull`, …) and extra flags. **`./run/scripts/compose-stack.sh --help`** for options (`--data-dir`, `--traefik` for the observability Grafana overlay).
+Stacks: **`minimal`**, **`traefik`**, **`observability`**, **`prod`** (Traefik stack only, `up`/`down`/`restart`), **`full`** (Traefik + observability with Grafana overlay — same as **`--with-obs prod`**). For **`prod`** / **`full`**, only **`up`**, **`down`**, and **`restart`** are supported. Pass any other Compose subcommand on the single-stack targets (`logs`, `ps`, `pull`, …). **`./run/scripts/compose-stack.sh --help`** for options (`--data-dir`, `--traefik` for observability, `--with-obs` for **`prod`**).
 
 | Directory | When to use |
 |-----------|-------------|

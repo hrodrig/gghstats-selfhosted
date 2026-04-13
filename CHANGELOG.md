@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-04-13
+
+### Added
+
+- **`compose-stack.sh`:** stacks **`prod`** (Traefik + gghstats: `up` / `down` / `restart` only) and **`full`** (same as **`--with-obs prod`**: Traefik then observability with Grafana Traefik overlay, correct order for `up` / `down` / `restart`). Docs: **`run/scripts/README.md`**, **`run/README.md`**, root **README**.
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.1.4`** ([gghstats v0.1.4](https://github.com/hrodrig/gghstats/releases/tag/v0.1.4)): [`run/common/.env.example`](run/common/.env.example), Compose image defaults, Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and docs.
+- **Helm chart:** bump **`version:`** to **0.1.7** and **`appVersion`** to **0.1.4**.
+
 ## [0.1.7] - 2026-04-04
 
 ### Added
@@ -79,7 +90,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.7...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.8...HEAD
+[0.1.8]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.8
 [0.1.7]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.7
 [0.1.6]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.6
 [0.1.5]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.5

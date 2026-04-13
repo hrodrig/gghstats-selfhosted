@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.7-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.8-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -87,7 +87,7 @@ docker run -d \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
-  ghcr.io/hrodrig/gghstats:v0.1.3
+  ghcr.io/hrodrig/gghstats:v0.1.4
 ```
 
 Use an image tag that exists on GHCR ([releases](https://github.com/hrodrig/gghstats/releases)); match **`GGHSTATS_VERSION`** in [`run/common/.env.example`](run/common/.env.example).
@@ -231,7 +231,7 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats
 
 **GitHub Pages:** The [Pages URL](https://hrodrig.github.io/gghstats-selfhosted/) serves **`index.yaml`** for Helm and includes a short **HTML landing** for humans. **`helm repo add`** only needs the HTTPS base URL — you do not have to open the site in a browser.
 
-**Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.6.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.7`**) per **`VERSION`**.
+**Naming (this repo vs the chart):** This GitHub repository is **`gghstats-selfhosted`** (deployment manifests only). The Helm chart lives under **`run/kubernetes/helm/gghstats/`** — the final directory name **`gghstats`** is the **chart name** (see `name:` in **`Chart.yaml`**), the same name as the **application** the chart deploys. It is **not** the repository name. Published chart packages and chart-releaser GitHub Releases use the pattern **`gghstats-<chart-version>`** (e.g. **`gghstats-0.1.7.tgz`**); **Git tags** for this repo use **`v<semver>`** (e.g. **`v0.1.8`**) per **`VERSION`**.
 
 ```bash
 helm repo add gghstats https://hrodrig.github.io/gghstats-selfhosted
@@ -282,7 +282,7 @@ helm uninstall gghstats -n gghstats
 
 *Recommended on servers:* colocate SQLite and env files outside the clone (see below).
 
-Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/.env.observability`** in one host directory (e.g. `/home/gghstats/gghstats-data/`). Set **`GGHSTATS_HOST_DATA`** inside the main **`.env`** to that absolute path. Run Compose from the clone root with **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** for the app stacks and **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** for observability (`-p gghstats-obs`). See [`run/common/.env.example`](run/common/.env.example) and [`run/docker-compose/observability/observability.env.example`](run/docker-compose/observability/observability.env.example). Optional helper: **[`run/scripts/compose-stack.sh`](run/scripts/compose-stack.sh)** (`./run/scripts/compose-stack.sh --help`).
+Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/.env.observability`** in one host directory (e.g. `/home/gghstats/gghstats-data/`). Set **`GGHSTATS_HOST_DATA`** inside the main **`.env`** to that absolute path. Run Compose from the clone root with **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** for the app stacks and **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** for observability (`-p gghstats-obs`). See [`run/common/.env.example`](run/common/.env.example) and [`run/docker-compose/observability/observability.env.example`](run/docker-compose/observability/observability.env.example). Optional helper: **[`run/scripts/compose-stack.sh`](run/scripts/compose-stack.sh)** — e.g. **`./run/scripts/compose-stack.sh full restart`** for Traefik + gghstats + observability without remembering compose order (`--help` for **`prod`** vs **`full`**).
 
 **[↑ Contents](#table-of-contents)**
 
