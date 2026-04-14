@@ -59,6 +59,8 @@ Examples:
   $(basename "$0") traefik up -d
   $(basename "$0") --traefik observability up -d
   $(basename "$0") observability logs grafana -f
+
+Note: After changing GGHSTATS_VERSION in .env — pull the image from GHCR, then traefik up -d (not restart). restart does not apply a new tag.
 EOF
 }
 

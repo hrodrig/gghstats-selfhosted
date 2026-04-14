@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Documentation:** operator checklist to upgrade the **gghstats** image — set **`GGHSTATS_VERSION`**, **pull** from GHCR, **`up -d`** (recreate); optional **`down`** first; **`restart`** does not swap images. **`run/common/.env.example`**, root **README** (Versioning), **`run/README.md`**, **`run/scripts/README.md`**, **`compose-stack.sh --help`** note.
+- **Documentation:** root **README** — subsection **Validate gghstats image upgrade (Compose / Traefik)** with concrete commands (`env`, `compose config`, `pull`/`up -d`, `docker ps`, UI); optional observability note; TOC link.
+
 ## [0.1.8] - 2026-04-13
 
 ### Added

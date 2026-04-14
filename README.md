@@ -28,6 +28,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Persistent data and secrets](#persistent-data-and-secrets)
 - [Repository layout](#repository-layout)
 - [Versioning](#versioning)
+- [Validate gghstats image upgrade (Compose / Traefik)](#validate-gghstats-image-upgrade-compose--traefik)
 - [Community and policies](#community-and-policies)
 - [Community standards](#community-standards)
 - [License](#license)
@@ -315,6 +316,41 @@ run/
 - **Helm chart (`run/kubernetes/helm/gghstats/Chart.yaml` → `version:`)** — semver of the **chart package** published to [GitHub Pages](https://hrodrig.github.io/gghstats-selfhosted/index.yaml) / [Releases](https://github.com/hrodrig/gghstats-selfhosted/releases). Bump **`version:`** when the chart itself changes (templates, `values`, etc.). It may **lag** behind **`VERSION`** (e.g. repo `0.2.0`, chart `0.1.5` until you edit the chart). [chart-releaser](https://github.com/helm/chart-releaser) may skip publishing if **`run/kubernetes/helm/`** did not change — expected for docs-only repo releases.
 - **`Chart.yaml` → `appVersion`** — **gghstats** application / image line; align with [gghstats releases](https://github.com/hrodrig/gghstats/releases) when you bump the deployed image story.
 - **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`** (or the env file you pass to Compose) — **container image** tag on GHCR ([gghstats releases](https://github.com/hrodrig/gghstats/releases)), not the same as **`VERSION`**.
+
+**Upgrading the app image:** (1) Set **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`**. (2) **Pull** the image from GHCR (so the new tag exists locally). (3) Run **`up -d`** so Compose **recreates** the service with that tag — e.g. **`./run/scripts/compose-stack.sh traefik pull`** then **`… traefik up -d`**, or **`… traefik up -d --pull always`**. Optionally **`traefik down`** before pull/up if you want everything stopped first. **`docker compose restart`** / **`compose-stack.sh … restart`** only restart the **existing** container — they **do not** apply a new image tag. See **[`run/common/.env.example`](run/common/.env.example)**.
+
+### Validate gghstats image upgrade (Compose / Traefik)
+
+Use this checklist from the **repository clone root** after editing **`GGHSTATS_VERSION`** (Traefik + **gghstats** stack; same idea for **minimal** with **`minimal`** instead of **`traefik`** in the commands below).
+
+1. **`GGHSTATS_HOST_DATA`** points at the directory that contains your **`.env`** (same as for normal Compose).
+2. Confirm the tag in the env file:
+   ```bash
+   grep GGHSTATS_VERSION "${GGHSTATS_HOST_DATA}/.env"
+   ```
+3. Confirm Compose resolves the expected **image** line (no need to start containers):
+   ```bash
+   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
+     -f run/docker-compose/traefik/docker-compose.yml config \
+     | grep -E 'image:|gghstats'
+   ```
+   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.1.4`**).
+4. **Pull** and **recreate** the service (do not rely on **`restart`** alone):
+   ```bash
+   ./run/scripts/compose-stack.sh traefik pull
+   ./run/scripts/compose-stack.sh traefik up -d
+   ```
+   Or one step:
+   ```bash
+   ./run/scripts/compose-stack.sh traefik up -d --pull always
+   ```
+5. Confirm the **running** container uses that image:
+   ```bash
+   docker ps --format 'table {{.Names}}\t{{.Image}}' | grep gghstats
+   ```
+6. **Smoke check — UI:** open **`GGHSTATS_HOSTNAME`** in the browser (HTTPS if Traefik + ACME). The **gghstats** web UI shows the app version in the sidebar (must match the release you deployed).
+
+**Optional — observability stack:** if you run Prometheus / Grafana / Loki on the same host, after the Traefik stack is healthy run **`./run/scripts/compose-stack.sh --traefik observability ps`** and open your Grafana URL (e.g. **`GF_SERVER_ROOT_URL`** / `GRAFANA_HOSTNAME`) to confirm dashboards load. Observability images are separate from **gghstats**; they only need a full cycle if *you* change those compose images.
 
 **[↑ Contents](#table-of-contents)**
 

@@ -33,6 +33,10 @@ Stacks: **`minimal`**, **`traefik`**, **`observability`**, **`prod`** (Traefik s
 
 Always use the **published image tag** that matches your desired [gghstats](https://github.com/hrodrig/gghstats) release (see `GGHSTATS_VERSION` in [`run/common/.env.example`](common/.env.example)).
 
+**Bump the running container to a new tag:** (1) Edit **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`**. (2) **Pull** from GHCR. (3) **`up -d`** to recreate the service — e.g. **`./run/scripts/compose-stack.sh traefik pull`** then **`… traefik up -d`**, or **`… traefik up -d --pull always`**. Optional: **`traefik down`** first. **`restart`** / **`prod restart`** / **`full restart`** do **not** switch the container to a new image.
+
+**Step-by-step validation** (env grep, `compose config`, `pull` + `up -d`, `docker ps`, browser check): see **[Validate gghstats image upgrade (Compose / Traefik)](../README.md#validate-gghstats-image-upgrade-compose--traefik)** in the repository README.
+
 ---
 
 **[↑ Back to the repository README](../README.md)**
