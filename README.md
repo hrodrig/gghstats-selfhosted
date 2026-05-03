@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.8-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.9-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -88,7 +88,7 @@ docker run -d \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
-  ghcr.io/hrodrig/gghstats:v0.1.4
+  ghcr.io/hrodrig/gghstats:v0.1.5
 ```
 
 Use an image tag that exists on GHCR ([releases](https://github.com/hrodrig/gghstats/releases)); match **`GGHSTATS_VERSION`** in [`run/common/.env.example`](run/common/.env.example).
@@ -334,7 +334,7 @@ Use this checklist from the **repository clone root** after editing **`GGHSTATS_
      -f run/docker-compose/traefik/docker-compose.yml config \
      | grep -E 'image:|gghstats'
    ```
-   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.1.4`**).
+   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.1.5`**).
 4. **Pull** and **recreate** the service (do not rely on **`restart`** alone):
    ```bash
    ./run/scripts/compose-stack.sh traefik pull

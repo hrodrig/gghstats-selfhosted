@@ -7,8 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-05-03
+
 ### Changed
 
+- Default **gghstats** container image tag **`v0.1.5`** ([gghstats v0.1.5](https://github.com/hrodrig/gghstats/releases/tag/v0.1.5)): [`run/common/.env.example`](run/common/.env.example), Compose image defaults, Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), [`run/docker/README.md`](run/docker/README.md), and root **README** examples.
+- **Helm chart:** bump **`version:`** to **0.1.8** and **`appVersion`** to **0.1.5**.
 - **Documentation:** operator checklist to upgrade the **gghstats** image — set **`GGHSTATS_VERSION`**, **pull** from GHCR, **`up -d`** (recreate); optional **`down`** first; **`restart`** does not swap images. **`run/common/.env.example`**, root **README** (Versioning), **`run/README.md`**, **`run/scripts/README.md`**, **`compose-stack.sh --help`** note.
 - **Documentation:** root **README** — subsection **Validate gghstats image upgrade (Compose / Traefik)** with concrete commands (`env`, `compose config`, `pull`/`up -d`, `docker ps`, UI); optional observability note; TOC link.
 
@@ -95,7 +99,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.8...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.9...HEAD
+[0.1.9]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.9
 [0.1.8]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.8
 [0.1.7]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.7
 [0.1.6]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.6
