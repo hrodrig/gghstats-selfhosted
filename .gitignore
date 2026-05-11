@@ -17,8 +17,9 @@
 !assets/
 !assets/**
 
-# GitHub Actions
+# GitHub Actions and Dependabot
 !.github/
+!.github/dependabot.yml
 !.github/workflows/
 !.github/workflows/**
 
