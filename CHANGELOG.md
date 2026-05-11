@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.11] - 2026-05-11
+
+### Changed
+
+- **GitHub Actions:** bump [`actions/checkout`](https://github.com/actions/checkout) to **v6** and [`azure/setup-helm`](https://github.com/Azure/setup-helm) to **v5** ([`helm-lint`](.github/workflows/helm-lint.yml), [`release-charts`](.github/workflows/release-charts.yml)).
+
 ## [0.1.10] - 2026-05-11
 
 ### Changed
@@ -106,7 +112,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.10...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.11...HEAD
+[0.1.11]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.11
 [0.1.10]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.10
 [0.1.9]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.9
 [0.1.8]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.8
