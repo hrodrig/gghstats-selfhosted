@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v0.1.6"
+  tag: "v0.2.1"
   pullPolicy: IfNotPresent
 
 service:
@@ -20,6 +20,8 @@ env:
   includePrivate: "false"
   syncInterval: "1h"
   apiToken: ""
+  # Optional: path inside container to a .css file under /data (gghstats >= 0.2.0). Example: "/data/custom-theme.css".
+  customCss: ""
   # Leave empty for default (Prometheus /metrics enabled). Set to "false" to disable.
   metrics: ""
 

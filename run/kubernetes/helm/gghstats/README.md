@@ -43,7 +43,11 @@ This path is the **same chart** as the published package; use it to read **`temp
 
 **Namespace:** the chart does **not** set a default namespace in `values.yaml`. You choose it at install time with **`-n` / `--namespace`** (example: **`gghstats`**). Use **`--create-namespace`** if that namespace does not exist yet. All manifests use the **release namespace** Helm applies. Uninstall with the same **`-n`**: `helm uninstall gghstats -n gghstats`.
 
-See **`values.yaml`** for image repository, tag, persistence, **resource requests/limits**, and environment variables. The application’s configuration is documented in the main **[gghstats](https://github.com/hrodrig/gghstats)** repository.
+See **`values.yaml`** for image repository, tag, persistence, **resource requests/limits**, and environment variables (including optional **`env.customCss`** for a [gghstats ≥ 0.2.0](https://github.com/hrodrig/gghstats/releases) dashboard theme). The application’s configuration is documented in the main **[gghstats](https://github.com/hrodrig/gghstats)** repository.
+
+### Optional custom theme (`env.customCss`)
+
+**`GGHSTATS_CUSTOM_CSS`** in the workload must reference a **`.css` file path inside the container**. With chart defaults, **only `/data`** is a persistent writable mount: the **PVC** (when **`persistence.enabled: true`**) is mounted there, alongside **`env.dbPath`** (SQLite). Use a value such as **`/data/custom-theme.css`** and place the file on that volume — **`kubectl cp`**, a **Job**, or your GitOps process — because **`readOnlyRootFilesystem: true`** prevents treating random image paths as writable theme storage. See the root [README — Custom UI theme](https://github.com/hrodrig/gghstats-selfhosted/blob/main/README.md#custom-ui-theme-optional) for Compose vs Kubernetes wording.
 
 **After `helm install`:** Helm prints **post-install notes** from **`templates/NOTES.txt`** (what the app is, how to reach the UI, GitHub token Secret). The short **`DESCRIPTION: Install complete`** line in Helm’s status block is generic and cannot be replaced with product marketing copy — use the notes for operator guidance.
 

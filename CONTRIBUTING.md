@@ -79,7 +79,7 @@ Use the same **`helm template`** flags as in the kubeconform scenarios to exerci
 
 ## Release flow (this repo)
 
-- **`VERSION`** at the repo root — semver without `v` (e.g. `0.2.0`).
+- **`VERSION`** at the repo root — semver without `v` (e.g. `0.1.12`).
 - Git tags **`v<version>`** on **`main`** after merging from **`develop`**.
 - See **[CHANGELOG.md](CHANGELOG.md)** for notable infra-facing changes.
 
