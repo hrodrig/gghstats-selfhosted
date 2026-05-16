@@ -7,6 +7,20 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.12] - 2026-05-17
+
+### Added
+
+- **Documentation:** [Custom UI theme (optional)](../README.md#custom-ui-theme-optional) in the root README — **`GGHSTATS_CUSTOM_CSS`**, **`v0.2.1`** image pin, Compose vs Helm notes, links to [gghstats `contrib/themes/`](https://github.com/hrodrig/gghstats/tree/main/contrib/themes) and upstream README.
+- **`run/README.md`:** table row linking to the theme section.
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.2.1`** ([gghstats v0.2.1](https://github.com/hrodrig/gghstats/releases/tag/v0.2.1)): [`run/common/.env.example`](run/common/.env.example), Compose image defaults ([Traefik](run/docker-compose/traefik/docker-compose.yml), [minimal](run/docker-compose/minimal/docker-compose.yml)), Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), [`run/docker/README.md`](run/docker/README.md), and root **README** examples.
+- **Compose:** pass optional **`GGHSTATS_CUSTOM_CSS`** into the **gghstats** service (Traefik + minimal stacks).
+- **Helm chart:** bump **`version:`** to **0.1.10**, **`appVersion`** to **0.2.1**, optional **`env.customCss`** → **`GGHSTATS_CUSTOM_CSS`** in [`templates/deployment.yaml`](run/kubernetes/helm/gghstats/templates/deployment.yaml).
+- **Documentation:** Custom UI theme — explicit **bind mount `/data`** (Compose / `docker run`) vs **Helm PVC** (and **`emptyDir`** when **`persistence.enabled: false`**), **`readOnlyRootFilesystem`**, UID **1000**; Helm chart README subsection for **`env.customCss`**. **`run/common/.env.example`** comments tie **`GGHSTATS_CUSTOM_CSS`** to the **`/data`** mount.
+
 ## [0.1.11] - 2026-05-11
 
 ### Changed
@@ -112,7 +126,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.11...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.12...HEAD
+[0.1.12]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.12
 [0.1.11]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.11
 [0.1.10]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.10
 [0.1.9]: https://github.com/hrodrig/gghstats-selfhosted/releases/tag/v0.1.9

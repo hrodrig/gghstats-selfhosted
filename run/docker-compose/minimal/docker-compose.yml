@@ -7,7 +7,7 @@ x-logging: &default-logging
 
 services:
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.1.6}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.2.1}
     container_name: gghstats
     restart: unless-stopped
     environment:
@@ -17,6 +17,7 @@ services:
       - GGHSTATS_SYNC_INTERVAL=${GGHSTATS_SYNC_INTERVAL:-1h}
       - GGHSTATS_INCLUDE_PRIVATE=${GGHSTATS_INCLUDE_PRIVATE:-false}
       - GGHSTATS_API_TOKEN=${GGHSTATS_API_TOKEN:-}
+      - GGHSTATS_CUSTOM_CSS=${GGHSTATS_CUSTOM_CSS:-}
     ports:
       - "${GGHSTATS_PORT:-8080}:${GGHSTATS_PORT:-8080}"
     volumes:

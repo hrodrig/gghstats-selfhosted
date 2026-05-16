@@ -69,6 +69,10 @@ spec:
             - name: GGHSTATS_METRICS
               value: {{ .Values.env.metrics | quote }}
             {{- end }}
+            {{- if .Values.env.customCss }}
+            - name: GGHSTATS_CUSTOM_CSS
+              value: {{ .Values.env.customCss | quote }}
+            {{- end }}
           volumeMounts:
             - name: data
               mountPath: /data
