@@ -1,0 +1,21 @@
+---
+# Copy to group_vars/all.yml (same directory as inventory) or merge into host vars.
+
+# TCP ports to allow through UFW (incoming). Adjust before locking yourself out.
+vps_allowed_tcp_ports:
+  - 22    # SSH — change if you use a non-default port and update ssh task first
+  - 80    # HTTP (e.g. Let's Encrypt HTTP-01, Traefik)
+  - 443   # HTTPS
+
+# SSH hardening is OFF by default. Enable only with key-based login verified.
+vps_ssh_harden: false
+# When vps_ssh_harden is true, set PasswordAuthentication no (requires pubkey login).
+vps_ssh_disable_password: false
+
+# Docker (tag: docker). Official Docker CE apt repo (docker-ce + docker-compose-plugin), one systemd unit.
+vps_install_docker: true
+# Leave empty to use ansible_user from inventory.yml; set YOUR_USER to override.
+vps_docker_user: ""
+
+# Fail2ban (tag: fail2ban, also runs with baseline when true). Debian packaging varies — verify jails after install.
+vps_install_fail2ban: true

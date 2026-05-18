@@ -1,0 +1,223 @@
+---
+# Agnostic VPS baseline — not gghstats-specific. Debian/Ubuntu only.
+# RECOMMENDATIONS ONLY: operator must review, validate, and accept full responsibility
+# for applying this playbook on their VPS. See ../README.md (Disclaimer).
+- name: VPS recommended baseline
+  hosts: vps
+  become: true
+  vars:
+    vps_allowed_tcp_ports:
+      - 22
+      - 80
+      - 443
+    vps_ssh_harden: false
+    vps_ssh_disable_password: false
+    vps_install_fail2ban: true
+    # Compose / docker run: true. Empty vps_docker_user = ansible_user from inventory.
+    vps_install_docker: true
+    vps_docker_user: ""
+    # Official Docker Engine apt repo (docker-ce + compose plugin). Do not mix with docker.io + docker-compose.
+    # Match https://docs.docker.com/engine/install/debian/ (unofficial + distro containerd/runc).
+    vps_docker_conflicting_packages:
+      - docker.io
+      - docker-cli
+      - docker-buildx
+      - docker-compose
+      - docker-doc
+      - podman-docker
+      - containerd
+      - runc
+    vps_docker_ce_packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    vps_docker_apt_arch_map:
+      x86_64: amd64
+      aarch64: arm64
+      armv7l: armhf
+  tasks:
+    - name: Require Debian family
+      ansible.builtin.assert:
+        that: ansible_facts["os_family"] == "Debian"
+        fail_msg: "This playbook targets Debian/Ubuntu only. Adapt or skip on other distros."
+      tags: [always]
+
+    - name: Install baseline packages
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - unattended-upgrades
+          - apt-listchanges
+        state: present
+        update_cache: true
+      tags: [baseline]
+
+    - name: Enable unattended security upgrades
+      ansible.builtin.copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Download-Upgradeable-Packages "1";
+          APT::Periodic::AutocleanInterval "7";
+          APT::Periodic::Unattended-Upgrade "1";
+      tags: [baseline]
+
+    # UFW modules need the binary on disk. In --check, apt does not install yet, so gate rules on stat.
+    - name: Firewall (UFW)
+      tags: [firewall]
+      block:
+        - name: Ensure UFW is installed
+          ansible.builtin.apt:
+            name: ufw
+            state: present
+
+        - name: Check UFW binary on target
+          ansible.builtin.stat:
+            path: /usr/sbin/ufw
+          register: ufw_binary
+
+        - name: UFW default deny incoming
+          community.general.ufw:
+            state: enabled
+            direction: incoming
+            policy: deny
+          when: ufw_binary.stat.exists | bool
+
+        - name: UFW allow TCP ports
+          community.general.ufw:
+            rule: allow
+            port: "{{ item | string }}"
+            proto: tcp
+          loop: "{{ vps_allowed_tcp_ports }}"
+          when: ufw_binary.stat.exists | bool
+
+    - name: Docker (Compose / docker run)
+      when: vps_install_docker | bool
+      tags: [docker]
+      vars:
+        vps_docker_distro: "{{ ansible_facts['distribution'] | lower }}"
+        vps_docker_suite: "{{ ansible_facts['distribution_release'] }}"
+        vps_docker_arch: "{{ vps_docker_apt_arch_map.get(ansible_facts['architecture'], ansible_facts['architecture']) }}"
+      block:
+        - name: Remove conflicting unofficial Docker packages
+          ansible.builtin.apt:
+            name: "{{ vps_docker_conflicting_packages }}"
+            state: absent
+            purge: false
+          register: docker_conflict_remove
+          failed_when: false
+
+        - name: Ensure apt keyrings directory exists
+          ansible.builtin.file:
+            path: /etc/apt/keyrings
+            state: directory
+            mode: "0755"
+
+        - name: Add Docker official apt GPG key
+          ansible.builtin.get_url:
+            url: "https://download.docker.com/linux/{{ vps_docker_distro }}/gpg"
+            dest: /etc/apt/keyrings/docker.asc
+            mode: "0644"
+
+        - name: Add Docker official apt repository
+          ansible.builtin.copy:
+            dest: /etc/apt/sources.list.d/docker.sources
+            mode: "0644"
+            content: |
+              Types: deb
+              URIs: https://download.docker.com/linux/{{ vps_docker_distro }}
+              Suites: {{ vps_docker_suite }}
+              Components: stable
+              Architectures: {{ vps_docker_arch }}
+              Signed-By: /etc/apt/keyrings/docker.asc
+
+        - name: Refresh apt cache after Docker repository
+          ansible.builtin.apt:
+            update_cache: true
+
+        - name: Install Docker Engine (CE) and Compose plugin
+          ansible.builtin.apt:
+            name: "{{ vps_docker_ce_packages }}"
+            state: present
+
+        - name: Check Docker CLI on target
+          ansible.builtin.stat:
+            path: /usr/bin/docker
+          register: docker_binary
+
+        - name: Enable and start Docker via systemd
+          ansible.builtin.systemd:
+            name: docker
+            state: started
+            enabled: true
+            daemon_reload: true
+          when: docker_binary.stat.exists | bool
+
+        - name: Add operator user to docker group
+          ansible.builtin.user:
+            name: "{{ vps_docker_user if (vps_docker_user | length > 0) else ansible_user }}"
+            groups: docker
+            append: true
+          when: docker_binary.stat.exists | bool
+
+        - name: Verify docker compose v2 plugin
+          ansible.builtin.command: docker compose version
+          register: compose_v2_check
+          changed_when: false
+          when: docker_binary.stat.exists | bool
+          failed_when: compose_v2_check.rc != 0
+
+    - name: SSH hardening block
+      when: vps_ssh_harden | bool
+      tags: [ssh]
+      block:
+        - name: PermitRootLogin prohibit-password
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^#?\s*PermitRootLogin\s+'
+            line: "PermitRootLogin prohibit-password"
+            validate: "sshd -t -f %s"
+          notify: Reload sshd
+
+        - name: Disable password authentication
+          when: vps_ssh_disable_password | bool
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^#?\s*PasswordAuthentication\s+'
+            line: "PasswordAuthentication no"
+            validate: "sshd -t -f %s"
+          notify: Reload sshd
+
+    - name: Fail2ban
+      when: vps_install_fail2ban | bool
+      tags: [fail2ban, baseline]
+      block:
+        - name: Install Fail2ban
+          ansible.builtin.apt:
+            name: fail2ban
+            state: present
+
+        - name: Check Fail2ban client on target
+          ansible.builtin.stat:
+            path: /usr/bin/fail2ban-client
+          register: fail2ban_binary
+
+        - name: Enable Fail2ban
+          ansible.builtin.service:
+            name: fail2ban
+            state: started
+            enabled: true
+          when: fail2ban_binary.stat.exists | bool
+
+  handlers:
+    - name: Reload sshd
+      ansible.builtin.service:
+        name: ssh
+        state: reloaded

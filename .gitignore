@@ -26,6 +26,9 @@
 # Deployment tree
 !run/
 !run/**
+# Operator-local Ansible (copy from *.example)
+run/vps-recommended/ansible/inventory.yml
+run/vps-recommended/ansible/group_vars/all.yml
 
 # SQLite placeholder at repo root (DB files stay ignored below)
 !data/

@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.15-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.16-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -26,6 +26,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Docker Compose Traefik HTTPS](#docker-compose-traefik-https)
 - [Observability optional](#observability-optional)
 - [Kubernetes Helm](#kubernetes-helm)
+- [Recommended VPS baseline (optional)](#recommended-vps-baseline-optional)
 - [Persistent data and secrets](#persistent-data-and-secrets)
 - [Custom UI theme (optional)](#custom-ui-theme-optional)
 - [Repository layout](#repository-layout)
@@ -47,6 +48,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 | **HTTPS + domain** (Traefik + Let’s Encrypt) | [Docker Compose Traefik HTTPS](#docker-compose-traefik-https) |
 | **Prometheus / Grafana / Loki** (after Traefik) | [Observability optional](#observability-optional) |
 | **Kubernetes** | [Kubernetes Helm](#kubernetes-helm) |
+| **Harden a fresh VPS** (optional, agnostic Ansible; recommendations only) | [Recommended VPS baseline](#recommended-vps-baseline-optional) |
 | **Simpler or custom dashboard look** (CSS overlay) | [Custom UI theme (optional)](#custom-ui-theme-optional) |
 
 Shared env template for Compose: copy **[`run/common/.env.example`](run/common/.env.example)** to **`${GGHSTATS_HOST_DATA}/.env`**, set **`GGHSTATS_HOST_DATA`** inside that file, and pass **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** to Compose. Deeper walkthroughs: **[`run/README.md`](run/README.md)**.
@@ -282,6 +284,27 @@ helm uninstall gghstats -n gghstats
 
 ---
 
+## Recommended VPS baseline (optional)
+
+**Goal:** generic **host** hygiene on a Debian/Ubuntu VPS — **not** gghstats containers or Traefik labels. The playbook can optionally install **Docker Engine (CE)** for Compose; skip that tag for binary-only or Helm nodes.
+
+If the attack vector is a **misconfigured or compromised VPS**, HTTP headers on the app will not help; operators secure **SSH**, **firewall**, and **automatic security updates** themselves. This repo ships an **optional, agnostic** Ansible playbook you run from your laptop against your server inventory.
+
+**Operator responsibility:** content under [`run/vps-recommended/`](run/vps-recommended/) is **recommendations only** — not a managed service. You must analyze, validate, and choose what to apply on **your** VPS; outcomes are **your** responsibility. See the [full disclaimer](run/vps-recommended/README.md#disclaimer) in that README.
+
+**Note:** step-by-step guides below often use **Docker Compose** because it is the usual path on a VPS; the baseline here is **not Compose-specific** — the same practices apply to **`docker run`**, a **standalone binary**, or **Helm on Kubernetes** (plus cluster-level controls where relevant).
+
+| Topic | Where |
+|-------|--------|
+| Philosophy, tags, dry-run | [`run/vps-recommended/README.md`](run/vps-recommended/README.md) |
+| Playbook | [`run/vps-recommended/ansible/playbook.yml`](run/vps-recommended/ansible/playbook.yml) |
+
+Typical order: **(1)** VPS baseline → **(2)** pick any [install path](#pick-a-path) (Compose is the common example; others are equivalent from a host-security view) → **(3)** store secrets and SQLite outside the clone ([persistent data](#persistent-data-and-secrets) — Compose uses **`${GGHSTATS_HOST_DATA}/.env`**; Helm uses Secrets/PVC; binary uses host paths you choose).
+
+**[↑ Contents](#table-of-contents)**
+
+---
+
 ## Persistent data and secrets
 
 *Recommended on servers:* colocate SQLite and env files outside the clone (see below).
@@ -332,6 +355,7 @@ Set **`env.customCss`** to a path **under `/data`** (e.g. **`/data/custom-theme.
 
 ```text
 run/
+├── vps-recommended/             # Optional agnostic VPS Ansible (not gghstats install)
 ├── common/.env.example          # Shared vars for Compose + image tag
 ├── scripts/                     # compose-stack.sh (docker compose helper)
 ├── standalone/{linux,macos,windows}/

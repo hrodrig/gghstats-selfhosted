@@ -7,6 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.16] - 2026-05-17
+
+### Added
+
+- **`run/vps-recommended/`** — optional agnostic VPS baseline (Ansible): unattended upgrades, UFW, official **Docker CE** + Compose plugin, **Fail2ban** (default on; verified on Debian 13 with **`sshd`** jail), optional **`sshd`** hardening. Does not install gghstats or Traefik app config. Operator-local `inventory.yml` / `group_vars/all.yml` gitignored. See [`run/vps-recommended/README.md`](run/vps-recommended/README.md).
+
+### Changed
+
+- Root **README** and **`run/README.md`**: link to VPS baseline section and layout entry.
+
 ## [0.1.15] - 2026-05-17
 
 ### Changed
@@ -149,7 +159,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.15...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.16...HEAD
+[0.1.16]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.15...v0.1.16
 [0.1.15]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.14...v0.1.15
 [0.1.14]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.13...v0.1.14
 [0.1.13]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.12...v0.1.13

@@ -1,0 +1,12 @@
+---
+# Copy to inventory.yml and adjust. Do not commit inventory.yml if it contains secrets.
+all:
+  children:
+    vps:
+      hosts:
+        my-vps:
+          ansible_host: 203.0.113.10
+          # Your existing sudo user — avoid predictable names like "gghstats" (see vps-recommended README).
+          ansible_user: deploy
+          # ansible_port: 22
+          # ansible_ssh_private_key_file: ~/.ssh/id_ed25519
