@@ -36,6 +36,7 @@ volumes:
 
 services:
   traefik:
+    container_name: traefik
     image: traefik:v3.6.12
     restart: always
     security_opt:
@@ -73,6 +74,7 @@ services:
     logging: *default-logging
 
   gghstats:
+    container_name: gghstats
     image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.4.0}
     restart: always
     user: "${GGS_UID:?set GGS_UID in .env to id -u}:${GGS_GID:?set GGS_GID in .env to id -g}"

@@ -172,6 +172,68 @@ Verify no leftover volumes: `docker volume ls | grep gghstats-obs` (remove strag
 
 Default URLs: **Grafana** `http://localhost:${GRAFANA_PORT:-3000}` · **Prometheus** `http://localhost:${PROMETHEUS_PORT:-9090}`. Pre-provisioned datasources point at `http://prometheus:9090` and `http://loki:3100` inside the stack.
 
+### Grafana fails to start after upgrading observability (0.1.17)
+
+If logs show `Datasource provisioning error: data source not found` and the container exits, the **`grafana_data` volume** was created **before** fixed datasource provisioning. **0.1.18+** uses datasource **names** in the dashboard (no fixed UIDs in `datasources.yml`).
+
+**Fix (keep dashboards in the volume):** update the clone to **≥ 0.1.18**, then recreate Grafana only:
+
+```bash
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+  -f run/docker-compose/observability/docker-compose.observability.yml \
+  -f run/docker-compose/observability/docker-compose.observability.traefik.yml \
+  up -d --force-recreate grafana
+```
+
+**Fix (clean slate):** `down -v` on the observability stack (see above) — wipes Grafana/Prometheus/Loki data — then `up -d` again.
+
+A plain **`404 page not found`** on `https://<GRAFANA_HOSTNAME>/login` usually means Grafana is **not running** (crash loop) or Traefik has no healthy backend — check `docker compose … ps` and `logs grafana`.
+
+### Dashboard **gghstats — Domain metrics** shows “No data” everywhere
+
+Grafana is up but panels are empty. Work through these checks on the **VPS** (from the clone root, same env files as usual).
+
+**1. Datasource file — no `uid` lines** (`datasources.yml` must match [the repo copy](observability/grafana/provisioning/datasources/datasources.yml): only `name`, `type`, `url` — **no** `uid:` on Prometheus or Loki).
+
+**2. App image ≥ 0.4.0** (domain metrics do not exist on older tags):
+
+```bash
+grep GGHSTATS_VERSION "${GGHSTATS_HOST_DATA}/.env"
+docker inspect gghstats --format '{{.Config.Image}}'
+```
+
+**3. Prometheus scrapes gghstats** — open Prometheus → **Status → Targets** (`http://localhost:9090/targets` or SSH tunnel). Job **`gghstats`** should be **UP**.
+
+Confirm Prometheus has data (this is what Grafana uses):
+
+```bash
+docker exec gghstats-obs-prometheus-1 wget -qO- \
+  'http://localhost:9090/api/v1/query?query=gghstats_repos_total'
+```
+
+Expect `"status":"success"` and a numeric `value`. The **Prometheus** image’s `wget` to `http://gghstats:8080` may still print **`bad address`** (BusyBox vs Docker DNS); that does **not** mean scrape failed if the query above works.
+
+If the query is empty, check **Status → Targets** for job **`gghstats`**. On **0.1.19+**, recreate the Traefik stack so **`container_name: gghstats`** is active on **`gghstats_edge`**:
+
+```bash
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
+  -f run/docker-compose/traefik/docker-compose.yml up -d --force-recreate
+```
+
+**4. Metrics exist in Prometheus** (from the host):
+
+```bash
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env.observability" -p gghstats-obs \
+  -f run/docker-compose/observability/docker-compose.observability.yml \
+  exec prometheus wget -qO- 'http://localhost:9090/api/v1/query?query=gghstats_repos_total'
+```
+
+Expect `"status":"success"` and a value in `result`. If empty, query `gghstats_build_info` — if that is also missing, the scrape target is wrong or the app has **`GGHSTATS_METRICS=false`**.
+
+**5. Grafana can reach Prometheus** — **Explore** → datasource **Prometheus** → query `gghstats_repos_total`. If Explore works but the provisioned dashboard does not, open the dashboard **Settings** → fix the datasource dropdown to **Prometheus** and **Save**.
+
+**6. After a successful full sync**, `gghstats_last_sync_timestamp_seconds` becomes &gt; 0; until then “hours since sync” may look empty even when other panels work.
+
 ### Grafana admin user and password (first boot only)
 
 `GF_SECURITY_ADMIN_USER` and `GF_SECURITY_ADMIN_PASSWORD` in Compose are applied only when Grafana **initializes a new database** (typically the **first** time the `grafana` service runs with an **empty** `grafana_data` volume). After that, the admin password is stored in Grafana’s SQLite DB inside the volume.

@@ -17,7 +17,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "description": "Unix time of the last successful full sync. Zero means no successful sync yet on this instance.",
       "fieldConfig": {
         "defaults": {
@@ -46,7 +46,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "(time() - gghstats_last_sync_timestamp_seconds) / 3600",
           "refId": "A"
         }
@@ -55,7 +55,7 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -72,7 +72,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "gghstats_repos_total",
           "legendFormat": "{{filter}}",
           "refId": "A"
@@ -82,7 +82,7 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -99,7 +99,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "gghstats_db_size_bytes",
           "refId": "A"
         }
@@ -108,7 +108,7 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -133,7 +133,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "gghstats_github_rate_limit_remaining{resource=\"core\"}",
           "refId": "A"
         }
@@ -142,7 +142,7 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -164,7 +164,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "histogram_quantile(0.95, sum(rate(gghstats_sync_duration_seconds_bucket[5m])) by (le, status))",
           "legendFormat": "p95 {{status}}",
           "refId": "A"
@@ -174,7 +174,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -195,7 +195,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "(time() - gghstats_last_sync_timestamp_seconds) / 3600",
           "legendFormat": "hours",
           "refId": "A"
@@ -213,7 +213,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -240,7 +240,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "100 * sum(rate(gghstats_github_api_requests_total{status!=\"success\"}[1h])) / sum(rate(gghstats_github_api_requests_total[1h]))",
           "refId": "A"
         }
@@ -249,7 +249,7 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -271,7 +271,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "sum(rate(gghstats_github_api_requests_total[5m])) by (status)",
           "legendFormat": "{{status}}",
           "refId": "A"
@@ -281,7 +281,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -302,7 +302,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "sum(rate(gghstats_github_api_requests_total[5m])) by (endpoint, status)",
           "legendFormat": "{{endpoint}} {{status}}",
           "refId": "A"
@@ -320,7 +320,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -341,7 +341,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "sum(rate(gghstats_http_requests_total{route!=\"metrics\"}[5m])) by (route, status)",
           "legendFormat": "{{route}} {{status}}",
           "refId": "A"
@@ -359,7 +359,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "gridPos": { "h": 3, "w": 24, "x": 0, "y": 40 },
       "id": 11,
       "options": {
@@ -371,7 +371,7 @@
       "type": "text"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -389,7 +389,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "topk(10, gghstats_repo_clones_7d)",
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
@@ -399,7 +399,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -417,7 +417,7 @@
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": "Prometheus",
           "expr": "topk(10, gghstats_repo_clones_30d)",
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"

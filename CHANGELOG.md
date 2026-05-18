@@ -7,6 +7,18 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.19] - 2026-05-18
+
+### Fixed
+
+- **Traefik Compose:** set **`container_name: gghstats`** and **`container_name: traefik`** so hostnames match [`prometheus.yml`](run/docker-compose/observability/observability/prometheus.yml) on shared **`gghstats_edge`** (separate Compose projects).
+
+## [0.1.18] - 2026-05-18
+
+### Fixed
+
+- **Grafana provisioning:** remove fixed datasource `uid` values that prevented startup when `grafana_data` already existed from an earlier stack (error: `data source not found`). Domain dashboard now references the **Prometheus** datasource by name.
+
 ## [0.1.17] - 2026-05-18
 
 ### Changed
@@ -18,7 +30,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - **Observability docs:** domain metric names and example PromQL on [`run/docker-compose/observability/README.md`](run/docker-compose/observability/README.md) (requires app **≥ 0.4.0**).
 - **`GGHSTATS_METRICS_PER_REPO`** documented in [`run/common/.env.example`](run/common/.env.example).
-- **Grafana:** provisioned dashboard **gghstats — Domain metrics** (`uid: gghstats-domain`) under folder **gghstats**; stable Prometheus/Loki datasource UIDs in provisioning.
+- **Grafana:** provisioned dashboard **gghstats — Domain metrics** (`uid: gghstats-domain`) under folder **gghstats**.
 
 ## [0.1.16] - 2026-05-17
 
@@ -172,7 +184,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.17...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.19...HEAD
+[0.1.19]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.18...v0.1.19
+[0.1.18]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.17...v0.1.18
 [0.1.17]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.16...v0.1.17
 [0.1.16]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.15...v0.1.16
 [0.1.15]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.14...v0.1.15
