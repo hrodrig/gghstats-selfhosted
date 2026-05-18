@@ -92,6 +92,8 @@ Images are referenced by **`linux/amd64` manifest digest** (with the semver tag 
 | [`observability/prometheus.yml`](observability/prometheus.yml) | Scrape config: `gghstats:8080`, `traefik:8080`, `node-exporter:9100`. |
 | [`observability/promtail-config.yaml`](observability/promtail-config.yaml) | Promtail Docker service discovery → Loki. |
 | [`observability/grafana/provisioning/datasources/datasources.yml`](observability/grafana/provisioning/datasources/datasources.yml) | Grafana datasources (Prometheus + Loki). |
+| [`observability/grafana/provisioning/dashboards/dashboards.yml`](observability/grafana/provisioning/dashboards/dashboards.yml) | File provider for provisioned dashboards (folder **gghstats**). |
+| [`observability/grafana/provisioning/dashboards/json/gghstats-domain.json`](observability/grafana/provisioning/dashboards/json/gghstats-domain.json) | **gghstats — Domain metrics** dashboard (app **≥ 0.4.0**). |
 | [`observability.env.example`](observability.env.example) | Copy to **`${GGHSTATS_HOST_DATA}/.env.observability`** (outside the repo); set secrets. |
 | [`docker-compose.observability.traefik.yml`](docker-compose.observability.traefik.yml) | **Optional:** Traefik labels so Grafana is reachable at **`https://<GRAFANA_HOSTNAME>`** (same Traefik/Let’s Encrypt as prod). **Does not** change the Traefik production Compose file. |
 
@@ -335,7 +337,11 @@ With **`GGHSTATS_METRICS_PER_REPO=true`**, top repos by 7d clones (matches UI **
 topk(5, gghstats_repo_clones_7d)
 ```
 
-Provisioned Grafana dashboards for these queries are planned in a follow-up change under `observability/grafana/provisioning/dashboards/`.
+### Provisioned dashboard
+
+After `up -d`, open Grafana → folder **gghstats** → **gghstats — Domain metrics** (or search uid `gghstats-domain`). Panels cover sync health, GitHub API, HTTP traffic, and optional per-repo clones (7d/30d) when **`GGHSTATS_METRICS_PER_REPO=true`** on the app.
+
+Recreate Grafana after changing JSON under `provisioning/dashboards/json/` (same `docker compose … up -d` command).
 
 ### Security (metrics)
 

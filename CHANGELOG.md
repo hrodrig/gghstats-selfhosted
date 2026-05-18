@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - **Observability docs:** domain metric names and example PromQL on [`run/docker-compose/observability/README.md`](run/docker-compose/observability/README.md) (requires app **≥ 0.4.0**).
 - **`GGHSTATS_METRICS_PER_REPO`** documented in [`run/common/.env.example`](run/common/.env.example).
+- **Grafana:** provisioned dashboard **gghstats — Domain metrics** (`uid: gghstats-domain`) under folder **gghstats**; stable Prometheus/Loki datasource UIDs in provisioning.
 
 ## [0.1.16] - 2026-05-17
 
