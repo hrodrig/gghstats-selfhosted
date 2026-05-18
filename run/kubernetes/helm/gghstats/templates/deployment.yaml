@@ -69,6 +69,10 @@ spec:
             - name: GGHSTATS_METRICS
               value: {{ .Values.env.metrics | quote }}
             {{- end }}
+            {{- if ne (.Values.env.metricsPerRepo | default "") "" }}
+            - name: GGHSTATS_METRICS_PER_REPO
+              value: {{ .Values.env.metricsPerRepo | quote }}
+            {{- end }}
             {{- if .Values.env.customCss }}
             - name: GGHSTATS_CUSTOM_CSS
               value: {{ .Values.env.customCss | quote }}

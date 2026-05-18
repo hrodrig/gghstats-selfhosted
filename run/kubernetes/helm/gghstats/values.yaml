@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v0.3.2"
+  tag: "v0.4.0"
   pullPolicy: IfNotPresent
 
 service:
@@ -24,6 +24,8 @@ env:
   customCss: ""
   # Leave empty for default (Prometheus /metrics enabled). Set to "false" to disable.
   metrics: ""
+  # Leave empty for default (off). Set to "true" for per-repo gauges (gghstats >= 0.4.0).
+  metricsPerRepo: ""
 
 githubToken:
   existingSecret: ""

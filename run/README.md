@@ -31,7 +31,7 @@ Stacks: **`minimal`**, **`traefik`**, **`observability`**, **`prod`** (Traefik s
 | [`kubernetes/helm/`](kubernetes/helm/) | **Helm** chart — install from the [published Helm repo](https://hrodrig.github.io/gghstats-selfhosted) when available; sources live here. |
 | [`kubernetes/manifests/`](kubernetes/manifests/) | Raw manifests — optional; see folder README. |
 | [`vps-recommended/`](vps-recommended/) | **Optional** agnostic VPS baseline (Ansible: updates, UFW, Docker CE, Fail2ban; optional SSH hardening) — **does not** install gghstats; same host hygiene for Compose, `docker run`, binary, or Helm. |
-| *(Optional)* **Custom dashboard CSS** | [Repository README — Custom UI theme (optional)](../README.md#custom-ui-theme-optional) — **`GGHSTATS_CUSTOM_CSS`**, image **≥ 0.2.0** (defaults use **`v0.3.2`**). |
+| *(Optional)* **Custom dashboard CSS** | [Repository README — Custom UI theme (optional)](../README.md#custom-ui-theme-optional) — **`GGHSTATS_CUSTOM_CSS`**, image **≥ 0.2.0** (defaults use **`v0.4.0`**). |
 
 Always use the **published image tag** that matches your desired [gghstats](https://github.com/hrodrig/gghstats) release (see `GGHSTATS_VERSION` in [`run/common/.env.example`](common/.env.example)).
 

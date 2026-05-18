@@ -22,7 +22,7 @@ See comments at the top of **[`observability.env.example`](observability.env.exa
 
 | Included | Notes |
 |----------|--------|
-| **`GET /metrics`** | Prometheus text exposition (HTTP metrics, build info, Go/process collectors). Optional disable: `GGHSTATS_METRICS=false`. |
+| **`GET /metrics`** | Prometheus text exposition (HTTP metrics, build info, Go/process collectors, **domain metrics** on gghstats **≥ 0.4.0**). Optional disable: `GGHSTATS_METRICS=false`. Optional per-repo gauges: `GGHSTATS_METRICS_PER_REPO=true` (higher cardinality). |
 
 That is the **only** observability surface shipped inside the gghstats binary and container. There is **no** embedded Prometheus, Grafana, Loki, or dashboards.
 
@@ -275,7 +275,11 @@ Grafana-on-Traefik is handled by **[`docker-compose.observability.traefik.yml`](
 | `gghstats_build_info` | Labels `version`, `commit`; value is always `1`. |
 | `gghstats_http_requests_total` | Labels `method`, `route`, `status`. `route` is **normalized** to limit cardinality. |
 | `gghstats_http_request_duration_seconds` | Labels `method`, `route` — latency histogram. |
+| **Domain (≥ 0.4.0)** | `gghstats_repos_total{filter}`, `gghstats_db_size_bytes`, `gghstats_last_sync_timestamp_seconds`, `gghstats_sync_duration_seconds{status}`, `gghstats_github_api_requests_total{endpoint,status}`, `gghstats_github_rate_limit_remaining{resource}` — refreshed on scrape and after successful sync. |
+| **Per-repo (≥ 0.4.0, opt-in)** | `gghstats_repo_stars`, `_forks`, `_clones`, `_views`, `_clones_1d`, `_clones_7d`, `_clones_30d` with labels `owner`, `repo` — same windows as the UI; enable with `GGHSTATS_METRICS_PER_REPO=true` on the app container. |
 | Go / process | `go_*`, `process_*` (where the OS supports the process collector). |
+
+Upstream reference: [gghstats README — `/metrics`](https://github.com/hrodrig/gghstats/blob/main/README.md).
 
 ### Example: Grafana Explore (Prometheus)
 
@@ -296,6 +300,42 @@ rate(gghstats_http_requests_total[5m])
 ```promql
 sum(rate(gghstats_http_requests_total{route!="metrics"}[5m])) by (route, status)
 ```
+
+### Example: domain metrics (gghstats ≥ 0.4.0)
+
+Requires the app image **v0.4.0** or newer (see **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`**). After deploy, confirm in Explore:
+
+```promql
+gghstats_repos_total
+```
+
+**Hours since last successful sync** (alert if > 24):
+
+```promql
+(time() - gghstats_last_sync_timestamp_seconds) / 3600
+```
+
+**GitHub API non-success ratio (1h):**
+
+```promql
+sum(rate(gghstats_github_api_requests_total{status!="success"}[1h]))
+/
+sum(rate(gghstats_github_api_requests_total[1h]))
+```
+
+**DB size (MB):**
+
+```promql
+gghstats_db_size_bytes / 1024 / 1024
+```
+
+With **`GGHSTATS_METRICS_PER_REPO=true`**, top repos by 7d clones (matches UI **(7d)** column):
+
+```promql
+topk(5, gghstats_repo_clones_7d)
+```
+
+Provisioned Grafana dashboards for these queries are planned in a follow-up change under `observability/grafana/provisioning/dashboards/`.
 
 ### Security (metrics)
 
