@@ -199,7 +199,8 @@ Grafana is up but panels are empty. Work through these checks on the **VPS** (fr
 
 ```bash
 grep GGHSTATS_VERSION "${GGHSTATS_HOST_DATA}/.env"
-docker inspect gghstats --format '{{.Config.Image}}'
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
+  -f run/docker-compose/traefik/docker-compose.yml ps gghstats
 ```
 
 **3. Prometheus scrapes gghstats** — open Prometheus → **Status → Targets** (`http://localhost:9090/targets` or SSH tunnel). Job **`gghstats`** should be **UP**.
@@ -213,7 +214,7 @@ docker exec gghstats-obs-prometheus-1 wget -qO- \
 
 Expect `"status":"success"` and a numeric `value`. The **Prometheus** image’s `wget` to `http://gghstats:8080` may still print **`bad address`** (BusyBox vs Docker DNS); that does **not** mean scrape failed if the query above works.
 
-If the query is empty, check **Status → Targets** for job **`gghstats`**. On **0.1.19+**, recreate the Traefik stack so **`container_name: gghstats`** is active on **`gghstats_edge`**:
+If the query is empty, check **Status → Targets** for job **`gghstats`**. Recreate the Traefik stack so services **`gghstats`** / **`traefik`** are on **`gghstats_edge`** (project **`gghstats-edge`**):
 
 ```bash
 docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \

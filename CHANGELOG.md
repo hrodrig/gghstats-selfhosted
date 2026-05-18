@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.20] - 2026-05-18
+
+### Fixed
+
+- **Grafana domain dashboard:** PromQL for sync age ignores `last_sync_timestamp_seconds == 0` (avoids multi-year spikes on the trend panel). Sync duration panel uses `increase()` over 6h instead of `rate(...[5m])` on sparse histograms. GitHub API error % uses `increase` + `clamp_min` so “no errors” shows **0%** instead of “No data”.
+
+### Changed
+
+- **Traefik Compose:** Compose project **`gghstats-edge`** (containers `gghstats-edge-traefik-1`, `gghstats-edge-gghstats-1`) — same style as observability **`gghstats-obs-*`**. Removed fixed **`container_name`**; Prometheus still uses service names **`gghstats`** / **`traefik`** on **`gghstats_edge`**.
+- **Traefik Compose:** pass through **`GGHSTATS_METRICS_PER_REPO`** from `${GGHSTATS_HOST_DATA}/.env` (default `false`) so per-repo Grafana panels can be enabled without editing the compose file.
+
 ## [0.1.19] - 2026-05-18
 
 ### Fixed

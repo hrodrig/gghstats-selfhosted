@@ -1,8 +1,8 @@
 # Prometheus scrape config for use with docker-compose.observability.yml (same directory as this file).
 #
-# Expects containers on the same Docker network (gghstats_edge) as this stack:
-# - `gghstats` from run/docker-compose/traefik/docker-compose.yml
-# - `traefik` (Prometheus metrics on :8080/metrics; enabled in that Traefik production Compose file)
+# Expects Compose *service* names on gghstats_edge (project gghstats-edge; containers gghstats-edge-gghstats-1, …):
+# - service `gghstats` from run/docker-compose/traefik/docker-compose.yml
+# - service `traefik` (:8080/metrics; enabled in that Traefik production Compose file)
 
 global:
   scrape_interval: 15s

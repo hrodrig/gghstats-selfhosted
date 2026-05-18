@@ -17,7 +17,7 @@ Run from any directory; paths are resolved relative to the repository clone.
 
 Stacks:
   minimal         run/docker-compose/minimal/docker-compose.yml
-  traefik         run/docker-compose/traefik/docker-compose.yml
+  traefik         run/docker-compose/traefik/docker-compose.yml (project: gghstats-edge)
   observability   run/docker-compose/observability/docker-compose.observability.yml (project: gghstats-obs)
   prod            Traefik + gghstats only: up | down | restart (no ordering puzzle for a single compose file)
   full            Same as --with-obs prod: Traefik + gghstats, then observability (Grafana overlay to Traefik)
@@ -127,7 +127,8 @@ MAIN_ENV="${GGHSTATS_HOST_DATA}/.env"
 OBS_ENV="${GGHSTATS_HOST_DATA}/.env.observability"
 
 compose_traefik() {
-  docker compose --env-file "$MAIN_ENV" -f "$ROOT/run/docker-compose/traefik/docker-compose.yml" "$@"
+  docker compose --env-file "$MAIN_ENV" -p gghstats-edge \
+    -f "$ROOT/run/docker-compose/traefik/docker-compose.yml" "$@"
 }
 
 compose_obs_traefik_overlay() {
@@ -192,7 +193,7 @@ case "$STACK" in
       echo "error: missing main env file: $MAIN_ENV" >&2
       exit 1
     }
-    COMPOSE_ARGS+=(--env-file "$MAIN_ENV" -f "$ROOT/run/docker-compose/traefik/docker-compose.yml")
+    COMPOSE_ARGS+=(--env-file "$MAIN_ENV" -p gghstats-edge -f "$ROOT/run/docker-compose/traefik/docker-compose.yml")
     ;;
   observability)
     [[ -f "$OBS_ENV" ]] || {
