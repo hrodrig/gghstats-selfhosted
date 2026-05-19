@@ -32,7 +32,7 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
   -f run/docker-compose/traefik/docker-compose.yml logs -f traefik
 ```
 
-**Upgrade from fixed `container_name: traefik` / `gghstats`:** `down` the stack, remove orphaned containers if `docker ps` still shows the old names, then `up -d` again.
+**Upgrade from 0.1.19 (`container_name: traefik` / `gghstats`, Compose project `traefik`):** use **`./run/scripts/compose-stack.sh full down`** (0.1.21+ also stops legacy project `traefik` and removes those containers), then **`full up -d`**. You should see **`gghstats-edge-traefik-1`** and **`gghstats-edge-gghstats-1`** in `docker ps`.
 
 Optional **Prometheus / Grafana / Loki**: **[`run/docker-compose/observability/`](../observability/README.md)** (start this Traefik stack first so `gghstats_edge` exists).
 

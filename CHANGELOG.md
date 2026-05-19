@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.21] - 2026-05-18
+
+### Fixed
+
+- **`compose-stack.sh`:** `traefik` / `prod` / `full` **`down`** also stops legacy Compose project **`traefik`** (pre-0.1.20) and removes fixed-name containers **`traefik`** / **`gghstats`** so `full down` does not leave the old stack running.
+
 ## [0.1.20] - 2026-05-18
 
 ### Fixed

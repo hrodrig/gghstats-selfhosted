@@ -10,6 +10,8 @@
 
 **Typical production with observability:** `./run/scripts/compose-stack.sh full restart` (or `full up -d` / `full down`).
 
+**After upgrading to 0.1.20+ naming (`gghstats-edge-*`):** if `full down` leaves old containers `traefik` / `gghstats` running, pull **0.1.21+** (legacy teardown in the script) or run `docker rm -f traefik gghstats`, then `full up -d`.
+
 **New gghstats image version:** edit **`GGHSTATS_VERSION`**, then **pull** (download from GHCR) and **`traefik up -d`** so the service is **recreated** with the new tag (`pull` + `up -d`, or **`up -d --pull always`**). Optional **`traefik down`** before pull/up for a full stop/start. **`restart`** / **`full restart`** does **not** replace the image — same container, same image it was created with.
 
 **Full validation checklist** (env, `compose config`, `docker ps`, browser): [repository README — Validate gghstats image upgrade](../../README.md#validate-gghstats-image-upgrade-compose--traefik).

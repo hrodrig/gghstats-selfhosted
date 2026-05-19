@@ -125,10 +125,35 @@ shift
 
 MAIN_ENV="${GGHSTATS_HOST_DATA}/.env"
 OBS_ENV="${GGHSTATS_HOST_DATA}/.env.observability"
+TRAEFIK_COMPOSE_FILE="$ROOT/run/docker-compose/traefik/docker-compose.yml"
+TRAEFIK_PROJECT=gghstats-edge
 
 compose_traefik() {
-  docker compose --env-file "$MAIN_ENV" -p gghstats-edge \
-    -f "$ROOT/run/docker-compose/traefik/docker-compose.yml" "$@"
+  docker compose --env-file "$MAIN_ENV" -p "$TRAEFIK_PROJECT" \
+    -f "$TRAEFIK_COMPOSE_FILE" "$@"
+}
+
+# Pre-0.1.20 stacks used Compose project "traefik" (directory name) and/or container_name traefik|gghstats.
+compose_traefik_legacy_teardown() {
+  local down_args=("$@")
+  local legacy_projects=(traefik gghstats-selfhosted)
+  local proj
+
+  for proj in "${legacy_projects[@]}"; do
+    if docker compose --env-file "$MAIN_ENV" -p "$proj" -f "$TRAEFIK_COMPOSE_FILE" ps -q 2>/dev/null | grep -q .; then
+      echo "Stopping legacy Compose project: $proj"
+      docker compose --env-file "$MAIN_ENV" -p "$proj" -f "$TRAEFIK_COMPOSE_FILE" \
+        down --remove-orphans "${down_args[@]}"
+    fi
+  done
+
+  local c
+  for c in traefik gghstats; do
+    if docker ps -a --format '{{.Names}}' | grep -Fxq "$c"; then
+      echo "Removing legacy container: $c (pre-${TRAEFIK_PROJECT} fixed container_name)"
+      docker rm -f "$c" || true
+    fi
+  done
 }
 
 compose_obs_traefik_overlay() {
@@ -171,6 +196,7 @@ case "$STACK" in
           compose_obs_traefik_overlay down "$@"
         fi
         compose_traefik down "$@"
+        compose_traefik_legacy_teardown "$@"
         ;;
       restart)
         compose_traefik restart "$@"
@@ -193,7 +219,7 @@ case "$STACK" in
       echo "error: missing main env file: $MAIN_ENV" >&2
       exit 1
     }
-    COMPOSE_ARGS+=(--env-file "$MAIN_ENV" -p gghstats-edge -f "$ROOT/run/docker-compose/traefik/docker-compose.yml")
+    COMPOSE_ARGS+=(--env-file "$MAIN_ENV" -p "$TRAEFIK_PROJECT" -f "$TRAEFIK_COMPOSE_FILE")
     ;;
   observability)
     [[ -f "$OBS_ENV" ]] || {
@@ -218,4 +244,7 @@ if [[ "$STACK" != "observability" && "$TRAEFIK_OVERLAY" -eq 1 ]]; then
 fi
 
 cd "$ROOT"
-exec docker compose "${COMPOSE_ARGS[@]}" "$COMPOSE_SUBCMD" "$@"
+docker compose "${COMPOSE_ARGS[@]}" "$COMPOSE_SUBCMD" "$@"
+if [[ "$STACK" == "traefik" && "$COMPOSE_SUBCMD" == "down" ]]; then
+  compose_traefik_legacy_teardown "$@"
+fi
