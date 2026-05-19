@@ -380,12 +380,14 @@
         "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
         "orientation": "horizontal",
         "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "sortBy": "value",
+        "sortOrder": "desc"
       },
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "topk(10, gghstats_repo_clones_7d)",
+          "expr": "sort_desc(topk(10, gghstats_repo_clones_7d))",
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
         }
@@ -408,12 +410,14 @@
         "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
         "orientation": "horizontal",
         "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "sortBy": "value",
+        "sortOrder": "desc"
       },
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "topk(10, gghstats_repo_clones_30d)",
+          "expr": "sort_desc(topk(10, gghstats_repo_clones_30d))",
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
         }
@@ -431,5 +435,5 @@
   "timezone": "browser",
   "title": "gghstats — Domain metrics",
   "uid": "gghstats-domain",
-  "version": 2
+  "version": 3
 }

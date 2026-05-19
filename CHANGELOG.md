@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.22] - 2026-05-18
+
+### Added
+
+- **Docs:** Grafana dashboard screenshots [`assets/grafana-domain-metrics-1.png`](assets/grafana-domain-metrics-1.png), [`assets/grafana-domain-metrics-2.png`](assets/grafana-domain-metrics-2.png) linked from [observability README](run/docker-compose/observability/README.md).
+
+### Fixed
+
+- **Grafana domain dashboard:** per-repo bar gauges sort by clone count descending (`sort_desc(topk(...))` + panel `sortBy: value`).
+- **Observability README:** remove broken links to missing Explore screenshots; document `sort_desc(topk(...))` for bar gauges.
+
 ## [0.1.21] - 2026-05-18
 
 ### Fixed

@@ -348,17 +348,13 @@ Upstream reference: [gghstats README — `/metrics`](https://github.com/hrodrig/
 
 ### Example: Grafana Explore (Prometheus)
 
-With Prometheus scraping **`gghstats`** and Grafana’s **Explore** tab using the provisioned Prometheus data source, you should see **`gghstats_*`** metrics in the metric picker:
-
-![Grafana Explore — `gghstats_*` metrics in the metric selector](../../../assets/grafana-explore-gghstats-metrics.png)
+With Prometheus scraping **`gghstats`** and Grafana’s **Explore** tab using the provisioned Prometheus data source, you should see **`gghstats_*`** metrics in the metric picker.
 
 Example query — HTTP request rate (per second) over a 5-minute window:
 
 ```promql
 rate(gghstats_http_requests_total[5m])
 ```
-
-![Grafana Explore — request rate by route and status](../../../assets/grafana-promql-gghstats-http-rate.png)
 
 **How to read it:** `rate(...[5m])` is an average requests-per-second over the last five minutes. The **`route="metrics"`** series is often the largest line: Prometheus scrapes **`GET /metrics`** on a fixed interval, so that traffic is expected. UI and API routes appear when users hit the app. To emphasize browser traffic only, exclude the scrape path, for example:
 
@@ -394,15 +390,21 @@ sum(rate(gghstats_github_api_requests_total[1h]))
 gghstats_db_size_bytes / 1024 / 1024
 ```
 
-With **`GGHSTATS_METRICS_PER_REPO=true`**, top repos by 7d clones (matches UI **(7d)** column):
+With **`GGHSTATS_METRICS_PER_REPO=true`**, top repos by 7d clones (matches UI **(7d)** column). For **bar gauge** panels in Grafana, sort by value with `sort_desc`:
 
 ```promql
-topk(5, gghstats_repo_clones_7d)
+sort_desc(topk(5, gghstats_repo_clones_7d))
 ```
 
 ### Provisioned dashboard
 
 After `up -d`, open Grafana → folder **gghstats** → **gghstats — Domain metrics** (or search uid `gghstats-domain`). Panels cover sync health, GitHub API, HTTP traffic, and optional per-repo clones (7d/30d) when **`GGHSTATS_METRICS_PER_REPO=true`** on the app.
+
+**Screenshots** (example from a live stack; values depend on your repos and sync):
+
+![gghstats — Domain metrics: Sync & store](../../../assets/grafana-domain-metrics-1.png)
+
+![gghstats — Domain metrics: HTTP and per-repo clones](../../../assets/grafana-domain-metrics-2.png)
 
 Recreate Grafana after changing JSON under `provisioning/dashboards/json/` (same `docker compose … up -d` command).
 
