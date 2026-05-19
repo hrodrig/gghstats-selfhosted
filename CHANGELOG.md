@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.23] - 2026-05-18
+
+### Fixed
+
+- **Grafana domain dashboard:** per-repo bar gauge queries now run in **Instant** mode (`instant: true`) so clone ranking renders in strict descending order (`sort_desc(topk(...))`) instead of time-range series order.
+
 ## [0.1.22] - 2026-05-18
 
 ### Added

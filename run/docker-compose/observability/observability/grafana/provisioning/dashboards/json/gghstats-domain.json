@@ -388,6 +388,7 @@
         {
           "datasource": "Prometheus",
           "expr": "sort_desc(topk(10, gghstats_repo_clones_7d))",
+          "instant": true,
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
         }
@@ -418,6 +419,7 @@
         {
           "datasource": "Prometheus",
           "expr": "sort_desc(topk(10, gghstats_repo_clones_30d))",
+          "instant": true,
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
         }
@@ -435,5 +437,5 @@
   "timezone": "browser",
   "title": "gghstats — Domain metrics",
   "uid": "gghstats-domain",
-  "version": 3
+  "version": 4
 }
