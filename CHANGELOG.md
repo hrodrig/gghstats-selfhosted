@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.20] - 2026-05-19
+
+### Added
+
+- **`.env.example`:** optional **`GGHSTATS_SYNC_ON_STARTUP`** ([gghstats >= 0.5.0](https://github.com/hrodrig/gghstats/releases/tag/v0.5.0)) — skip blocking full sync at container start when set to `false`.
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.5.0`** ([gghstats v0.5.0](https://github.com/hrodrig/gghstats/releases/tag/v0.5.0) — Head to Head, optional startup sync): [`run/common/.env.example`](run/common/.env.example), Compose defaults ([Traefik](run/docker-compose/traefik/docker-compose.yml), [minimal](run/docker-compose/minimal/docker-compose.yml)), Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and README examples.
+- **Helm chart:** bump **`version:`** to **0.1.15**, **`appVersion`** to **0.5.0**.
+
 ## [0.1.19] - 2026-05-18
 
 ### Fixed
