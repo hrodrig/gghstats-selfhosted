@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [0.1.20] - 2026-05-19
+## [0.1.24] - 2026-05-19
 
 ### Added
 
@@ -17,6 +17,40 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - Default **gghstats** container image tag **`v0.5.0`** ([gghstats v0.5.0](https://github.com/hrodrig/gghstats/releases/tag/v0.5.0) — Head to Head, optional startup sync): [`run/common/.env.example`](run/common/.env.example), Compose defaults ([Traefik](run/docker-compose/traefik/docker-compose.yml), [minimal](run/docker-compose/minimal/docker-compose.yml)), Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and README examples.
 - **Helm chart:** bump **`version:`** to **0.1.15**, **`appVersion`** to **0.5.0**.
+
+## [0.1.23] - 2026-05-18
+
+### Fixed
+
+- **Grafana domain dashboard:** per-repo bar gauge queries now run in **Instant** mode (`instant: true`) so clone ranking renders in strict descending order (`sort_desc(topk(...))`) instead of time-range series order.
+
+## [0.1.22] - 2026-05-18
+
+### Added
+
+- **Docs:** Grafana dashboard screenshots [`assets/grafana-domain-metrics-1.png`](assets/grafana-domain-metrics-1.png), [`assets/grafana-domain-metrics-2.png`](assets/grafana-domain-metrics-2.png) linked from [observability README](run/docker-compose/observability/README.md).
+
+### Fixed
+
+- **Grafana domain dashboard:** per-repo bar gauges sort by clone count descending (`sort_desc(topk(...))` + panel `sortBy: value`).
+- **Observability README:** remove broken links to missing Explore screenshots; document `sort_desc(topk(...))` for bar gauges.
+
+## [0.1.21] - 2026-05-18
+
+### Fixed
+
+- **`compose-stack.sh`:** `traefik` / `prod` / `full` **`down`** also stops legacy Compose project **`traefik`** (pre-0.1.20) and removes fixed-name containers **`traefik`** / **`gghstats`** so `full down` does not leave the old stack running.
+
+## [0.1.20] - 2026-05-18
+
+### Fixed
+
+- **Grafana domain dashboard:** PromQL for sync age ignores `last_sync_timestamp_seconds == 0` (avoids multi-year spikes on the trend panel). Sync duration panel uses `increase()` over 6h instead of `rate(...[5m])` on sparse histograms. GitHub API error % uses `increase` + `clamp_min` so “no errors” shows **0%** instead of “No data”.
+
+### Changed
+
+- **Traefik Compose:** Compose project **`gghstats-edge`** (containers `gghstats-edge-traefik-1`, `gghstats-edge-gghstats-1`) — same style as observability **`gghstats-obs-*`**. Removed fixed **`container_name`**; Prometheus still uses service names **`gghstats`** / **`traefik`** on **`gghstats_edge`**.
+- **Traefik Compose:** pass through **`GGHSTATS_METRICS_PER_REPO`** from `${GGHSTATS_HOST_DATA}/.env` (default `false`) so per-repo Grafana panels can be enabled without editing the compose file.
 
 ## [0.1.19] - 2026-05-18
 

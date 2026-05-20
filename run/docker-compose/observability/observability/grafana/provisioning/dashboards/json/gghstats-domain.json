@@ -47,7 +47,7 @@
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "(time() - gghstats_last_sync_timestamp_seconds) / 3600",
+          "expr": "((time() - gghstats_last_sync_timestamp_seconds) / 3600) and (gghstats_last_sync_timestamp_seconds > 0)",
           "refId": "A"
         }
       ],
@@ -143,35 +143,30 @@
     },
     {
       "datasource": "Prometheus",
+      "description": "Mean duration of successful full syncs in the last 6 hours (histogram observed once per sync, not a continuous rate).",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "lineWidth": 1,
-            "showPoints": "never",
-            "spanNulls": false
-          },
+          "decimals": 0,
           "unit": "s"
         }
       },
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 5 },
       "id": 5,
       "options": {
-        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "colorMode": "value",
+        "graphMode": "area",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }
       },
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "histogram_quantile(0.95, sum(rate(gghstats_sync_duration_seconds_bucket[5m])) by (le, status))",
-          "legendFormat": "p95 {{status}}",
+          "expr": "sum(increase(gghstats_sync_duration_seconds_sum{status=\"success\"}[6h])) / clamp_min(sum(increase(gghstats_sync_duration_seconds_count{status=\"success\"}[6h])), 1)",
           "refId": "A"
         }
       ],
-      "title": "Full sync duration (p95)",
-      "type": "timeseries"
+      "title": "Last successful sync duration (6h avg)",
+      "type": "stat"
     },
     {
       "datasource": "Prometheus",
@@ -196,7 +191,7 @@
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "(time() - gghstats_last_sync_timestamp_seconds) / 3600",
+          "expr": "((time() - gghstats_last_sync_timestamp_seconds) / 3600) and (gghstats_last_sync_timestamp_seconds > 0)",
           "legendFormat": "hours",
           "refId": "A"
         }
@@ -241,7 +236,7 @@
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "100 * sum(rate(gghstats_github_api_requests_total{status!=\"success\"}[1h])) / sum(rate(gghstats_github_api_requests_total[1h]))",
+          "expr": "100 * sum(increase(gghstats_github_api_requests_total{status!=\"success\"}[1h])) / clamp_min(sum(increase(gghstats_github_api_requests_total[1h])), 1)",
           "refId": "A"
         }
       ],
@@ -385,12 +380,15 @@
         "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
         "orientation": "horizontal",
         "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "sortBy": "value",
+        "sortOrder": "desc"
       },
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "topk(10, gghstats_repo_clones_7d)",
+          "expr": "sort_desc(topk(10, gghstats_repo_clones_7d))",
+          "instant": true,
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
         }
@@ -413,12 +411,15 @@
         "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
         "orientation": "horizontal",
         "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "sortBy": "value",
+        "sortOrder": "desc"
       },
       "targets": [
         {
           "datasource": "Prometheus",
-          "expr": "topk(10, gghstats_repo_clones_30d)",
+          "expr": "sort_desc(topk(10, gghstats_repo_clones_30d))",
+          "instant": true,
           "legendFormat": "{{owner}}/{{repo}}",
           "refId": "A"
         }
@@ -436,5 +437,5 @@
   "timezone": "browser",
   "title": "gghstats — Domain metrics",
   "uid": "gghstats-domain",
-  "version": 1
+  "version": 4
 }
