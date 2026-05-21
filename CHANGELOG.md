@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.26] - 2026-05-20
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.5.2`** ([gghstats v0.5.2](https://github.com/hrodrig/gghstats/releases/tag/v0.5.2) — H2H momentum chart and copy fixes): [`run/common/.env.example`](run/common/.env.example), Compose defaults ([Traefik](run/docker-compose/traefik/docker-compose.yml), [minimal](run/docker-compose/minimal/docker-compose.yml)), Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and README examples.
+- **Helm chart:** bump **`version:`** to **0.1.16**, **`appVersion`** to **0.5.2**.
+
 ## [0.1.24] - 2026-05-19
 
 ### Added
@@ -229,7 +236,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.19...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.26...HEAD
+[0.1.26]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.24...v0.1.26
 [0.1.19]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.18...v0.1.19
 [0.1.18]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.17...v0.1.18
 [0.1.17]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.16...v0.1.17
