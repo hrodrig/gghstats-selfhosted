@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.29] - 2026-05-21
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.6.2`** ([gghstats v0.6.2](https://github.com/hrodrig/gghstats/releases/tag/v0.6.2) — French and Brazilian Portuguese UI): Compose, Helm, README examples.
+- **Helm chart:** bump **`version:`** to **0.1.19**, **`appVersion`** to **0.6.2**.
+
+### Added
+
+- **`run/common/.env.example`:** example **`GGHSTATS_ENABLED_LOCALES=en,es,de,fr,pt-br`**.
+
 ## [0.1.28] - 2026-05-21
 
 ### Changed
