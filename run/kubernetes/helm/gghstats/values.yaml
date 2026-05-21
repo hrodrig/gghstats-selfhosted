@@ -19,6 +19,14 @@ env:
   filter: "*"
   includePrivate: "false"
   syncInterval: "1h"
+  # Optional (gghstats >= 0.5.0): "true" or "false"; empty = app default (true).
+  syncOnStartup: ""
+  # UI i18n (gghstats >= 0.6.0); API/CLI stay English.
+  defaultLocale: "en"
+  enabledLocales: "en,es,de,fr,pt-br"
+  # Optional (gghstats >= 0.3.0): badge embeds and public base URL behind ingress.
+  badgePublic: ""
+  publicUrl: ""
   apiToken: ""
   # Optional: path inside container to a .css file under /data (gghstats >= 0.2.0). Example: "/data/custom-theme.css".
   customCss: ""

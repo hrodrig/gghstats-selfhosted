@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.30] - 2026-05-21
+
+### Fixed
+
+- **Compose (minimal, Traefik):** pass **`GGHSTATS_DEFAULT_LOCALE`**, **`GGHSTATS_ENABLED_LOCALES`**, and related app env vars from `${GGHSTATS_HOST_DATA}/.env` into the gghstats container (fixes sidebar showing only EN/ES/DE when fr/pt-br were set on the host).
+- **Helm:** same i18n and optional env vars in [`deployment.yaml`](run/kubernetes/helm/gghstats/templates/deployment.yaml) and [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml).
+
+### Changed
+
+- **Helm chart:** bump **`version:`** to **0.1.20** (app image unchanged at **v0.6.2**).
+
 ## [0.1.29] - 2026-05-21
 
 ### Changed

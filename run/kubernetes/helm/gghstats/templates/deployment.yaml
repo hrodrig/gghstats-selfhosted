@@ -61,6 +61,22 @@ spec:
               value: {{ .Values.env.includePrivate | quote }}
             - name: GGHSTATS_SYNC_INTERVAL
               value: {{ .Values.env.syncInterval | quote }}
+            {{- if ne (.Values.env.syncOnStartup | default "") "" }}
+            - name: GGHSTATS_SYNC_ON_STARTUP
+              value: {{ .Values.env.syncOnStartup | quote }}
+            {{- end }}
+            - name: GGHSTATS_DEFAULT_LOCALE
+              value: {{ .Values.env.defaultLocale | quote }}
+            - name: GGHSTATS_ENABLED_LOCALES
+              value: {{ .Values.env.enabledLocales | quote }}
+            {{- if ne (.Values.env.badgePublic | default "") "" }}
+            - name: GGHSTATS_BADGE_PUBLIC
+              value: {{ .Values.env.badgePublic | quote }}
+            {{- end }}
+            {{- if ne (.Values.env.publicUrl | default "") "" }}
+            - name: GGHSTATS_PUBLIC_URL
+              value: {{ .Values.env.publicUrl | quote }}
+            {{- end }}
             {{- if .Values.env.apiToken }}
             - name: GGHSTATS_API_TOKEN
               value: {{ .Values.env.apiToken | quote }}

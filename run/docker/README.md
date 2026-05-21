@@ -11,6 +11,8 @@ mkdir -p "$GGHSTATS_HOST_DATA"
 docker run -d \
   -e GGHSTATS_GITHUB_TOKEN=ghp_xxx \
   -e GGHSTATS_FILTER="your-github-user/*" \
+  -e GGHSTATS_DEFAULT_LOCALE=en \
+  -e GGHSTATS_ENABLED_LOCALES=en,es,de,fr,pt-br \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
