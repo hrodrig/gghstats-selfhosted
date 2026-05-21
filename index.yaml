@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   gghstats:
   - apiVersion: v2
+    appVersion: 0.6.1
+    created: "2026-05-21T13:32:06.922326249Z"
+    description: Self-hosted GitHub repository traffic dashboard and CLI
+    digest: 88eb2c623262598e40aa744adfe357ad34851de72a0f679f89b4ebcfbdd6ea31
+    icon: https://raw.githubusercontent.com/hrodrig/gghstats-selfhosted/main/assets/gghstats-selfhosted-icon.png
+    name: gghstats
+    type: application
+    urls:
+    - https://github.com/hrodrig/gghstats-selfhosted/releases/download/gghstats-0.1.18/gghstats-0.1.18.tgz
+    version: 0.1.18
+  - apiVersion: v2
     appVersion: 0.6.0
     created: "2026-05-21T12:59:15.823043055Z"
     description: Self-hosted GitHub repository traffic dashboard and CLI
@@ -174,4 +185,4 @@ entries:
     urls:
     - https://github.com/hrodrig/gghstats-selfhosted/releases/download/gghstats-0.1.2/gghstats-0.1.2.tgz
     version: 0.1.2
-generated: "2026-05-21T12:59:15.823161686Z"
+generated: "2026-05-21T13:32:06.922486651Z"
