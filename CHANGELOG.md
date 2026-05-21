@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.31] - 2026-05-21
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.6.3`** ([gghstats v0.6.3](https://github.com/hrodrig/gghstats/releases/tag/v0.6.3) — German UI polish and i18n test coverage): Compose, Helm, README examples.
+- **Helm chart:** bump **`version:`** to **0.1.21**, **`appVersion`** to **0.6.3**.
+
 ## [0.1.30] - 2026-05-21
 
 ### Fixed
