@@ -7,6 +7,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.28] - 2026-05-21
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.6.1`** ([gghstats v0.6.1](https://github.com/hrodrig/gghstats/releases/tag/v0.6.1) — Secure flag on locale cookie, CodeQL fix): [`run/common/.env.example`](run/common/.env.example), Compose defaults, Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and README examples.
+- **Helm chart:** bump **`version:`** to **0.1.18**, **`appVersion`** to **0.6.1**.
+
 ## [0.1.27] - 2026-05-20
 
 ### Changed
