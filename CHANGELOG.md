@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.27] - 2026-05-20
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.6.0`** ([gghstats v0.6.0](https://github.com/hrodrig/gghstats/releases/tag/v0.6.0) — Web UI i18n en/es/de): [`run/common/.env.example`](run/common/.env.example), Compose defaults ([Traefik](run/docker-compose/traefik/docker-compose.yml), [minimal](run/docker-compose/minimal/docker-compose.yml)), Helm [`values.yaml`](run/kubernetes/helm/gghstats/values.yaml), and README examples.
+- **Helm chart:** bump **`version:`** to **0.1.17**, **`appVersion`** to **0.6.0**.
+
+### Added
+
+- **`run/common/.env.example`:** optional **`GGHSTATS_DEFAULT_LOCALE`** / **`GGHSTATS_ENABLED_LOCALES`** ([gghstats >= 0.6.0](https://github.com/hrodrig/gghstats/releases/tag/v0.6.0)); README versioning note links to upstream i18n docs.
+
 ## [0.1.26] - 2026-05-20
 
 ### Changed

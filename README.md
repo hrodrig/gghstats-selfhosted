@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.26-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.27-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -93,7 +93,7 @@ docker run -d \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
-  ghcr.io/hrodrig/gghstats:v0.5.2
+  ghcr.io/hrodrig/gghstats:v0.6.0
 ```
 
 Use an image tag that exists on GHCR ([releases](https://github.com/hrodrig/gghstats/releases)); match **`GGHSTATS_VERSION`** in [`run/common/.env.example`](run/common/.env.example).
@@ -317,7 +317,7 @@ Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/
 
 ## Custom UI theme (optional)
 
-**Requires** a [gghstats](https://github.com/hrodrig/gghstats) image **0.2.0** or newer (this repo’s Compose defaults use **`v0.5.2`**). The app serves an extra stylesheet at **`GET /theme/custom.css`** when **`GGHSTATS_CUSTOM_CSS`** points at a **regular `.css` file readable inside the container**.
+**Requires** a [gghstats](https://github.com/hrodrig/gghstats) image **0.2.0** or newer (this repo’s Compose defaults use **`v0.6.0`**). The app serves an extra stylesheet at **`GET /theme/custom.css`** when **`GGHSTATS_CUSTOM_CSS`** points at a **regular `.css` file readable inside the container**.
 
 ### Where the theme file must live (bind mount vs PVC)
 
@@ -336,7 +336,7 @@ After install, common options are **`kubectl cp`** a file into the running pod�
 
 **Compose / Traefik or minimal (steps)**
 
-1. Pin the image: set **`GGHSTATS_VERSION=v0.5.2`** in **`${GGHSTATS_HOST_DATA}/.env`** (see [`run/common/.env.example`](run/common/.env.example)).
+1. Pin the image: set **`GGHSTATS_VERSION=v0.6.0`** in **`${GGHSTATS_HOST_DATA}/.env`** (see [`run/common/.env.example`](run/common/.env.example)).
 2. Copy a starter from **[`gghstats` `contrib/themes/`](https://github.com/hrodrig/gghstats/tree/main/contrib/themes)** (or write your own) into the **host directory** that is bind-mounted to **`/data`** (same as [Persistent data and secrets](#persistent-data-and-secrets)), e.g. **`${GGHSTATS_HOST_DATA}/custom-theme.css`**.
 3. Set **`GGHSTATS_CUSTOM_CSS=/data/custom-theme.css`** in that **`.env`**.
 4. Recreate the app container so env and mounts apply: **`docker compose … up -d`** (not **`restart`** alone if you also changed **`GGHSTATS_VERSION`** — see [Versioning](#versioning)).
@@ -379,6 +379,7 @@ run/
 - **Helm chart (`run/kubernetes/helm/gghstats/Chart.yaml` → `version:`)** — semver of the **chart package** published to [GitHub Pages](https://hrodrig.github.io/gghstats-selfhosted/index.yaml) / [Releases](https://github.com/hrodrig/gghstats-selfhosted/releases). Bump **`version:`** when the chart itself changes (templates, `values`, etc.). It may **lag** behind **`VERSION`** (e.g. repo `0.2.0`, chart `0.1.5` until you edit the chart). [chart-releaser](https://github.com/helm/chart-releaser) may skip publishing if **`run/kubernetes/helm/`** did not change — expected for docs-only repo releases.
 - **`Chart.yaml` → `appVersion`** — **gghstats** application / image line; align with [gghstats releases](https://github.com/hrodrig/gghstats/releases) when you bump the deployed image story.
 - **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`** (or the env file you pass to Compose) — **container image** tag on GHCR ([gghstats releases](https://github.com/hrodrig/gghstats/releases)), not the same as **`VERSION`**.
+- **Optional (gghstats ≥ 0.6.0):** **`GGHSTATS_DEFAULT_LOCALE`** and **`GGHSTATS_ENABLED_LOCALES`** for dashboard UI languages (API/CLI stay English). See [gghstats — Web UI languages (i18n)](https://github.com/hrodrig/gghstats/blob/main/README.md#web-ui-languages-i18n) and [`run/common/.env.example`](run/common/.env.example).
 
 **Upgrading the app image:** (1) Set **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`**. (2) **Pull** the image from GHCR (so the new tag exists locally). (3) Run **`up -d`** so Compose **recreates** the service with that tag — e.g. **`./run/scripts/compose-stack.sh traefik pull`** then **`… traefik up -d`**, or **`… traefik up -d --pull always`**. Optionally **`traefik down`** before pull/up if you want everything stopped first. **`docker compose restart`** / **`compose-stack.sh … restart`** only restart the **existing** container — they **do not** apply a new image tag. See **[`run/common/.env.example`](run/common/.env.example)**.
 
@@ -397,7 +398,7 @@ Use this checklist from the **repository clone root** after editing **`GGHSTATS_
      -f run/docker-compose/traefik/docker-compose.yml config \
      | grep -E 'image:|gghstats'
    ```
-   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.5.2`**).
+   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.6.0`**).
 4. **Pull** and **recreate** the service (do not rely on **`restart`** alone):
    ```bash
    ./run/scripts/compose-stack.sh traefik pull
