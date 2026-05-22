@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.33] - 2026-05-22
+
+### Changed
+
+- **Traefik (production Compose):** bump image **`traefik:v3.6.12`** → **`traefik:v3.6.17`** (stay on **≥ v3.6.14** for security advisories, including ForwardAuth header handling). Recreate with `traefik pull` + `traefik up -d`.
+
 ## [0.1.32] - 2026-05-22
 
 ### Fixed
