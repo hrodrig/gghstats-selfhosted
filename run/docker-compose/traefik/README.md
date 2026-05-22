@@ -4,6 +4,8 @@
 
 **Traefik** terminates HTTPS (Let’s Encrypt) and routes to **gghstats** on the **`gghstats_edge`** Docker network. No host port is published for gghstats; only **80** and **443** for Traefik.
 
+**Prometheus `/metrics`:** the public router rule excludes `PathPrefix(`/metrics`)`, so `https://<GGHSTATS_HOSTNAME>/metrics` is **not** reachable from the Internet. Scraping uses the Compose service name on the internal network (`http://gghstats:8080/metrics` in [`observability/prometheus.yml`](../observability/observability/prometheus.yml)). After changing labels, recreate the stack (`up -d`) so Traefik reloads routing.
+
 Compose **project** `gghstats-edge` (containers `gghstats-edge-traefik-1`, `gghstats-edge-gghstats-1`) — same naming style as observability `gghstats-obs-*`. Use **`docker compose exec gghstats …`** (service name), not the old fixed names `traefik` / `gghstats`.
 
 **Shortcut:** [`run/scripts/compose-stack.sh`](../../scripts/compose-stack.sh) — e.g. `./run/scripts/compose-stack.sh traefik up -d`.

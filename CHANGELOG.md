@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.32] - 2026-05-22
+
+### Fixed
+
+- **Traefik (production Compose):** public router rule excludes **`/metrics`** (`!PathPrefix(\`/metrics\`)`) so Prometheus scrapes **`http://gghstats:8080/metrics`** on **`gghstats_edge`** only, not via the public hostname. Documented in [`run/docker-compose/traefik/README.md`](run/docker-compose/traefik/README.md).
+
 ## [0.1.31] - 2026-05-21
 
 ### Changed
