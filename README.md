@@ -42,7 +42,8 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 
 | You want… | Section |
 |-----------|---------|
-| **Binary only** (no Docker) | [Standalone binary](#standalone-binary) |
+| **Binary only** (no Docker) | [Standalone binary](#standalone-binary) — Linux: [systemd, `.deb`/`.rpm`, config](run/standalone/linux/README.md) |
+| **Linux `.deb` / `.rpm` + systemd** | [run/standalone/linux/README.md](run/standalone/linux/README.md) |
 | **Single container** (`docker run`) | [Docker single container](#docker-single-container) |
 | **Compose, one service** (quick VPS) | [Docker Compose minimal](#docker-compose-minimal) |
 | **HTTPS + domain** (Traefik + Let’s Encrypt) | [Docker Compose Traefik HTTPS](#docker-compose-traefik-https) |
@@ -59,21 +60,16 @@ Shared env template for Compose: copy **[`run/common/.env.example`](run/common/.
 
 ## Standalone binary
 
-**Goal:** run the app without Docker.
+**Goal:** run the app without Docker — tarball, **`.deb`**, **`.rpm`**, or **systemd** on Linux.
 
-1. Download a release asset for your OS/arch from **[gghstats Releases](https://github.com/hrodrig/gghstats/releases)**.
-2. Extract the binary, then:
+**All implementation detail** (env file paths, `systemctl`, package install, filters on a server) is in **[`run/standalone/`](run/standalone/README.md)** — start with **[Linux](run/standalone/linux/README.md)** for packages and systemd.
 
-```bash
-export GGHSTATS_GITHUB_TOKEN=ghp_xxx   # classic PAT with repo scope as needed
-./gghstats serve
-```
+**Smoke test** (UI only):
 
-**Check:** open **http://localhost:8080** (or the port you set).
+1. Install via [gghstats Install](https://github.com/hrodrig/gghstats#install) (Homebrew, tarball, or package).
+2. `export GGHSTATS_GITHUB_TOKEN=ghp_xxx` and `gghstats serve` — open **http://localhost:8080**.
 
-**Stop:** `Ctrl+C`. SQLite path depends on your config — see **[gghstats `.env.example`](https://github.com/hrodrig/gghstats/blob/main/.env.example)**.
-
-**More:** [run/standalone/linux](run/standalone/linux/README.md) · [macos](run/standalone/macos/README.md) · [windows](run/standalone/windows/README.md)
+**macOS / Windows:** [run/standalone/macos](run/standalone/macos/README.md) · [run/standalone/windows](run/standalone/windows/README.md)
 
 **[↑ Contents](#table-of-contents)**
 

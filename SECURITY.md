@@ -18,7 +18,8 @@ to the latest release to receive security fixes.
 
 **Do not open a public issue** for security vulnerabilities.
 
-- **Preferred:** Use [GitHub Security Advisories](https://github.com/hrodrig/gghstats/security/advisories/new) to report privately.
+- **Preferred:** Use [GitHub Security Advisories (gghstats-selfhosted)](https://github.com/hrodrig/gghstats-selfhosted/security/advisories/new) for issues in this repository (Compose, Helm, env templates, docs, deployment layout).
+- **Application (binary / `ghcr.io` image):** report via [gghstats Security Advisories](https://github.com/hrodrig/gghstats/security/advisories/new) when the flaw is in the app itself, not the manifests here.
 - **Alternative:** Contact the maintainer via [github.com/hrodrig](https://github.com/hrodrig) with:
   - clear description
   - impact

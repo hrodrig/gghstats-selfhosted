@@ -23,7 +23,7 @@ Stacks: **`minimal`**, **`traefik`**, **`observability`**, **`prod`** (Traefik s
 | Directory | When to use |
 |-----------|-------------|
 | [`run/common/`](common/) | Shared **environment template** for Compose. Copy to **`${GGHSTATS_HOST_DATA}/.env`**, set **`GGHSTATS_HOST_DATA`** inside that file, then `docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f …` from the clone root (see [`run/common/.env.example`](common/.env.example)). |
-| [`standalone/`](standalone/) | **Release binaries** from [gghstats Releases](https://github.com/hrodrig/gghstats/releases) — no Docker. |
+| [`standalone/`](standalone/) | **Linux/macOS/Windows binary** — [Linux: systemd, `.deb`/`.rpm`, `/etc/gghstats`](standalone/linux/README.md). |
 | [`docker/`](docker/) | **`docker run`** with the GHCR image — minimal, no Compose file. |
 | [`docker-compose/minimal/`](docker-compose/minimal/) | **One Compose service** — quick test or small VPS. |
 | [`docker-compose/traefik/`](docker-compose/traefik/) | **Traefik + TLS** — production-style HTTPS on your domain. |
