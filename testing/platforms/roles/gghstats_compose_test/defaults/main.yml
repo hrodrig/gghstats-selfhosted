@@ -1,0 +1,3 @@
+---
+compose_docker_path_prefix: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+gghstats_compose_container_name: gghstats

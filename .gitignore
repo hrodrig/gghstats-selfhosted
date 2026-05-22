@@ -30,6 +30,12 @@
 run/vps-recommended/ansible/inventory.yml
 run/vps-recommended/ansible/group_vars/all.yml
 
+# Automation — Compose batch tests on real VPS (inventory is local)
+!Makefile
+!testing/
+!testing/**
+testing/platforms/inventory/hosts.yml
+
 # SQLite placeholder at repo root (DB files stay ignored below)
 !data/
 !data/.keep

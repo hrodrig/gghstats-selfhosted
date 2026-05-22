@@ -1,0 +1,36 @@
+# Copy to hosts.yml (gitignored) and set real hosts, token, and paths.
+#
+# Run from repo root: make test-compose-platforms
+# Or: cd testing/platforms && ansible-playbook playbooks/full-cycle.yml
+#
+# Prerequisites on each host: Docker Engine + docker compose plugin; valid GitHub PAT.
+
+all:
+  vars:
+    gghstats_compose_repo_version: develop
+    gghstats_compose_repo_url: https://github.com/hrodrig/gghstats-selfhosted.git
+    gghstats_compose_repo_dest: /opt/gghstats-selfhosted
+
+    gghstats_image_version: v0.6.4
+    gghstats_port: 8080
+    gghstats_filter: "*"
+    gghstats_sync_on_startup: "false"
+
+    # Required — fine-grained or classic PAT with read access to repos in gghstats_filter.
+    gghstats_github_token: ghp_REPLACE
+
+    gghstats_host_data: /var/lib/gghstats-compose
+    # gghstats_container_uid: "1000"
+    # gghstats_container_gid: "1000"
+
+  children:
+    compose_vps:
+      hosts:
+        vps-debian:
+          ansible_host: 203.0.113.10
+          ansible_port: 2201
+          ansible_user: root
+        vps-ubuntu:
+          ansible_host: 203.0.113.10
+          ansible_port: 2202
+          ansible_user: root

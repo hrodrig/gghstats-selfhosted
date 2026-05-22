@@ -1,0 +1,22 @@
+---
+- name: gghstats-selfhosted compose teardown
+  hosts: all
+  gather_facts: false
+  become: true
+  vars:
+    compose_docker_path_prefix: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+  tasks:
+    - name: Minimal stack down
+      ansible.builtin.command:
+        argv:
+          - ./run/scripts/compose-stack.sh
+          - minimal
+          - down
+        chdir: "{{ gghstats_compose_repo_dest }}"
+      environment:
+        GGHSTATS_HOST_DATA: "{{ gghstats_host_data }}"
+        PATH: "{{ compose_docker_path_prefix }}:{{ (ansible_facts.env | default(ansible_facts.ansible_env | default({}))).PATH | default('/usr/bin:/bin') }}"
+      register: compose_down
+      changed_when: compose_down.rc == 0
+      failed_when: false

@@ -10,8 +10,10 @@ Thank you for helping improve these deployment manifests.
 
 ## Checks before submitting
 
+- **`make release-check`** (from the repository root) when you touch Helm and/or Compose paths — same scenarios as CI plus **`docker compose … config`** for the minimal stack.
 - Paths under **`run/`** match the documented layout; **`docker compose … config`** succeeds when a minimal env file is provided (e.g. **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** with **`GGHSTATS_HOST_DATA`** set, or a dev **`./.env`** at the repo root with defaults). For observability: **`--env-file "${GGHSTATS_HOST_DATA}/.env.observability"`** and **`-p gghstats-obs`**.
-- **Helm:** If your PR changes **`run/kubernetes/helm/`**, run **[Helm chart validation (same as CI)](#helm-chart-validation-same-as-ci)** below. GitHub Actions runs [**.github/workflows/helm-lint.yml**](.github/workflows/helm-lint.yml) on those paths.
+- **Helm:** If your PR changes **`run/kubernetes/helm/`**, run **[Helm chart validation (same as CI)](#helm-chart-validation-same-as-ci)** below (or **`make release-check`**). GitHub Actions runs [**.github/workflows/helm-lint.yml**](.github/workflows/helm-lint.yml) on those paths.
+- **Optional (maintainers):** **`make test-compose-platforms`** on lab VPS ([`testing/platforms/README.md`](testing/platforms/README.md)); **`make test-helm-kind`** with **`GGHSTATS_HELM_E2E_GITHUB_TOKEN`** ([`testing/kind/README.md`](testing/kind/README.md)).
 - **English** for README and comments.
 - If you bump **[`VERSION`](VERSION)**, keep the README **Version** badge and **CHANGELOG** aligned. Bump **`Chart.yaml` `version:`** only when **`run/kubernetes/helm/gghstats/`** changes and you intend to publish a **new chart package** — **`VERSION`** and chart **`version:`** do not need to match on every release (see **Versioning** in the root README).
 

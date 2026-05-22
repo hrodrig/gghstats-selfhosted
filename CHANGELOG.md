@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`testing/`** — Ansible **Compose minimal** platform tests on real VPS (`make test-compose-platforms`); **kind** + Helm smoke test (`make test-helm-kind`, requires `GGHSTATS_HELM_E2E_GITHUB_TOKEN`).
+- **`Makefile`** — `release-check`, `test-compose-platforms`, `test-helm-kind` (local gates aligned with CI and operator paths).
+
 ## [0.1.33] - 2026-05-22
 
 ### Changed

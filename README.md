@@ -363,7 +363,14 @@ run/
 └── kubernetes/
     ├── helm/gghstats/           # Helm chart named "gghstats" (app); not the repo name
     └── manifests/
+testing/
+├── platforms/                   # Ansible: minimal Compose on real VPS (make test-compose-platforms)
+├── kind/                        # kind + Helm smoke test docs
+└── scripts/                     # test-helm-kind.sh
+Makefile                         # release-check, test-compose-platforms, test-helm-kind
 ```
+
+Maintainers: **`make release-check`** before tagging; optional **`testing/platforms`** and **`make test-helm-kind`** — see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 **[↑ Contents](#table-of-contents)**
 

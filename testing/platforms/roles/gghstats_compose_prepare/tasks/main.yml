@@ -1,0 +1,48 @@
+---
+- name: Check required variables
+  ansible.builtin.assert:
+    that:
+      - gghstats_github_token is defined
+      - gghstats_github_token | length > 0
+      - gghstats_host_data is defined
+      - gghstats_host_data | length > 0
+    quiet: true
+
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Ensure repository parent directory exists
+  ansible.builtin.file:
+    path: "{{ gghstats_compose_repo_dest | dirname }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone or update gghstats-selfhosted
+  ansible.builtin.git:
+    repo: "{{ gghstats_compose_repo_url }}"
+    dest: "{{ gghstats_compose_repo_dest }}"
+    version: "{{ gghstats_compose_repo_version }}"
+    update: true
+
+- name: Ensure GGHSTATS_HOST_DATA directory exists
+  ansible.builtin.file:
+    path: "{{ gghstats_host_data }}"
+    state: directory
+    mode: "0755"
+
+- name: Deploy Compose environment file
+  ansible.builtin.template:
+    src: env.compose.j2
+    dest: "{{ gghstats_host_data }}/.env"
+    mode: "0600"
+
+- name: Set GGHSTATS_HOST_DATA ownership for gghstats container user
+  ansible.builtin.file:
+    path: "{{ gghstats_host_data }}"
+    state: directory
+    owner: "{{ gghstats_container_uid }}"
+    group: "{{ gghstats_container_gid }}"
+    mode: "0755"
+    recurse: true

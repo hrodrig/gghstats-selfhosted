@@ -1,0 +1,10 @@
+---
+gghstats_compose_repo_url: https://github.com/hrodrig/gghstats-selfhosted.git
+gghstats_compose_repo_dest: /opt/gghstats-selfhosted
+gghstats_compose_repo_version: develop
+gghstats_image_version: v0.6.4
+gghstats_port: 8080
+gghstats_filter: "*"
+gghstats_sync_on_startup: "false"
+gghstats_container_uid: "1000"
+gghstats_container_gid: "1000"

@@ -1,0 +1,8 @@
+---
+- name: gghstats-selfhosted compose test
+  hosts: all
+  gather_facts: false
+  become: true
+
+  roles:
+    - gghstats_compose_test

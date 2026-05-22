@@ -1,0 +1,59 @@
+---
+- name: Verify Docker CLI is available
+  ansible.builtin.command:
+    argv:
+      - docker
+      - --version
+  environment:
+    PATH: "{{ compose_docker_path_prefix }}:{{ (ansible_facts.env | default(ansible_facts.ansible_env | default({}))).PATH | default('/usr/bin:/bin') }}"
+  register: gghstats_compose_docker_check
+  changed_when: false
+  failed_when: false
+
+- name: Prerequisite validation — Docker CLI
+  ansible.builtin.fail:
+    msg: >
+      Prerequisite check failed: Docker CLI not available (docker --version failed).
+      Install Docker Engine and the Compose v2 plugin on this host (same requirement as running
+      compose-stack.sh manually). Ansible prepends {{ compose_docker_path_prefix }} to PATH for non-login SSH.
+      See https://docs.docker.com/engine/install/
+  when: gghstats_compose_docker_check.rc != 0
+
+- name: Start minimal stack
+  ansible.builtin.command:
+    argv:
+      - ./run/scripts/compose-stack.sh
+      - minimal
+      - up
+      - -d
+    chdir: "{{ gghstats_compose_repo_dest }}"
+  environment:
+    GGHSTATS_HOST_DATA: "{{ gghstats_host_data }}"
+    PATH: "{{ compose_docker_path_prefix }}:{{ (ansible_facts.env | default(ansible_facts.ansible_env | default({}))).PATH | default('/usr/bin:/bin') }}"
+  register: compose_up
+  changed_when: >
+    'Creating' in (compose_up.stdout | default(''))
+    or 'Started' in (compose_up.stdout | default(''))
+    or 'Starting' in (compose_up.stdout | default(''))
+    or 'Recreate' in (compose_up.stdout | default(''))
+    or 'recreated' in (compose_up.stderr | default(''))
+
+- name: Wait for gghstats HTTP listener in container logs
+  ansible.builtin.shell: docker logs "{{ gghstats_compose_container_name }}" 2>&1 | tail -400
+  environment:
+    PATH: "{{ compose_docker_path_prefix }}:{{ (ansible_facts.env | default(ansible_facts.ansible_env | default({}))).PATH | default('/usr/bin:/bin') }}"
+  register: gghstats_log_check
+  until: gghstats_log_check.rc == 0 and ('listening' in gghstats_log_check.stdout)
+  retries: 45
+  delay: 2
+  changed_when: false
+
+- name: Health check on published port
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ gghstats_port | default(8080) }}/api/v1/healthz"
+    method: GET
+    status_code: 200
+  register: gghstats_health
+  until: gghstats_health.status == 200
+  retries: 15
+  delay: 2
