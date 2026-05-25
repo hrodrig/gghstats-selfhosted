@@ -8,8 +8,8 @@ These playbooks **fail fast on the same prerequisite checks** a human operator w
 
 | Suite | What it validates |
 | --- | --- |
-| **This directory** | **Docker** + **Compose v2**; clone or update **gghstats-selfhosted**; render **`${GGHSTATS_HOST_DATA}/.env`**; **`chown` `${GGHSTATS_HOST_DATA}`** to **1000:1000** (official image user); **`compose-stack.sh minimal up -d`**; wait for **`listening`** in **`docker logs gghstats`**; **`GET /api/v1/healthz`** on the published port; **`minimal down`** in teardown |
-| [gghstats](https://github.com/hrodrig/gghstats) | Application unit tests, packages, Homebrew — not Compose manifests |
+| **This directory** | **Docker** + **Compose v2** on **Linux** VPS; clone **gghstats-selfhosted**; **`compose-stack.sh minimal`**; **`/api/v1/healthz`**; teardown |
+| [gghstats](https://github.com/hrodrig/gghstats) | Go unit tests (`make test`); **native OS** installs (`.deb`/`.rpm`/BSD) via **`make test-platforms`** in **`gghstats/testing/platforms/`** — not Docker |
 | **`make test-helm-kind`** | **kind** + Helm chart (see [testing/kind/README.md](../kind/README.md)) |
 
 **Not in scope here:** Traefik, observability, or Helm on real clusters (extend playbooks later if needed).
@@ -25,7 +25,7 @@ These playbooks **fail fast on the same prerequisite checks** a human operator w
 
 1. **Docker Engine** and **Docker Compose v2** (`docker compose`). Install on each target **before** running playbooks.
 2. **Git** (the prepare role installs **git** when missing).
-3. **Python 3** for Ansible. On *BSD set `ansible_python_interpreter` in inventory (see `inventory/hosts.yml.example`).
+3. **Python 3** on the control node for Ansible. Target hosts must be **Linux with Docker** (not \*BSD — BSD has no supported Docker path for this Compose suite).
 4. A **GitHub fine-grained or classic PAT** with **read** access to the repos you put in **`gghstats_filter`** (set in inventory as **`gghstats_github_token`**).
 
 ## Quick start
@@ -84,9 +84,16 @@ If **`/api/v1/healthz`** fails but logs show **`listening`**, check **`gghstats_
 
 If the container exits immediately, verify **`gghstats_github_token`** and **`gghstats_filter`** (`docker logs gghstats`).
 
+## Relationship to gghstats (application repo)
+
+| Repo | Validates |
+|------|-----------|
+| **gghstats** `testing/platforms/` | Native **`.deb`/`.rpm`/BSD tarball**, systemd/rc.d, `/etc/gghstats/gghstats.env` |
+| **gghstats-selfhosted** (here) | **Docker Compose** + **Helm/kind** on Linux |
+
+Run both before a release if you changed **packaging** and **deployment manifests**.
+
 ## Relationship to pgwd-selfhosted
 
-- **pgwd-selfhosted** exercises **Postgres-backed** Compose + optional notification mocks.
-- **This repo** exercises **gghstats Compose + GHCR image** as documented under **`run/docker-compose/minimal/`**.
-
-Run both before a release if you maintain both products and changed shared Compose patterns.
+- **pgwd-selfhosted** — Compose + Postgres on Linux VPS.
+- **This repo** — gghstats Compose + GHCR image (`run/docker-compose/minimal/`).
