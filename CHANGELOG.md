@@ -7,12 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.35] - 2026-05-29
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.7.2`** ([gghstats v0.7.2](https://github.com/hrodrig/gghstats/releases/tag/v0.7.2) — sqlite bump, **x/net** pin guard): Compose, Helm, README examples, platform test defaults.
+- **Helm chart:** bump **`version:`** to **0.1.23**, **`appVersion`** to **0.7.2**.
+
+## [0.1.34] - 2026-05-27
+
 ### Added
 
 - **`testing/`** — Ansible **Compose minimal** platform tests on real VPS (`make test-compose-platforms`); **kind** + Helm smoke test (`make test-helm-kind`, requires `GGHSTATS_HELM_E2E_GITHUB_TOKEN`).
 - **`Makefile`** — `release-check`, `test-compose-platforms`, `test-helm-kind` (local gates aligned with CI and operator paths).
-
-## [0.1.34] - 2026-05-27
 
 ### Changed
 
