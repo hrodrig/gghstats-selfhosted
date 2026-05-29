@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.36] - 2026-05-29
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.7.3`** ([gghstats v0.7.3](https://github.com/hrodrig/gghstats/releases/tag/v0.7.3) — per-site SEO `/robots.txt` + `/sitemap.xml`, **x/net** v0.55.0): Compose, Helm, README examples, platform test defaults.
+- **Helm chart:** bump **`version:`** to **0.1.24**, **`appVersion`** to **0.7.3**.
+- **`run/common/.env.example`:** document **`GGHSTATS_PUBLIC_URL`** for public sitemap/robots (gghstats ≥ 0.7.3).
+
 ## [0.1.35] - 2026-05-29
 
 ### Changed
@@ -314,7 +322,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.26...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.36...HEAD
+[0.1.36]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.35...v0.1.36
 [0.1.26]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.24...v0.1.26
 [0.1.19]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.18...v0.1.19
 [0.1.18]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.17...v0.1.18
