@@ -89,7 +89,7 @@ docker run -d \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
-  ghcr.io/hrodrig/gghstats:v0.7.4
+  ghcr.io/hrodrig/gghstats:v0.7.5
 ```
 
 Use an image tag that exists on GHCR ([releases](https://github.com/hrodrig/gghstats/releases)); match **`GGHSTATS_VERSION`** in [`run/common/.env.example`](run/common/.env.example).
@@ -164,6 +164,8 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/tra
 ```
 
 **More:** [run/docker-compose/traefik/README.md](run/docker-compose/traefik/README.md)
+
+> **Rate limiting (defence in depth):** gghstats ≥ 0.7.5 applies built-in per-IP rate limiting (120 req/min, burst 20). The Traefik compose keeps its own rate-limit middleware at the edge — together they provide layered protection. If you tune the in-app limits, you can relax the Traefik layer. See [gghstats README — Rate limiting](https://github.com/hrodrig/gghstats/blob/main/README.md#rate-limiting).
 
 **[↑ Contents](#table-of-contents)**
 
@@ -313,7 +315,7 @@ Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/
 
 ## Custom UI theme (optional)
 
-**Requires** a [gghstats](https://github.com/hrodrig/gghstats) image **0.2.0** or newer (this repo’s Compose defaults use **`v0.7.4`**). The app serves an extra stylesheet at **`GET /theme/custom.css`** when **`GGHSTATS_CUSTOM_CSS`** points at a **regular `.css` file readable inside the container**.
+**Requires** a [gghstats](https://github.com/hrodrig/gghstats) image **0.2.0** or newer (this repo’s Compose defaults use **`v0.7.5`**). The app serves an extra stylesheet at **`GET /theme/custom.css`** when **`GGHSTATS_CUSTOM_CSS`** points at a **regular `.css` file readable inside the container**.
 
 ### Where the theme file must live (bind mount vs PVC)
 
@@ -332,7 +334,7 @@ After install, common options are **`kubectl cp`** a file into the running pod�
 
 **Compose / Traefik or minimal (steps)**
 
-1. Pin the image: set **`GGHSTATS_VERSION=v0.7.4`** in **`${GGHSTATS_HOST_DATA}/.env`** (see [`run/common/.env.example`](run/common/.env.example)).
+1. Pin the image: set **`GGHSTATS_VERSION=v0.7.5`** in **`${GGHSTATS_HOST_DATA}/.env`** (see [`run/common/.env.example`](run/common/.env.example)).
 2. Copy a starter from **[`gghstats` `contrib/themes/`](https://github.com/hrodrig/gghstats/tree/main/contrib/themes)** (or write your own) into the **host directory** that is bind-mounted to **`/data`** (same as [Persistent data and secrets](#persistent-data-and-secrets)), e.g. **`${GGHSTATS_HOST_DATA}/custom-theme.css`**.
 3. Set **`GGHSTATS_CUSTOM_CSS=/data/custom-theme.css`** in that **`.env`**.
 4. Recreate the app container so env and mounts apply: **`docker compose … up -d`** (not **`restart`** alone if you also changed **`GGHSTATS_VERSION`** — see [Versioning](#versioning)).
@@ -401,7 +403,7 @@ Use this checklist from the **repository clone root** after editing **`GGHSTATS_
      -f run/docker-compose/traefik/docker-compose.yml config \
      | grep -E 'image:|gghstats'
    ```
-   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.7.4`**).
+   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v0.7.5`**).
 4. **Pull** and **recreate** the service (do not rely on **`restart`** alone):
    ```bash
    ./run/scripts/compose-stack.sh traefik pull

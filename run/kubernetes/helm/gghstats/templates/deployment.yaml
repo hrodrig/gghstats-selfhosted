@@ -89,6 +89,22 @@ spec:
             - name: GGHSTATS_METRICS_PER_REPO
               value: {{ .Values.env.metricsPerRepo | quote }}
             {{- end }}
+            {{- if ne (.Values.env.rateLimitEnabled | default "") "" }}
+            - name: GGHSTATS_RATE_LIMIT_ENABLED
+              value: {{ .Values.env.rateLimitEnabled | quote }}
+            {{- end }}
+            {{- if ne (.Values.env.rateLimitRequests | default "") "" }}
+            - name: GGHSTATS_RATE_LIMIT_REQUESTS
+              value: {{ .Values.env.rateLimitRequests | quote }}
+            {{- end }}
+            {{- if ne (.Values.env.rateLimitPeriod | default "") "" }}
+            - name: GGHSTATS_RATE_LIMIT_PERIOD
+              value: {{ .Values.env.rateLimitPeriod | quote }}
+            {{- end }}
+            {{- if ne (.Values.env.rateLimitBurst | default "") "" }}
+            - name: GGHSTATS_RATE_LIMIT_BURST
+              value: {{ .Values.env.rateLimitBurst | quote }}
+            {{- end }}
             {{- if .Values.env.customCss }}
             - name: GGHSTATS_CUSTOM_CSS
               value: {{ .Values.env.customCss | quote }}
