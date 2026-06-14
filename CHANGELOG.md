@@ -5,6 +5,14 @@ All notable changes to **gghstats-selfhosted** (deployment manifests, docs, and 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.1.39] - 2026-06-14
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.7.7`** ([gghstats v0.7.7](https://github.com/hrodrig/gghstats/releases/tag/v0.7.7) — IP whitelist, query param sanitization, SQLite 3.53.2): Compose, README examples.
+- **Compose:** add `GGHSTATS_WHITELIST*` env vars to `run/common/.env.example`.
+- **README:** add IP whitelist note alongside rate limiting in Traefik section.
+
 ## [0.1.38] - 2026-06-14
 
 ### Changed
