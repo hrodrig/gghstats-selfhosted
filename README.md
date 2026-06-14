@@ -166,6 +166,8 @@ docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -f run/docker-compose/tra
 **More:** [run/docker-compose/traefik/README.md](run/docker-compose/traefik/README.md)
 
 > **Rate limiting (defence in depth):** gghstats ≥ 0.7.5 applies built-in per-IP rate limiting (120 req/min, burst 20). The Traefik compose keeps its own rate-limit middleware at the edge — together they provide layered protection. If you tune the in-app limits, you can relax the Traefik layer. See [gghstats README — Rate limiting](https://github.com/hrodrig/gghstats/blob/main/README.md#rate-limiting).
+>
+> **`/metrics` is public by default.** The Traefik compose excludes it from the public router (`!PathPrefix`). Prometheus scrapes internally via `http://gghstats:8080/metrics` on the Docker network. If you use **minimal Compose** or **`docker run`**, protect `/metrics` with a firewall or set `GGHSTATS_METRICS=false`.
 
 **[↑ Contents](#table-of-contents)**
 
