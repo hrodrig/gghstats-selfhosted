@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Default **gghstats** container image tag **`v0.7.5`** ([gghstats v0.7.5](https://github.com/hrodrig/gghstats/releases/tag/v0.7.5) — per-IP rate limiting, alpine 3.24): Compose, Helm, README examples.
+- **Helm chart:** bump **`version:`** to **0.1.26**, **`appVersion`** to **0.7.5**.
+- **Helm:** add `GGHSTATS_RATE_LIMIT_*` env vars (`rateLimitEnabled`, `rateLimitRequests`, `rateLimitPeriod`, `rateLimitBurst`).
+- **Compose:** add rate limit env vars to `run/common/.env.example`.
+- **Traefik compose:** update rate-limit middleware comment to note gghstats >= 0.7.5 has built-in rate limiting.
+
 ## [0.1.37] - 2026-06-10
 
 ### Changed

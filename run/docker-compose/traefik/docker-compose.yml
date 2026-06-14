@@ -79,7 +79,7 @@ services:
     logging: *default-logging
 
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.7.4}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.7.5}
     restart: always
     user: "${GGS_UID:?set GGS_UID in .env to id -u}:${GGS_GID:?set GGS_GID in .env to id -g}"
     security_opt:
@@ -108,7 +108,9 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=gghstats_edge
-      # Rate limit per client IP (token bucket); reduces noisy scanners before they hit the app.
+      # Rate limit per client IP (token bucket). gghstats >= 0.7.5 has built-in per-IP rate limiting;
+      # keep this Traefik middleware as defence-in-depth against noisy scanners at the edge.
+      # If you tune the in-app limit, you can relax or remove this layer.
       - traefik.http.middlewares.gghstats-ratelimit.ratelimit.average=10
       - traefik.http.middlewares.gghstats-ratelimit.ratelimit.period=1s
       - traefik.http.middlewares.gghstats-ratelimit.ratelimit.burst=50
