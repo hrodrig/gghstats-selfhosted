@@ -10,13 +10,25 @@ Use this guide when you run **gghstats as a native Linux binary** (tarball, `.de
 
 ## Quick install (command only)
 
+**Smoke test** (UI only) — minimal path to try the dashboard; **not** production. Same commands as [gghstats Quick start](https://github.com/hrodrig/gghstats#quick-start):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hrodrig/gghstats/main/scripts/install.sh | sh
+export GGHSTATS_GITHUB_TOKEN=ghp_xxx
+gghstats run --open
+```
+
+**`run`** is an alias for **`serve`**; **`--open`** opens the browser when the dashboard is ready. Background sync starts automatically. Open **http://localhost:8080** if you did not use **`--open`**.
+
+**Server install** (packages, systemd, filters):
+
 | Platform | Command |
 |----------|---------|
-| **Tarball** | Download `gghstats_*_linux_*.tar.gz` from [gghstats Releases](https://github.com/hrodrig/gghstats/releases), extract, run `./gghstats serve` |
+| **Tarball** | Download `gghstats_*_linux_*.tar.gz` from [gghstats Releases](https://github.com/hrodrig/gghstats/releases), extract to your path |
 | **Debian / Ubuntu** | See [`.deb` package](#debian--ubuntu-deb) below |
 | **Fedora / RHEL / AlmaLinux / Rocky / Oracle** | See [`.rpm` package](#fedora--rhel--almalinux-rpm) below |
 
-Set **`GGHSTATS_GITHUB_TOKEN`** before `gghstats serve`. For a **smoke test** of the UI only, a minimal env is enough; for a **server**, complete the configuration sections below (or prefer [Docker Compose Traefik](../../docker-compose/traefik/README.md)).
+For a **server**, complete the [configuration sections](#configuration-on-linux-bare-metal) below (or prefer [Docker Compose Traefik](../../docker-compose/traefik/README.md)).
 
 ---
 

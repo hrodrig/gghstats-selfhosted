@@ -66,10 +66,15 @@ Shared env template for Compose: copy **[`run/common/.env.example`](run/common/.
 
 **All implementation detail** (env file paths, `systemctl`, package install, filters on a server) is in **[`run/standalone/`](run/standalone/README.md)** — start with **[Linux](run/standalone/linux/README.md)** for packages and systemd.
 
-**Smoke test** (UI only):
+**Smoke test** (UI only) — minimal path to try the dashboard; **not** production. Same commands as [gghstats Quick start](https://github.com/hrodrig/gghstats#quick-start):
 
-1. Install via [gghstats Install](https://github.com/hrodrig/gghstats#install) (Homebrew, tarball, or package).
-2. `export GGHSTATS_GITHUB_TOKEN=ghp_xxx` and `gghstats serve` — open **http://localhost:8080**.
+```bash
+curl -fsSL https://raw.githubusercontent.com/hrodrig/gghstats/main/scripts/install.sh | sh
+export GGHSTATS_GITHUB_TOKEN=ghp_xxx
+gghstats run --open
+```
+
+**`run`** is an alias for **`serve`**; **`--open`** opens the browser when the dashboard is ready. Background sync starts automatically. Open **http://localhost:8080** if you did not use **`--open`**. Other install options (Homebrew, `.deb`, tarball): [gghstats Install](https://github.com/hrodrig/gghstats#install).
 
 **macOS / Windows:** [run/standalone/macos](run/standalone/macos/README.md) · [run/standalone/windows](run/standalone/windows/README.md)
 
