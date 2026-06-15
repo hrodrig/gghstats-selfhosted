@@ -5,7 +5,7 @@ All notable changes to **gghstats-selfhosted** (deployment manifests, docs, and 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.1.40] - 2026-06-14
 
 ### Added
 
