@@ -1,0 +1,66 @@
+###############################################################################
+#                   Authelia configuration for gghstats                        #
+# Copy to ${GGHSTATS_HOST_DATA}/authelia/configuration.yml and edit secrets.  #
+###############################################################################
+
+theme: dark
+
+default_2fa_method: totp
+
+server:
+  address: tcp://0.0.0.0:9091
+
+log:
+  level: info
+
+totp:
+  issuer: gghstats
+  period: 30
+  skew: 1
+
+webauthn:
+  disable: false
+
+authentication_backend:
+  file:
+    path: /config/users.yml
+    password:
+      algorithm: argon2id
+      iterations: 1
+
+access_control:
+  default_policy: deny
+  rules:
+    # Allow login portal (public).
+    - domain: "{{ env \"HOSTNAME\" }}"
+      policy: bypass
+      resources:
+        - "^/auth/.*$"
+
+    # Protect the dashboard (require login).
+    - domain: "{{ env \"HOSTNAME\" }}"
+      policy: one_factor
+      resources:
+        - "^/api/.*$"
+        - "^/h2h$"
+
+session:
+  name: gghstats_session
+  secret: ""
+  expiration: 24h
+  inactivity: 1h
+  domain: "{{ env \"HOSTNAME\" }}"
+  remember_me: 30d
+
+regulation:
+  max_retries: 5
+  find_time: 2m
+  ban_time: 5m
+
+storage:
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /config/notifications.yml

@@ -7,6 +7,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 TRAEFIK_OVERLAY=0
 WITH_OBS=0
+WITH_AUTH=0
 DATA_DIR=""
 
 usage() {
@@ -19,8 +20,11 @@ Stacks:
   minimal         run/docker-compose/minimal/docker-compose.yml
   traefik         run/docker-compose/traefik/docker-compose.yml (project: gghstats-edge)
   observability   run/docker-compose/observability/docker-compose.observability.yml (project: gghstats-obs)
+  authelia        run/docker-compose/authelia/docker-compose.authelia.yml (project: gghstats-auth)
   prod            Traefik + gghstats only: up | down | restart (no ordering puzzle for a single compose file)
-  full            Same as --with-obs prod: Traefik + gghstats, then observability (Grafana overlay to Traefik)
+  full            Same as --with-obs prod: Traefik + gghstats, then observability
+                  Add --with-auth for Authelia on top of Traefik + gghstats (portal at /auth)
+                  Add --with-obs --with-auth for all three stacks (Traefik + gghstats + observability + Authelia)
 
   For Traefik + gghstats + observability on the shared Docker network (gghstats_edge):
   start the traefik stack first, then observability. The observability stack does not
@@ -37,6 +41,7 @@ Stacks:
 Options:
   --data-dir DIR   Set GGHSTATS_HOST_DATA for this invocation (otherwise use env GGHSTATS_HOST_DATA)
   --with-obs       (prod only; place before "prod") Same as stack "full" — include observability in the ordered steps
+  --with-auth      (prod only; place before "prod") Include Authelia SSO (portal at /auth)
   --traefik        (observability only) Also load docker-compose.observability.traefik.yml (Grafana via Traefik)
   -h, --help       Show this help
 
@@ -68,6 +73,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --with-obs)
       WITH_OBS=1
+      shift
+      ;;
+    --with-auth)
+      WITH_AUTH=1
       shift
       ;;
     --traefik)
@@ -133,6 +142,11 @@ compose_traefik() {
     -f "$TRAEFIK_COMPOSE_FILE" "$@"
 }
 
+compose_authelia() {
+  docker compose --env-file "$MAIN_ENV" -p gghstats-auth \
+    -f "$ROOT/run/docker-compose/authelia/docker-compose.authelia.yml" "$@"
+}
+
 # Pre-0.1.20 stacks used Compose project "traefik" (directory name) and/or container_name traefik|gghstats.
 compose_traefik_legacy_teardown() {
   local down_args=("$@")
@@ -190,8 +204,14 @@ case "$STACK" in
         if [[ "$WITH_OBS" -eq 1 ]]; then
           compose_obs_traefik_overlay up "$@"
         fi
+        if [[ "$WITH_AUTH" -eq 1 ]]; then
+          compose_authelia up "$@"
+        fi
         ;;
       down)
+        if [[ "$WITH_AUTH" -eq 1 ]]; then
+          compose_authelia down "$@"
+        fi
         if [[ "$WITH_OBS" -eq 1 ]]; then
           compose_obs_traefik_overlay down "$@"
         fi
@@ -202,6 +222,9 @@ case "$STACK" in
         compose_traefik restart "$@"
         if [[ "$WITH_OBS" -eq 1 ]]; then
           compose_obs_traefik_overlay restart "$@"
+        fi
+        if [[ "$WITH_AUTH" -eq 1 ]]; then
+          compose_authelia restart "$@"
         fi
         ;;
     esac
@@ -231,8 +254,16 @@ case "$STACK" in
       COMPOSE_ARGS+=(-f "$ROOT/run/docker-compose/observability/docker-compose.observability.traefik.yml")
     fi
     ;;
+  authelia)
+    [[ -f "$MAIN_ENV" ]] || {
+      echo "error: missing main env file: $MAIN_ENV" >&2
+      exit 1
+    }
+    COMPOSE_ARGS+=(--env-file "$MAIN_ENV" -p gghstats-auth -f "$ROOT/run/docker-compose/authelia/docker-compose.authelia.yml")
+    ;;
+
   *)
-    echo "error: unknown stack: $STACK (use minimal, traefik, observability, prod, or full)" >&2
+    echo "error: unknown stack: $STACK (use minimal, traefik, observability, authelia, prod, or full)" >&2
     usage >&2
     exit 1
     ;;

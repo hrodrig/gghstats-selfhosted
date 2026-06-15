@@ -1,0 +1,73 @@
+version: '3.8'
+
+# Authelia SSO stack for gghstats (advanced, optional).
+# Requires the Traefik stack running on gghstats_edge (project gghstats-edge).
+# Project name: gghstats-auth
+#
+# Usage (from repository root, after starting traefik stack):
+#   1. cp run/docker-compose/authelia/authelia/configuration.yml "${GGHSTATS_HOST_DATA}/authelia/configuration.yml"
+#   2. cp run/docker-compose/authelia/authelia/users.yml       "${GGHSTATS_HOST_DATA}/authelia/users.yml"
+#   3. Edit users.yml and set secrets in ${GGHSTATS_HOST_DATA}/.env (see README)
+#   4. docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -p gghstats-auth \
+#        -f run/docker-compose/authelia/docker-compose.authelia.yml up -d
+#   5. Restart the traefik stack so it picks up the authelia middleware labels:
+#        docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -p gghstats-edge \
+#          -f run/docker-compose/traefik/docker-compose.yml up -d
+#
+# After adding Authelia, restart the Traefik stack (not just reload) so labels are applied.
+
+services:
+  authelia:
+    image: authelia/authelia:4.39
+    container_name: gghstats-auth-authelia
+    restart: unless-stopped
+    networks:
+      - edge
+    volumes:
+      - ${GGHSTATS_HOST_DATA:?set GGHSTATS_HOST_DATA}/authelia:/config
+    environment:
+      AUTHELIA_JWT_SECRET_FILE: /run/secrets/authelia_jwt_secret
+      AUTHELIA_SESSION_SECRET_FILE: /run/secrets/authelia_session_secret
+      AUTHELIA_STORAGE_PASSWORD_FILE: /run/secrets/authelia_storage_password
+    secrets:
+      - authelia_jwt_secret
+      - authelia_session_secret
+      - authelia_storage_password
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=gghstats_edge
+      # Authelia portal (login / 2FA / password reset)
+      - traefik.http.routers.authelia.rule=Host(`${GGHSTATS_HOSTNAME:?set GGHSTATS_HOSTNAME}`) && PathPrefix(`/auth`)
+      - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.routers.authelia.tls=true
+      - traefik.http.routers.authelia.tls.certresolver=le
+      - traefik.http.routers.authelia.middlewares=gghstats-hdr
+      # Internal auth server (forwardAuth endpoint)
+      - traefik.http.middlewares.authelia-forward.forwardauth.address=http://authelia:9091/api/verify?rd=https://${GGHSTATS_HOSTNAME}/auth/
+      - traefik.http.middlewares.authelia-forward.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.authelia-forward.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Email,Remote-Name
+    expose:
+      - 9091
+
+  redis:
+    image: valkey/valkey:8.1-alpine
+    container_name: gghstats-auth-redis
+    restart: unless-stopped
+    networks:
+      - edge
+    command: redis-server --requirepass "${AUTHELIA_STORAGE_PASSWORD:?set AUTHELIA_STORAGE_PASSWORD}"
+    expose:
+      - 6379
+
+networks:
+  edge:
+    name: gghstats_edge
+    external: true
+
+secrets:
+  authelia_jwt_secret:
+    environment: AUTHELIA_JWT_SECRET
+  authelia_session_secret:
+    environment: AUTHELIA_SESSION_SECRET
+  authelia_storage_password:
+    environment: AUTHELIA_STORAGE_PASSWORD
