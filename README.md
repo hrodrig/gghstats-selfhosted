@@ -25,6 +25,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Docker Compose minimal](#docker-compose-minimal)
 - [Docker Compose Traefik HTTPS](#docker-compose-traefik-https)
 - [Observability optional](#observability-optional)
+- [Authelia SSO (advanced)](#authelia-sso-advanced-optional)
 - [Kubernetes Helm](#kubernetes-helm)
 - [Recommended VPS baseline (optional)](#recommended-vps-baseline-optional)
 - [Persistent data and secrets](#persistent-data-and-secrets)
@@ -48,6 +49,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 | **Compose, one service** (quick VPS) | [Docker Compose minimal](#docker-compose-minimal) |
 | **HTTPS + domain** (Traefik + Let’s Encrypt) | [Docker Compose Traefik HTTPS](#docker-compose-traefik-https) |
 | **Prometheus / Grafana / Loki** (after Traefik) | [Observability optional](#observability-optional) |
+| **Authelia SSO + 2FA** (advanced, after Traefik) | [Authelia SSO](#authelia-sso-advanced-optional) |
 | **Kubernetes** | [Kubernetes Helm](#kubernetes-helm) |
 | **Harden a fresh VPS** (optional, agnostic Ansible; recommendations only) | [Recommended VPS baseline](#recommended-vps-baseline-optional) |
 | **Simpler or custom dashboard look** (CSS overlay) | [Custom UI theme (optional)](#custom-ui-theme-optional) |
@@ -304,6 +306,16 @@ If the attack vector is a **misconfigured or compromised VPS**, HTTP headers on 
 Typical order: **(1)** VPS baseline → **(2)** pick any [install path](#pick-a-path) (Compose is the common example; others are equivalent from a host-security view) → **(3)** store secrets and SQLite outside the clone ([persistent data](#persistent-data-and-secrets) — Compose uses **`${GGHSTATS_HOST_DATA}/.env`**; Helm uses Secrets/PVC; binary uses host paths you choose).
 
 **[↑ Contents](#table-of-contents)**
+
+---
+
+## Authelia SSO (advanced, optional)
+
+**Goal:** Single Sign-On with 2FA (TOTP/WebAuthn) in front of gghstats. Protects `/api/` and `/h2h` — dashboard stays public.
+
+**Prerequisites:** [Traefik stack](#docker-compose-traefik-https) running on `gghstats_edge`.
+
+**[Setup guide →](run/docker-compose/authelia/README.md)**
 
 ---
 
