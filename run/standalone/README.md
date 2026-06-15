@@ -4,6 +4,8 @@
 
 Run the **gghstats binary** from [gghstats Releases](https://github.com/hrodrig/gghstats/releases) without containers.
 
+**Smoke test** (UI only): [gghstats Quick start](https://github.com/hrodrig/gghstats#quick-start) — `export GGHSTATS_GITHUB_TOKEN=ghp_xxx` and `gghstats run --open` after install.
+
 | OS | Guide |
 |----|--------|
 | **Linux** (tarball, `.deb`, `.rpm`, **systemd**) | **[linux/README.md](linux/README.md)** — configuration, packages, service |
