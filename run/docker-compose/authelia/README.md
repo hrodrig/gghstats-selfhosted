@@ -122,6 +122,7 @@ rm -rf "${GGHSTATS_HOST_DATA}/authelia"
 Internet → Traefik :443
               │
               ├─ /auth/*         → Authelia :9091 (login portal)
+              ├─ /api/v1/badge/* → gghstats :8080 (public — README embeds)
               ├─ /api/*, /h2h    → authelia-forward@docker (verify) → gghstats :8080
               └─ /*              → gghstats :8080 (public)
 
