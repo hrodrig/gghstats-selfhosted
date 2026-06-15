@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Helm chart:** bump **`version:`** to **0.1.27**, **`appVersion`** to **0.7.8**.
 - **Traefik README:** document `gghstats-badges` router and gghstats ≥ 0.7.8 in-app exemption.
 
 ## [0.1.40] - 2026-06-14
