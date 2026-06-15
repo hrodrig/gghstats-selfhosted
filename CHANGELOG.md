@@ -5,6 +5,18 @@ All notable changes to **gghstats-selfhosted** (deployment manifests, docs, and 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Authelia SSO stack:** optional advanced authentication with 2FA (TOTP/WebAuthn) via Traefik forwardAuth. Protects `/api/` and `/h2h` — dashboard remains public. Includes compose file, override for Traefik labels, configuration templates, Valkey for sessions, and full README with setup guide.
+- **compose-stack.sh:** add `authelia` stack and `--with-auth` flag for prod/full orchestration.
+
+### Changed
+
+- **Compose:** inject `GGHSTATS_RATE_LIMIT_*` and `GGHSTATS_WHITELIST*` env vars in both Traefik and minimal compose files.
+- **env.example:** add Authelia secrets section.
+
 ## [0.1.39] - 2026-06-14
 
 ### Changed

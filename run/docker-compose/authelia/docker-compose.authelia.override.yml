@@ -1,0 +1,15 @@
+# Authelia override for the Traefik compose stack.
+# Adds the authelia-forward middleware to gghstats routes.
+# Apply alongside the traefik compose file:
+#
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" -p gghstats-edge \
+#     -f run/docker-compose/traefik/docker-compose.yml \
+#     -f run/docker-compose/authelia/docker-compose.authelia.override.yml \
+#     up -d
+
+services:
+  gghstats:
+    labels:
+      # Append authelia-forward to the existing middleware chain.
+      # If you already customised middlewares, adjust the chain accordingly.
+      - traefik.http.routers.gghstats.middlewares=gghstats-ratelimit,gghstats-hdr,authelia-forward@docker

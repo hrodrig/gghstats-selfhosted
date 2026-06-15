@@ -1,0 +1,16 @@
+###############################################################################
+#                       Authelia users for gghstats                            #
+# Copy to ${GGHSTATS_HOST_DATA}/authelia/users.yml and edit passwords.        #
+# Generate hashed password:  docker run --rm authelia/authelia:4.39            #
+#   authelia crypto hash generate argon2 --password 'your-password'            #
+###############################################################################
+
+users:
+  # Default admin user — CHANGE THE PASSWORD before first use!
+  admin:
+    disabled: false
+    displayname: "Administrator"
+    password: "$argon2id$v=19$m=65536,t=1,p=8$CHANGE_ME$CHANGE_ME"
+    email: "admin@example.com"
+    groups:
+      - admins
