@@ -79,7 +79,7 @@ services:
     logging: *default-logging
 
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.7.5}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.7.8}
     restart: always
     user: "${GGS_UID:?set GGS_UID in .env to id -u}:${GGS_GID:?set GGS_GID in .env to id -g}"
     security_opt:
@@ -127,7 +127,16 @@ services:
       - traefik.http.middlewares.gghstats-hdr.headers.stsIncludeSubdomains=false
       # Do not expose /metrics on the public hostname. Prometheus (observability stack) scrapes
       # http://gghstats:8080/metrics on gghstats_edge — that path never goes through Traefik.
-      - traefik.http.routers.gghstats.rule=Host(`${GGHSTATS_HOSTNAME:?set GGHSTATS_HOSTNAME FQDN}`) && !PathPrefix(`/metrics`)
+      # README badge embeds: separate router without edge rate limit (GitHub/camo fetches SVG).
+      - traefik.http.routers.gghstats-badges.rule=Host(`${GGHSTATS_HOSTNAME:?set GGHSTATS_HOSTNAME FQDN}`) && PathPrefix(`/api/v1/badge`)
+      - traefik.http.routers.gghstats-badges.priority=100
+      - traefik.http.routers.gghstats-badges.entrypoints=websecure
+      - traefik.http.routers.gghstats-badges.tls=true
+      - traefik.http.routers.gghstats-badges.tls.certresolver=le
+      - traefik.http.routers.gghstats-badges.middlewares=gghstats-hdr
+      - traefik.http.routers.gghstats-badges.service=gghstats
+      - traefik.http.routers.gghstats.rule=Host(`${GGHSTATS_HOSTNAME:?set GGHSTATS_HOSTNAME FQDN}`) && !PathPrefix(`/metrics`) && !PathPrefix(`/api/v1/badge`)
+      - traefik.http.routers.gghstats.priority=1
       - traefik.http.routers.gghstats.entrypoints=websecure
       - traefik.http.routers.gghstats.tls=true
       - traefik.http.routers.gghstats.tls.certresolver=le

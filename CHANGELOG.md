@@ -5,6 +5,19 @@ All notable changes to **gghstats-selfhosted** (deployment manifests, docs, and 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+## [0.1.41] - 2026-06-15
+
+### Fixed
+
+- **Traefik:** dedicated `gghstats-badges` router for `/api/v1/badge` without edge rate limiting (README embeds / GitHub image proxy).
+- **Defaults:** `GGHSTATS_VERSION` / Compose / Helm **`appVersion`** → **v0.7.8**; fix `.deb`/`.rpm` example filenames in Linux standalone README.
+
+### Changed
+
+- **Traefik README:** document `gghstats-badges` router and gghstats ≥ 0.7.8 in-app exemption.
+
 ## [0.1.40] - 2026-06-14
 
 ### Added

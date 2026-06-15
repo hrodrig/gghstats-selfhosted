@@ -6,6 +6,8 @@
 
 **Prometheus `/metrics`:** the public router rule excludes `PathPrefix(`/metrics`)`, so `https://<GGHSTATS_HOSTNAME>/metrics` is **not** reachable from the Internet. Scraping uses the Compose service name on the internal network (`http://gghstats:8080/metrics` in [`observability/prometheus.yml`](../observability/observability/prometheus.yml)). After changing labels, recreate the stack (`up -d`) so Traefik reloads routing.
 
+**README badge embeds (`/api/v1/badge/*`):** a separate Traefik router (`gghstats-badges`, higher priority) serves badge SVGs **without** the edge rate-limit middleware so GitHub and other image proxies can fetch them. gghstats **≥ 0.7.8** also exempts badge paths from in-app rate limiting and IP whitelist.
+
 **Traefik image:** pinned in [`docker-compose.yml`](docker-compose.yml) (currently **`traefik:v3.6.17`**, 3.6.x line). Stay on **≥ v3.6.14** for published security fixes. After bumping the tag: **`./run/scripts/compose-stack.sh traefik pull`** then **`traefik up -d`** (recreates the Traefik container; `restart` alone does not apply a new image).
 
 Compose **project** `gghstats-edge` (containers `gghstats-edge-traefik-1`, `gghstats-edge-gghstats-1`) — same naming style as observability `gghstats-obs-*`. Use **`docker compose exec gghstats …`** (service name), not the old fixed names `traefik` / `gghstats`.
