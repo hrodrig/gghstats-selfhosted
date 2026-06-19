@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.42] - 2026-06-19
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.7.10`** ([gghstats v0.7.10](https://github.com/hrodrig/gghstats/releases/tag/v0.7.10) — whitelist bypass for valid `x-api-token`, clearer dashboard sync errors): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples.
+- **Helm chart:** bump **`version:`** to **0.1.28**, **`appVersion`** to **0.7.10**.
+- **README:** note that gghstats ≥ 0.7.10 lets **Sync all** work through `GGHSTATS_WHITELIST` when `GGHSTATS_API_TOKEN` is set.
+- **Platform tests:** default **`gghstats_image_version`** → **v0.7.10**.
+
 ## [0.1.41] - 2026-06-15
 
 ### Fixed
