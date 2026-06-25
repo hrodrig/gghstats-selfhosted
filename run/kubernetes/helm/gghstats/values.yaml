@@ -1,3 +1,5 @@
+fullnameOverride: ""
+
 replicaCount: 1
 
 image:
@@ -7,12 +9,13 @@ image:
 
 service:
   type: ClusterIP
-  # Must match env.port (container listen port for Service target and probes).
+  # Service port (e.g. 80 for Traefik ingress). Container listens on env.port (8080).
   port: 8080
+  targetPort: 8080
 
 env:
   host: "0.0.0.0"
-  # Must match service.port.
+  # Must match service.targetPort.
   port: "8080"
   # SQLite path — must be under the /data volume (only writable mount besides /tmp).
   dbPath: "/data/gghstats.db"
@@ -27,9 +30,15 @@ env:
   # Optional (gghstats >= 0.3.0): badge embeds and public base URL behind ingress.
   badgePublic: ""
   publicUrl: ""
+  # API token for protected endpoints and sync UI. REQUIRED for the "Sync now"
+  # button to appear in the dashboard sidebar. Can be any string; the same value
+  # is sent as x-api-token header. If empty, the sync button is hidden and
+  # /api/ endpoints return 404.
   apiToken: ""
   # Optional: path inside container to a .css file under /data (gghstats >= 0.2.0). Example: "/data/custom-theme.css".
   customCss: ""
+  # Log level: debug, info, warn, error (gghstats >= 0.2.0). Empty = app default (info).
+  logLevel: ""
   # Leave empty for default (Prometheus /metrics enabled). Set to "false" to disable.
   metrics: ""
   # Leave empty for default (off). Set to "true" for per-repo gauges (gghstats >= 0.4.0).
@@ -39,6 +48,13 @@ env:
   rateLimitRequests: ""
   rateLimitPeriod: ""
   rateLimitBurst: ""
+  # Raw HTML injected just before </head> on every page (gghstats >= 0.7.11).
+  # Useful for analytics scripts, extra CSS, meta tags, etc.
+  headHTML: ""
+  # JSON array of reverse-proxy rules (gghstats >= 0.7.11).
+  # Each rule maps a local path prefix to a remote backend, with optional headers.
+  # Example: '[{"local":"/kiko","url":"https://events.example.com","headers":{"Host":"kiko-backend"}}]'
+  reverseProxyRules: ""
 
 
 githubToken:
@@ -53,6 +69,8 @@ persistence:
   storageClass: ""
   accessModes:
     - ReadWriteOnce
+  # Note: the PVC has helm.sh/resource-policy: keep, so it is NOT deleted on helm uninstall.
+  # To remove it manually: kubectl delete pvc <name>
 
 # Required shape is enforced by values.schema.json (Helm rejects missing or incomplete resources).
 # Baseline for scheduling (requests) and burst cap (limits). Tune for your traffic and GitHub sync load.
@@ -65,6 +83,8 @@ resources:
     memory: 512Mi
 
 # Must match the non-root user in the upstream image (see gghstats Dockerfile: USER gghstats, uid/gid 1000).
+imagePullSecrets: []
+
 podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000

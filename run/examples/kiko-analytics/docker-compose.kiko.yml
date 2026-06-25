@@ -1,0 +1,24 @@
+# Kiko analytics integration — Docker Compose override
+#
+# Apply on top of any gghstats docker-compose stack (minimal, traefik, etc.)
+# to inject the Kiko analytics snippet and proxy its collection endpoint.
+#
+# Usage (from repository root, with GGHSTATS_HOST_DATA set):
+#
+#   docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
+#     -f run/docker-compose/traefik/docker-compose.yml \
+#     -f run/examples/kiko-analytics/docker-compose.kiko.yml \
+#     up -d
+
+services:
+  gghstats:
+    environment:
+      # Kiko analytics: inject the tracker script before </head> on every page.
+      # Point the data-endpoint to the local reverse-proxy path (see reverseProxyRules below).
+      # Replace "https://events.example.com" with your Kiko backend URL and
+      # the /kiko.js path with your actual tracker script.
+      GGHSTATS_HEAD_HTML: ${GGHSTATS_HEAD_HTML:-<script defer src="/kiko/kiko.js" data-endpoint="/kiko"></script>}
+
+      # Reverse-proxy: forward /kiko/* requests to the Kiko backend.
+      # Adjust the URL and Host header to match your Kiko deployment.
+      GGHSTATS_REVERSE_PROXY_RULES: ${GGHSTATS_REVERSE_PROXY_RULES:-[{"local":"/kiko","url":"https://events.example.com","headers":{"Host":"events.example.com"}}]}
