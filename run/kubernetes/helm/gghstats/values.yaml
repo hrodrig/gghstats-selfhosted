@@ -55,6 +55,13 @@ env:
   # Each rule maps a local path prefix to a remote backend, with optional headers.
   # Example: '[{"local":"/kiko","url":"https://events.example.com","headers":{"Host":"kiko-backend"}}]'
   reverseProxyRules: ""
+  # Anonymous usage collection (gghstats >= 0.7.11). Set "true" to enable;
+  # empty = disabled. Sends anonymous feature-flag data on startup (no secrets,
+  # paths, or repo names).
+  enableCollector: ""
+  # Update check (gghstats >= 0.7.11). Checks GitHub API for newer releases on
+  # startup and logs a warning. empty = app default (enabled). Set "false" to disable.
+  enableUpdateCheck: ""
 
 
 githubToken:

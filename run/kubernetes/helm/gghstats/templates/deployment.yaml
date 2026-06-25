@@ -121,6 +121,14 @@ spec:
             - name: GGHSTATS_REVERSE_PROXY_RULES
               value: {{ .Values.env.reverseProxyRules | quote }}
             {{- end }}
+            {{- if .Values.env.enableCollector }}
+            - name: GGHSTATS_ENABLE_COLLECTOR
+              value: {{ .Values.env.enableCollector | quote }}
+            {{- end }}
+            {{- if .Values.env.enableUpdateCheck }}
+            - name: GGHSTATS_ENABLE_UPDATE_CHECK
+              value: {{ .Values.env.enableUpdateCheck | quote }}
+            {{- end }}
           volumeMounts:
             - name: data
               mountPath: /data
