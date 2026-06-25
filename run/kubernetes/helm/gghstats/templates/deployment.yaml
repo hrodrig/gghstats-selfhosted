@@ -27,7 +27,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.service.targetPort | default 8080 }}
               name: http
           livenessProbe:
             httpGet:
@@ -105,9 +105,29 @@ spec:
             - name: GGHSTATS_RATE_LIMIT_BURST
               value: {{ .Values.env.rateLimitBurst | quote }}
             {{- end }}
+            {{- if ne (.Values.env.logLevel | default "") "" }}
+            - name: GGHSTATS_LOG_LEVEL
+              value: {{ .Values.env.logLevel | quote }}
+            {{- end }}
             {{- if .Values.env.customCss }}
             - name: GGHSTATS_CUSTOM_CSS
               value: {{ .Values.env.customCss | quote }}
+            {{- end }}
+            {{- if ne (.Values.env.headHTML | default "") "" }}
+            - name: GGHSTATS_HEAD_HTML
+              value: {{ .Values.env.headHTML | quote }}
+            {{- end }}
+            {{- if ne (.Values.env.reverseProxyRules | default "") "" }}
+            - name: GGHSTATS_REVERSE_PROXY_RULES
+              value: {{ .Values.env.reverseProxyRules | quote }}
+            {{- end }}
+            {{- if .Values.env.enableCollector }}
+            - name: GGHSTATS_ENABLE_COLLECTOR
+              value: {{ .Values.env.enableCollector | quote }}
+            {{- end }}
+            {{- if .Values.env.enableUpdateCheck }}
+            - name: GGHSTATS_ENABLE_UPDATE_CHECK
+              value: {{ .Values.env.enableUpdateCheck | quote }}
             {{- end }}
           volumeMounts:
             - name: data
@@ -116,6 +136,10 @@ spec:
               mountPath: /tmp
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: data
           {{- if .Values.persistence.enabled }}

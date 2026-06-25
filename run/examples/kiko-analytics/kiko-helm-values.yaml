@@ -1,0 +1,30 @@
+# Kiko analytics integration — Helm values overlay
+#
+# Merge with your main values.yaml or pass with -f / --values.
+# These settings inject the Kiko tracker script via headHTML and proxy
+# the collection endpoint via reverseProxyRules.
+#
+# Usage:
+#
+#   helm upgrade --install gghstats ./run/kubernetes/helm/gghstats \
+#     -f my-values.yaml \
+#     -f run/examples/kiko-analytics/kiko-helm-values.yaml \
+#     -n gghstats
+#
+# Or inline:
+#
+#   helm upgrade --install gghstats ./run/kubernetes/helm/gghstats \
+#     -f my-values.yaml \
+#     --set-json 'env.headHTML="<script defer src=\"/kiko/kiko.js\" data-endpoint=\"/kiko\"></script>"' \
+#     --set-json 'env.reverseProxyRules="[{\"local\":\"/kiko\",\"url\":\"https://events.example.com\",\"headers\":{\"Host\":\"events.example.com\"}}]"' \
+#     -n gghstats
+
+env:
+  # Kiko analytics: inject the tracker script before </head> on every page.
+  # Point data-endpoint to the local proxy path (see reverseProxyRules).
+  # Replace the URL with your actual Kiko backend.
+  headHTML: '<script defer src="/kiko/kiko.js" data-endpoint="/kiko"></script>'
+
+  # Reverse-proxy: forward /kiko/* requests to the Kiko backend.
+  # Adjust the URL and Host header to match your Kiko deployment.
+  reverseProxyRules: '[{"local":"/kiko","url":"https://events.example.com","headers":{"Host":"events.example.com"}}]'

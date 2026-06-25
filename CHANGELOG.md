@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.43] - 2026-06-25
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.7.11`** ([gghstats v0.7.11](https://github.com/hrodrig/gghstats/releases/tag/v0.7.11) — head HTML injection, reverse proxy rules, anonymous usage collector, startup update check): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples.
+- **Helm chart:** bump **`version:`** to **0.1.29**, **`appVersion`** to **0.7.11**.
+- **Helm chart:** expose new `GGHSTATS_ENABLE_COLLECTOR` and `GGHSTATS_ENABLE_UPDATE_CHECK` env vars via `env.enableCollector` and `env.enableUpdateCheck` values (gghstats ≥ 0.7.11). Template uses truthy check so unset values are omitted from the pod spec.
+- **README:** sync version badge to 0.1.43.
+
 ## [0.1.42] - 2026-06-19
 
 ### Changed

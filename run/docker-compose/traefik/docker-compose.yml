@@ -79,7 +79,7 @@ services:
     logging: *default-logging
 
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.7.10}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.7.11}
     restart: always
     user: "${GGS_UID:?set GGS_UID in .env to id -u}:${GGS_GID:?set GGS_GID in .env to id -g}"
     security_opt:
@@ -107,6 +107,8 @@ services:
       GGHSTATS_ENABLED_LOCALES: ${GGHSTATS_ENABLED_LOCALES:-en,es,de,fr,pt-br}
       GGHSTATS_BADGE_PUBLIC: ${GGHSTATS_BADGE_PUBLIC:-}
       GGHSTATS_PUBLIC_URL: ${GGHSTATS_PUBLIC_URL:-}
+      GGHSTATS_HEAD_HTML: ${GGHSTATS_HEAD_HTML:-}
+      GGHSTATS_REVERSE_PROXY_RULES: ${GGHSTATS_REVERSE_PROXY_RULES:-}
     volumes:
       - ${GGHSTATS_HOST_DATA:-../../../data}:/data
     networks:
