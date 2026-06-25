@@ -9,7 +9,7 @@ Real-world scenarios combining **gghstats** with external services, using the ap
 
 | Example | What it shows |
 |---------|---------------|
-| [`kiko-analytics/`](kiko-analytics/) | Integrate [Kiko](https://kiko.analytics) (or any analytics script) via `headHTML`, proxy the collection endpoint via `reverseProxyRules`. Covers both **Docker Compose** and **Helm**. |
+| [`kiko-analytics/`](kiko-analytics/) | Integrate [Kiko](https://kiko.hermesrodriguez.com) (or any analytics script) via `headHTML`, proxy the collection endpoint via `reverseProxyRules`. Covers both **Docker Compose** and **Helm**. |
 
 ## How to use
 
