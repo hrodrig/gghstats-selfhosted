@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.44] - 2026-06-27
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.8.0`** ([gghstats v0.8.0](https://github.com/hrodrig/gghstats/releases/tag/v0.8.0) — concurrent sync workers, exponential GitHub API retries, SQLite connection pooling, new Prometheus metrics for rate limiter/whitelist/badges/sync): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples.
+- **Helm chart:** bump **`version:`** to **0.1.30**, **`appVersion`** to **0.8.0**.
+- **Helm chart:** expose new `GGHSTATS_SYNC_WORKERS` env var via `env.syncWorkers` value (gghstats >= 0.8.0). Template uses truthy check so unset values are omitted from the pod spec.
+- **README:** sync version badge to 0.1.44.
+
 ## [0.1.43] - 2026-06-25
 
 ### Changed

@@ -32,7 +32,7 @@ Stacks: **`minimal`**, **`traefik`**, **`observability`**, **`prod`** (Traefik s
 | [`kubernetes/manifests/`](kubernetes/manifests/) | Raw manifests — optional; see folder README. |
 | [`examples/`](examples/) | **Integration examples** — real-world scenarios (e.g. [Kiko analytics](examples/kiko-analytics/)) using `headHTML` and `reverseProxyRules` (gghstats >= 0.7.11). |
 | [`vps-recommended/`](vps-recommended/) | **Optional** agnostic VPS baseline (Ansible: updates, UFW, Docker CE, Fail2ban; optional SSH hardening) — **does not** install gghstats; same host hygiene for Compose, `docker run`, binary, or Helm. |
-| *(Optional)* **Custom dashboard CSS** | [Repository README — Custom UI theme (optional)](../README.md#custom-ui-theme-optional) — **`GGHSTATS_CUSTOM_CSS`**, image **≥ 0.2.0** (defaults use **`v0.7.11`**). |
+| *(Optional)* **Custom dashboard CSS** | [Repository README — Custom UI theme (optional)](../README.md#custom-ui-theme-optional) — **`GGHSTATS_CUSTOM_CSS`**, image **≥ 0.2.0** (defaults use **`v0.8.0`**). |
 
 Always use the **published image tag** that matches your desired [gghstats](https://github.com/hrodrig/gghstats) release (see `GGHSTATS_VERSION` in [`run/common/.env.example`](common/.env.example)).
 

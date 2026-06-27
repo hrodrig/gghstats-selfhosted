@@ -129,6 +129,10 @@ spec:
             - name: GGHSTATS_ENABLE_UPDATE_CHECK
               value: {{ .Values.env.enableUpdateCheck | quote }}
             {{- end }}
+            {{- if ne (.Values.env.syncWorkers | default "") "" }}
+            - name: GGHSTATS_SYNC_WORKERS
+              value: {{ .Values.env.syncWorkers | quote }}
+            {{- end }}
           volumeMounts:
             - name: data
               mountPath: /data
