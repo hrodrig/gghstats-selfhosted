@@ -30,7 +30,7 @@ This example shows how to integrate [Kiko](https://kiko.analytics) (or any analy
 
 ## Prerequisites
 
-- gghstats image **>= 0.7.11** (currently `v0.7.10` in defaults — upgrade `GGHSTATS_VERSION` or `image.tag`).
+- gghstats image **>= 0.7.11** (currently `v0.8.0` in defaults — upgrade `GGHSTATS_VERSION` or `image.tag` if pinned lower).
 - A Kiko (or compatible analytics) account and backend URL.
 
 ## Usage

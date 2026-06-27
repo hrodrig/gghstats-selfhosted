@@ -94,14 +94,14 @@ The same `.deb` works on Debian and Ubuntu. Installs `/usr/bin/gghstats`, `/etc/
 **From GitHub** (replace version / arch):
 
 ```bash
-wget -q -O /tmp/gghstats.deb https://github.com/hrodrig/gghstats/releases/download/v0.7.10/gghstats_0.7.10_linux_amd64.deb
+wget -q -O /tmp/gghstats.deb https://github.com/hrodrig/gghstats/releases/download/v0.8.0/gghstats_0.8.0_linux_amd64.deb
 sudo dpkg -i /tmp/gghstats.deb
 ```
 
 **Local build** (`make snapshot` in gghstats → `dist/`):
 
 ```bash
-sudo dpkg -i ./gghstats_0.7.10_linux_amd64.deb
+sudo dpkg -i ./gghstats_0.8.0_linux_amd64.deb
 ```
 
 **Then:** [Configuration on Linux](#configuration-on-linux-bare-metal) → [systemd](#systemd-service).
@@ -122,13 +122,13 @@ Same `.rpm` for Fedora, AlmaLinux, Rocky Linux, and Oracle Linux.
 **From GitHub:**
 
 ```bash
-sudo dnf install -y "https://github.com/hrodrig/gghstats/releases/download/v0.7.10/gghstats_0.7.10_linux_amd64.rpm"
+sudo dnf install -y "https://github.com/hrodrig/gghstats/releases/download/v0.8.0/gghstats_0.8.0_linux_amd64.rpm"
 ```
 
 **Local build:**
 
 ```bash
-sudo dnf install ./gghstats_0.7.10_linux_amd64.rpm
+sudo dnf install ./gghstats_0.8.0_linux_amd64.rpm
 ```
 
 **Then:** same as Debian — edit `/etc/gghstats/gghstats.env`, [systemd](#systemd-service).
