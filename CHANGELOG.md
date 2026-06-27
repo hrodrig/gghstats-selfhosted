@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.45] - 2026-06-27
+
+### Fixed
+
+- **Compose (minimal, Traefik):** pass `GGHSTATS_ENABLE_COLLECTOR` and `GGHSTATS_ENABLE_UPDATE_CHECK` from `${GGHSTATS_HOST_DATA}/.env` into the gghstats container (were documented in `.env.example` and supported by the app since v0.7.11, but omitted from the Compose environment blocks — collector remained disabled despite env file setting).
+- **`.env.example`:** document `GGHSTATS_ENABLE_COLLECTOR` and `GGHSTATS_ENABLE_UPDATE_CHECK`.
+
+### Changed
+
+- **Helm chart:** bump **`version:`** to **0.1.31** (appImage unchanged at **v0.8.0**; `syncWorkers` helm value added in prior release).
+
 ## [0.1.44] - 2026-06-27
 
 ### Changed
@@ -399,7 +410,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.37...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.45...HEAD
+[0.1.45]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.44...v0.1.45
+[0.1.44]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.37...v0.1.44
 [0.1.37]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.36...v0.1.37
 [0.1.36]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.35...v0.1.36
 [0.1.26]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.24...v0.1.26
