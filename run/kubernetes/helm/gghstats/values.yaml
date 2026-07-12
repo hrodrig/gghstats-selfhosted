@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v0.8.1"
+  tag: "v0.9.0"
   pullPolicy: IfNotPresent
 
 service:
@@ -64,6 +64,9 @@ env:
   enableUpdateCheck: ""
   # Number of concurrent workers for GitHub API sync (gghstats >= 0.8.0). empty = app default (4).
   syncWorkers: ""
+  # Demo UI with sample data (gghstats >= 0.9.0). Set "true" for no GitHub token/sync.
+  # empty = off. For production leave empty and set githubToken.
+  demo: ""
 
 
 githubToken:

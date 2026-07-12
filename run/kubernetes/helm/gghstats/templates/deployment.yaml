@@ -133,6 +133,10 @@ spec:
             - name: GGHSTATS_SYNC_WORKERS
               value: {{ .Values.env.syncWorkers | quote }}
             {{- end }}
+            {{- if ne (.Values.env.demo | default "") "" }}
+            - name: GGHSTATS_DEMO
+              value: {{ .Values.env.demo | quote }}
+            {{- end }}
           volumeMounts:
             - name: data
               mountPath: /data
