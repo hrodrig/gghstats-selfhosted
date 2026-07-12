@@ -1,4 +1,4 @@
-# gghstats-selfhosted — optional automation targets (no Go build).
+# gghstats-selfhosted — deployment manifests (Compose, Helm, lab tests)
 # Primary validation: Helm workflow (CI), Compose on real hosts.
 
 .DEFAULT_GOAL := help
@@ -8,26 +8,43 @@ LIMIT ?=
 CHART_DIR ?= run/kubernetes/helm/gghstats
 KUBERNETES_VERSION ?= 1.30.0
 
+# Single source of truth: VERSION file at repo root (this repo's semver, not GGHSTATS_VERSION).
+VERSION_RAW ?= $(shell cat VERSION 2>/dev/null | tr -d '\n\r')
+VERSION     := $(patsubst v%,%,$(VERSION_RAW))
+TAG         := v$(VERSION)
+
 .PHONY: help release-check test-compose-platforms test-helm-kind
 
+GREEN  := \033[0;32m
+YELLOW := \033[0;33m
+RESET  := \033[0m
+
 help:
-	@echo "gghstats-selfhosted — make targets"
+	@echo "$(GREEN)gghstats-selfhosted$(RESET) — Compose / Helm / platform lab for gghstats"
 	@echo ""
-	@echo "  make release-check             Local gate before tagging: helm lint, helm template +"
-	@echo "                                 kubeconform (same scenarios as CI), minimal Compose config."
-	@echo "                                 Requires: helm, kubeconform, docker (compose plugin)."
+	@echo "Usage: make [target]"
 	@echo ""
-	@echo "  make test-helm-kind            kind + Helm install gghstats + /api/v1/healthz check."
-	@echo "                                 Requires: Docker, kind, kubectl, helm."
-	@echo "                                 Env: GGHSTATS_HELM_E2E_GITHUB_TOKEN (fine-grained PAT, repo read)."
-	@echo "                                 Optional: GGHSTATS_HELM_E2E_CLUSTER, GGHSTATS_HELM_E2E_ROLLOUT_TIMEOUT,"
-	@echo "                                 GGHSTATS_HELM_E2E_LOG_WAIT_SECS, GGHSTATS_HELM_E2E_NO_CLEANUP"
+	@echo "$(YELLOW)Quality:$(RESET)"
+	@echo "  $(GREEN)release-check$(RESET)            Local gate before tagging: helm lint, helm template +"
+	@echo "                             kubeconform (same scenarios as CI), minimal Compose config."
+	@echo "                             Requires: helm, kubeconform, docker (compose plugin)."
 	@echo ""
-	@echo "  make test-compose-platforms   Run Ansible full-cycle on hosts (testing/platforms/)."
-	@echo "                                 Requires inventory: testing/platforms/inventory/hosts.yml"
-	@echo "                                 Optional: LIMIT=hostname for --limit"
+	@echo "$(YELLOW)Helm:$(RESET)"
+	@echo "  $(GREEN)test-helm-kind$(RESET)           kind + Helm install gghstats + /api/v1/healthz check."
+	@echo "                             Requires: Docker, kind, kubectl, helm."
+	@echo "                             Env: GGHSTATS_HELM_E2E_GITHUB_TOKEN (fine-grained PAT, repo read)."
+	@echo "                             Optional: GGHSTATS_HELM_E2E_CLUSTER, GGHSTATS_HELM_E2E_ROLLOUT_TIMEOUT,"
+	@echo "                             GGHSTATS_HELM_E2E_LOG_WAIT_SECS, GGHSTATS_HELM_E2E_NO_CLEANUP"
+	@echo ""
+	@echo "$(YELLOW)Compose / platforms:$(RESET)"
+	@echo "  $(GREEN)test-compose-platforms$(RESET)   Ansible full-cycle on lab hosts (testing/platforms/)."
+	@echo "                             Requires inventory: testing/platforms/inventory/hosts.yml"
+	@echo "                             Optional: LIMIT=hostname for --limit"
+	@echo ""
+	@echo "Current version: $(VERSION) (tag: $(TAG))"
 	@echo ""
 	@echo "Examples:"
+	@echo "  make release-check"
 	@echo "  make test-helm-kind"
 	@echo "  make test-compose-platforms"
 	@echo "  make test-compose-platforms LIMIT=vps-ubuntu"

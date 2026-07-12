@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.47] - 2026-07-12
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.9.0`** ([gghstats v0.9.0](https://github.com/hrodrig/gghstats/releases/tag/v0.9.0) — demo mode, backup/restore CLI, repo trends, distroless image, security headers/SRI): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Compose / Helm:** pass **`GGHSTATS_DEMO`** (gghstats ≥ 0.9.0) and **`GGHSTATS_METRICS`**; Traefik no longer hard-requires `GGHSTATS_GITHUB_TOKEN` so demo mode can run without a token.
+- **Helm chart:** bump **`version:`** to **0.1.33**, **`appVersion`** to **0.9.0**; **`env.demo`** value.
+- **README:** sync version badge to **0.1.47**.
+
 ## [0.1.46] - 2026-07-10
 
 ### Changed
@@ -418,7 +427,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.46...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.47...HEAD
+[0.1.47]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.46...v0.1.47
 [0.1.46]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.45...v0.1.46
 [0.1.45]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.44...v0.1.45
 [0.1.44]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.37...v0.1.44
