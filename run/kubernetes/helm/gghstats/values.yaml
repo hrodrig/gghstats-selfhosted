@@ -69,6 +69,16 @@ env:
   demo: ""
 
 
+# Opt-in alerts (gghstats >= 0.10.0; SMTP >= 0.10.1).
+# `sinks` and `rules` are JSON arrays. Provider credentials belong in an
+# existing Kubernetes Secret whose keys are environment-variable names, e.g.
+# GGHSTATS_SLACK_WEBHOOK_URL, GGHSTATS_TEAMS_WEBHOOK_URL, GGHSTATS_SMTP_PASSWORD.
+alerting:
+  enabled: false
+  sinks: ""
+  rules: ""
+  existingSecret: ""
+
 githubToken:
   existingSecret: ""
   secretName: gghstats-secret

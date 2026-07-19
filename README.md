@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.48-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.49-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -28,6 +28,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Authelia SSO (advanced)](#authelia-sso-advanced-optional)
 - [Kubernetes Helm](#kubernetes-helm)
 - [Recommended VPS baseline (optional)](#recommended-vps-baseline-optional)
+- [Opt-in alerts](#opt-in-alerts)
 - [Persistent data and secrets](#persistent-data-and-secrets)
 - [Custom UI theme (optional)](#custom-ui-theme-optional)
 - [Repository layout](#repository-layout)
@@ -323,6 +324,42 @@ Typical order: **(1)** VPS baseline → **(2)** pick any [install path](#pick-a-
 **Prerequisites:** [Traefik stack](#docker-compose-traefik-https) running on `gghstats_edge`.
 
 **[Setup guide →](run/docker-compose/authelia/README.md)**
+
+---
+
+## Opt-in alerts
+
+**gghstats v0.10.0+** sends traffic/ops alerts to Slack, generic webhooks (Discord, Teams, n8n), or Loki; **v0.10.1+** adds SMTP email. Alerts remain off unless `GGHSTATS_ALERTS_ENABLED=true`.
+
+**Compose (minimal / Traefik):** keep provider secrets in `${GGHSTATS_HOST_DATA}/.env`; both stacks explicitly pass the standard `GGHSTATS_*` sink variables. Configure `GGHSTATS_ALERT_SINKS` and `GGHSTATS_ALERT_RULES` using the examples in [`run/common/.env.example`](run/common/.env.example), recreate with `up -d`, then smoke-test:
+
+```bash
+./run/scripts/compose-stack.sh traefik up -d --pull always
+docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
+  -f run/docker-compose/traefik/docker-compose.yml \
+  exec gghstats gghstats alert test
+```
+
+Add `--sink smtp`, `--sink slack`, `--sink webhook`, or `--sink loki` to test one family. A successful test exits **0**; delivery failures exit **4**.
+
+**Helm:** set `alerting.enabled`, `alerting.sinks`, and `alerting.rules`. Put provider credentials in an existing Secret whose **keys are the exact environment-variable names** referenced by the sink JSON, then set `alerting.existingSecret` to that Secret name. Example:
+
+```bash
+kubectl create secret generic gghstats-alerts -n gghstats \
+  --from-literal=GGHSTATS_SLACK_WEBHOOK_URL='https://hooks.slack.com/services/...'
+```
+
+```yaml
+alerting:
+  enabled: true
+  existingSecret: gghstats-alerts
+  sinks: '[{"type":"slack","webhook_url_env":"GGHSTATS_SLACK_WEBHOOK_URL"}]'
+  rules: '[{"scope":"all_repos","metric":"clones","window":"lifetime","op":"gte","value":21000,"fire":"once"}]'
+```
+
+Full rule/sink contract: [gghstats SPEC §8](https://github.com/hrodrig/gghstats/blob/main/SPEC.md#8-opt-in-alerts--notification-rules).
+
+**[↑ Contents](#table-of-contents)**
 
 ---
 
