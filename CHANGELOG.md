@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Docs:** Slack alert smoke-test checklist in root README (`gghstats alert test --sink slack`) plus anonymized capture [`assets/alert-test-slack.png`](assets/alert-test-slack.png).
+
 ## [0.1.49] - 2026-07-18
 
 ### Added
