@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v0.9.0"
+  tag: "v0.10.1"
   pullPolicy: IfNotPresent
 
 service:
