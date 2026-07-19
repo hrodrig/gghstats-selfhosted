@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.48] - 2026-07-18
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.10.1`** ([gghstats v0.10.1](https://github.com/hrodrig/gghstats/releases/tag/v0.10.1) — incremental star sync, opt-in alerts with Slack/webhook/Loki/SMTP, star milestones): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`version:`** to **0.1.34**, **`appVersion`** to **0.10.1**.
+- **README:** sync version badge to **0.1.48**.
+
 ## [0.1.47] - 2026-07-12
 
 ### Changed
@@ -427,7 +435,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.47...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.48...HEAD
+[0.1.48]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.47...v0.1.48
 [0.1.47]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.46...v0.1.47
 [0.1.46]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.45...v0.1.46
 [0.1.45]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.44...v0.1.45
