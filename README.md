@@ -331,16 +331,42 @@ Typical order: **(1)** VPS baseline → **(2)** pick any [install path](#pick-a-
 
 **gghstats v0.10.0+** sends traffic/ops alerts to Slack, generic webhooks (Discord, Teams, n8n), or Loki; **v0.10.1+** adds SMTP email. Alerts remain off unless `GGHSTATS_ALERTS_ENABLED=true`.
 
-**Compose (minimal / Traefik):** keep provider secrets in `${GGHSTATS_HOST_DATA}/.env`; both stacks explicitly pass the standard `GGHSTATS_*` sink variables. Configure `GGHSTATS_ALERT_SINKS` and `GGHSTATS_ALERT_RULES` using the examples in [`run/common/.env.example`](run/common/.env.example), recreate with `up -d`, then smoke-test:
+**Compose (minimal / Traefik):** keep provider secrets in `${GGHSTATS_HOST_DATA}/.env`; both stacks explicitly pass the standard `GGHSTATS_*` sink variables. Configure `GGHSTATS_ALERT_SINKS` and `GGHSTATS_ALERT_RULES` using the examples in [`run/common/.env.example`](run/common/.env.example), then recreate with `up -d` (not `restart` alone).
+
+### Validate Slack delivery
+
+Minimal Slack-only config (replace the webhook URL; never commit real secrets):
+
+```bash
+GGHSTATS_ALERTS_ENABLED=true
+GGHSTATS_SLACK_WEBHOOK_URL='https://hooks.slack.com/services/T…/B…/…'
+GGHSTATS_ALERT_SINKS='[{"type":"slack","webhook_url_env":"GGHSTATS_SLACK_WEBHOOK_URL"}]'
+# Optional rules — evaluated after a successful sync, not by alert test:
+# GGHSTATS_ALERT_RULES='[{"scope":"all_repos","metric":"clones","window":"lifetime","op":"gte","value":21000,"fire":"once"}]'
+```
+
+Smoke-test from the **clone root** (Traefik stack; use `minimal` if that is your compose file):
 
 ```bash
 ./run/scripts/compose-stack.sh traefik up -d --pull always
 docker compose --env-file "${GGHSTATS_HOST_DATA}/.env" \
   -f run/docker-compose/traefik/docker-compose.yml \
-  exec gghstats gghstats alert test
+  exec gghstats gghstats alert test --sink slack
 ```
 
-Add `--sink smtp`, `--sink slack`, `--sink webhook`, or `--sink loki` to test one family. A successful test exits **0**; delivery failures exit **4**.
+Expected console output:
+
+```text
+alert test: sent kind "traffic" to 1 sink(s)
+```
+
+Exit **0** = delivered; **1** = config; **4** = delivery failure. The Slack channel should show a **synthetic** payload (`example/repo`, `rule: delivery check`) — not your real repos:
+
+![Slack alert test — synthetic delivery check](assets/alert-test-slack.png)
+
+`gghstats alert test` only checks sink delivery. Real rules fire after the next successful sync (or use the dashboard **Sync now** button if `GGHSTATS_SYNC_ON_STARTUP=false`).
+
+Other families: `--sink smtp`, `--sink webhook`, or `--sink loki`.
 
 **Helm:** set `alerting.enabled`, `alerting.sinks`, and `alerting.rules`. Put provider credentials in an existing Secret whose **keys are the exact environment-variable names** referenced by the sink JSON, then set `alerting.existingSecret` to that Secret name. Example:
 
