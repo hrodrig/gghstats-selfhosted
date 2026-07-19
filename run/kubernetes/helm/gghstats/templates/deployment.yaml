@@ -137,6 +137,19 @@ spec:
             - name: GGHSTATS_DEMO
               value: {{ .Values.env.demo | quote }}
             {{- end }}
+            {{- if .Values.alerting.enabled }}
+            - name: GGHSTATS_ALERTS_ENABLED
+              value: "true"
+            - name: GGHSTATS_ALERT_SINKS
+              value: {{ required "alerting.sinks is required when alerting.enabled=true" .Values.alerting.sinks | quote }}
+            - name: GGHSTATS_ALERT_RULES
+              value: {{ required "alerting.rules is required when alerting.enabled=true" .Values.alerting.rules | quote }}
+            {{- end }}
+          {{- if .Values.alerting.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.alerting.existingSecret }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: /data

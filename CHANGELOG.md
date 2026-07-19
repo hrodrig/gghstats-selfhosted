@@ -7,6 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.49] - 2026-07-18
+
+### Added
+
+- **Compose alerts:** minimal and Traefik pass `GGHSTATS_ALERTS_ENABLED`, sink/rule JSON, and standard Slack, Discord, Teams, n8n, Loki, and SMTP provider variables into the gghstats container.
+- **Helm alerts:** `alerting.enabled`, `alerting.sinks`, `alerting.rules`, and `alerting.existingSecret`; provider credentials load from an existing Kubernetes Secret via `envFrom`.
+- **Operator docs:** sink examples and `gghstats alert test` smoke-test flow in root README and `.env.example`.
+
+### Changed
+
+- **Helm chart:** bump **`version:`** to **0.1.35** (`appVersion` remains **0.10.1**).
+- **README:** sync version badge to **0.1.49**.
+
 ## [0.1.48] - 2026-07-18
 
 ### Changed
@@ -435,7 +448,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.48...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.49...HEAD
+[0.1.49]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.48...v0.1.49
 [0.1.48]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.47...v0.1.48
 [0.1.47]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.46...v0.1.47
 [0.1.46]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.45...v0.1.46

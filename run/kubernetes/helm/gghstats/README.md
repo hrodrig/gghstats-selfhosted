@@ -31,6 +31,25 @@ kubectl create secret generic gghstats-secret \
 
 Leave **`githubToken.value`** empty so the chart does not render the token into release manifests. If **`githubToken.existingSecret`** is set, it overrides the Secret name the Deployment mounts (see **`templates/deployment.yaml`**).
 
+### Opt-in alerts
+
+Set `alerting.enabled`, `alerting.sinks`, and `alerting.rules` in `my-values.yaml`. Keep Slack/webhook/Loki/SMTP credentials out of Helm values: create a Secret whose keys use the exact environment-variable names referenced by the sink JSON, then set `alerting.existingSecret`. The Deployment loads every key from that Secret with `envFrom`.
+
+```bash
+kubectl create secret generic gghstats-alerts -n gghstats \
+  --from-literal=GGHSTATS_TEAMS_WEBHOOK_URL='https://...'
+```
+
+```yaml
+alerting:
+  enabled: true
+  existingSecret: gghstats-alerts
+  sinks: '[{"type":"webhook","url_env":"GGHSTATS_TEAMS_WEBHOOK_URL","body":"teams"}]'
+  rules: '[{"repo":"owner/repo","metric":"clones","window":"lifetime","op":"gte","value":4000,"fire":"once"}]'
+```
+
+Supported sink families: Slack, generic webhook (Discord / Teams / n8n), Loki, and SMTP. See [gghstats SPEC §8](https://github.com/hrodrig/gghstats/blob/main/SPEC.md#8-opt-in-alerts--notification-rules).
+
 ### Install from a git clone (sources and templates)
 
 From the **repository root** of [gghstats-selfhosted](https://github.com/hrodrig/gghstats-selfhosted):
