@@ -72,7 +72,7 @@ Copy **`inventory/hosts.yml.example`** to **`inventory/hosts.yml`** (gitignored)
 - **`ansible_host`**, **`ansible_port`**, **`ansible_user`**
 - **`gghstats_github_token`** — PAT (never commit)
 - **`gghstats_host_data`** — e.g. `/var/lib/gghstats-compose` (must match **`GGHSTATS_HOST_DATA`** inside the generated **`.env`**)
-- Optional: **`gghstats_compose_repo_version`** (default `develop`), **`gghstats_image_version`** (default `v0.10.1`), **`gghstats_port`**, **`gghstats_filter`**, **`gghstats_sync_on_startup`** (default **`false`** for faster smoke tests)
+- Optional: **`gghstats_compose_repo_version`** (default `develop`), **`gghstats_image_version`** (default `v0.10.2`), **`gghstats_port`**, **`gghstats_filter`**, **`gghstats_sync_on_startup`** (default **`false`** for faster smoke tests)
 
 **`gghstats_container_uid` / `gghstats_container_gid`** default **1000:1000** (official GHCR image). Override if you use a custom image — verify with `docker run --rm --entrypoint id ghcr.io/hrodrig/gghstats:<tag>`.
 

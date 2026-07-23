@@ -105,6 +105,10 @@ spec:
             - name: GGHSTATS_RATE_LIMIT_BURST
               value: {{ .Values.env.rateLimitBurst | quote }}
             {{- end }}
+            {{- if ne (.Values.env.trustedProxies | default "") "" }}
+            - name: GGHSTATS_TRUSTED_PROXIES
+              value: {{ .Values.env.trustedProxies | quote }}
+            {{- end }}
             {{- if ne (.Values.env.logLevel | default "") "" }}
             - name: GGHSTATS_LOG_LEVEL
               value: {{ .Values.env.logLevel | quote }}

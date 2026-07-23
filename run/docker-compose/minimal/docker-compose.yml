@@ -7,7 +7,7 @@ x-logging: &default-logging
 
 services:
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.10.1}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.10.2}
     container_name: gghstats
     restart: unless-stopped
     environment:
@@ -28,6 +28,7 @@ services:
       - GGHSTATS_RATE_LIMIT_REQUESTS=${GGHSTATS_RATE_LIMIT_REQUESTS:-}
       - GGHSTATS_RATE_LIMIT_PERIOD=${GGHSTATS_RATE_LIMIT_PERIOD:-}
       - GGHSTATS_RATE_LIMIT_BURST=${GGHSTATS_RATE_LIMIT_BURST:-}
+      - GGHSTATS_TRUSTED_PROXIES=${GGHSTATS_TRUSTED_PROXIES:-}
       - GGHSTATS_WHITELIST=${GGHSTATS_WHITELIST:-}
       - GGHSTATS_WHITELIST_PATHS=${GGHSTATS_WHITELIST_PATHS:-}
       - GGHSTATS_SYNC_ON_STARTUP=${GGHSTATS_SYNC_ON_STARTUP:-true}
