@@ -79,7 +79,7 @@ services:
     logging: *default-logging
 
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.10.1}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v0.10.2}
     restart: always
     user: "${GGS_UID:?set GGS_UID in .env to id -u}:${GGS_GID:?set GGS_GID in .env to id -g}"
     security_opt:
@@ -103,6 +103,7 @@ services:
       GGHSTATS_RATE_LIMIT_REQUESTS: ${GGHSTATS_RATE_LIMIT_REQUESTS:-}
       GGHSTATS_RATE_LIMIT_PERIOD: ${GGHSTATS_RATE_LIMIT_PERIOD:-}
       GGHSTATS_RATE_LIMIT_BURST: ${GGHSTATS_RATE_LIMIT_BURST:-}
+      GGHSTATS_TRUSTED_PROXIES: ${GGHSTATS_TRUSTED_PROXIES:-}
       GGHSTATS_WHITELIST: ${GGHSTATS_WHITELIST:-}
       GGHSTATS_WHITELIST_PATHS: ${GGHSTATS_WHITELIST_PATHS:-}
       GGHSTATS_SYNC_ON_STARTUP: ${GGHSTATS_SYNC_ON_STARTUP:-true}

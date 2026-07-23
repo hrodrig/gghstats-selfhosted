@@ -7,9 +7,18 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.50] - 2026-07-22
+
 ### Added
 
 - **Docs:** Slack alert smoke-test checklist in root README (`gghstats alert test --sink slack`) plus anonymized capture [`assets/alert-test-slack.png`](assets/alert-test-slack.png).
+- **Trusted proxies:** pass **`GGHSTATS_TRUSTED_PROXIES`** through minimal/Traefik Compose and Helm (`env.trustedProxies`); document Traefik/Docker CIDR setup for gghstats ≥ **0.10.2**.
+
+### Changed
+
+- Default **gghstats** container image tag **`v0.10.2`** ([gghstats v0.10.2](https://github.com/hrodrig/gghstats/releases/tag/v0.10.2) — trusted proxies SEC1, HTTP server timeouts SEC2, `x/net` pin): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`version:`** to **0.1.36**, **`appVersion`** to **0.10.2**.
+- **README:** sync version badge to **0.1.50**.
 
 ## [0.1.49] - 2026-07-18
 
@@ -452,7 +461,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.49...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.50...HEAD
+[0.1.50]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.49...v0.1.50
 [0.1.49]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.48...v0.1.49
 [0.1.48]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.47...v0.1.48
 [0.1.47]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.46...v0.1.47

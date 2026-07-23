@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v0.10.1"
+  tag: "v0.10.2"
   pullPolicy: IfNotPresent
 
 service:
@@ -48,6 +48,9 @@ env:
   rateLimitRequests: ""
   rateLimitPeriod: ""
   rateLimitBurst: ""
+  # Trusted reverse-proxy peers for X-Forwarded-For / X-Real-IP (gghstats >= 0.10.2).
+  # Empty = ignore forwarded headers. Behind Ingress/Traefik set the proxy CIDR(s).
+  trustedProxies: ""
   # Raw HTML injected just before </head> on every page (gghstats >= 0.7.11).
   # Useful for analytics scripts, extra CSS, meta tags, etc.
   headHTML: ""
@@ -69,7 +72,7 @@ env:
   demo: ""
 
 
-# Opt-in alerts (gghstats >= 0.10.0; SMTP >= 0.10.1).
+# Opt-in alerts (gghstats >= 0.10.0; SMTP >= 0.10.2).
 # `sinks` and `rules` are JSON arrays. Provider credentials belong in an
 # existing Kubernetes Secret whose keys are environment-variable names, e.g.
 # GGHSTATS_SLACK_WEBHOOK_URL, GGHSTATS_TEAMS_WEBHOOK_URL, GGHSTATS_SMTP_PASSWORD.
