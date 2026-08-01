@@ -94,7 +94,7 @@ The same `.deb` works on Debian and Ubuntu. Installs `/usr/bin/gghstats`, `/etc/
 **From GitHub** (replace version / arch):
 
 ```bash
-wget -q -O /tmp/gghstats.deb https://github.com/hrodrig/gghstats/releases/download/v1.0.0/gghstats_1.0.0_linux_amd64.deb
+wget -q -O /tmp/gghstats.deb https://github.com/hrodrig/gghstats/releases/download/v1.0.1/gghstats_1.0.1_linux_amd64.deb
 sudo dpkg -i /tmp/gghstats.deb
 ```
 
@@ -122,7 +122,7 @@ Same `.rpm` for Fedora, AlmaLinux, Rocky Linux, and Oracle Linux.
 **From GitHub:**
 
 ```bash
-sudo dnf install -y "https://github.com/hrodrig/gghstats/releases/download/v1.0.0/gghstats_1.0.0_linux_amd64.rpm"
+sudo dnf install -y "https://github.com/hrodrig/gghstats/releases/download/v1.0.1/gghstats_1.0.1_linux_amd64.rpm"
 ```
 
 **Local build:**
