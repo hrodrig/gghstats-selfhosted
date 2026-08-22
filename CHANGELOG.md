@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Default **gghstats** container image tag **`v1.1.0`** ([gghstats v1.1.0](https://github.com/hrodrig/gghstats/releases/tag/v1.1.0) — repo pins CLI + Featured showcase): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.1.0**, **`version:`** to **0.1.40**.
+- **README:** sync version badge to **0.1.54**.
+
 ## [0.1.53] - 2026-08-01
 
 ### Changed
