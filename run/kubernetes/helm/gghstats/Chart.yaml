@@ -3,5 +3,5 @@ name: gghstats
 description: Self-hosted GitHub repository traffic dashboard and CLI
 type: application
 icon: https://raw.githubusercontent.com/hrodrig/gghstats-selfhosted/main/assets/gghstats-selfhosted-icon.png
-version: 0.1.43
-appVersion: "1.5.0"
+version: 0.1.44
+appVersion: "1.5.1"
