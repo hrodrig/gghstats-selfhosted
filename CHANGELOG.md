@@ -9,6 +9,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Default **gghstats** container image tag **`v1.5.0`** ([gghstats v1.5.0](https://github.com/hrodrig/gghstats/releases/tag/v1.5.0) — traffic freshness/coverage, report visibility fail-closed, chart gap legend + chart JSON download): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Operators:** after upgrading the image, existing SQLite rows migrate to `github_visibility=unknown` until the next sync — dashboard/API may look empty briefly (history kept). See upstream [Upgrading to 1.5.0](https://github.com/hrodrig/gghstats/blob/main/README.md#upgrading-to-150).
+- **`GGHSTATS_REPORT_PRIVATE`:** wired in Compose (minimal/Traefik), `.env.example`, and Helm (`env.reportPrivate`) — separate from `GGHSTATS_INCLUDE_PRIVATE` / `env.includePrivate`.
+- **Helm chart:** bump **`appVersion`** to **1.5.0**, **`version:`** to **0.1.43**.
+- **README:** sync version badge to **0.1.57**.
+
+### Changed
+
 - Default **gghstats** container image tag **`v1.4.0`** ([gghstats v1.4.0](https://github.com/hrodrig/gghstats/releases/tag/v1.4.0) — locale/compact chart formatting, JSONL export filename, stats help tooltips, Rank column headers): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.4.0**, **`version:`** to **0.1.42**.
 - **README:** sync version badge to **0.1.56**.
