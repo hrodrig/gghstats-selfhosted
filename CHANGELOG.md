@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Default **gghstats** container image tag **`v1.4.0`** ([gghstats v1.4.0](https://github.com/hrodrig/gghstats/releases/tag/v1.4.0) — locale/compact chart formatting, JSONL export filename, stats help tooltips, Rank column headers): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.4.0**, **`version:`** to **0.1.42**.
+- **README:** sync version badge to **0.1.56**.
+
+### Changed
+
 - Default **gghstats** container image tag **`v1.3.0`** ([gghstats v1.3.0](https://github.com/hrodrig/gghstats/releases/tag/v1.3.0) — index clone statistics, `# - %` rank/share column, JSONL export): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.3.0**, **`version:`** to **0.1.41**.
 - **README:** sync version badge to **0.1.55**.
