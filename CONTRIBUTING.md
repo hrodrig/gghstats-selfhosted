@@ -5,8 +5,22 @@ Thank you for helping improve these deployment manifests.
 ## How to contribute
 
 - **Issues:** Use [GitHub Issues](https://github.com/hrodrig/gghstats-selfhosted/issues) for bugs, doc gaps, or manifest improvements (Compose, Helm, observability).
-- **Pull requests:** Open PRs against **`develop`**. Keep changes focused (one concern per PR when possible).
+- **Code / manifest changes:** Open a pull request from a branch (for example `fix/description` or `chore/pin-gghstats-x.y.z`). Same policy as **[gghstats](https://github.com/hrodrig/gghstats)**.
 - **Application behavior** (Go code, UI, API): contribute in **[gghstats](https://github.com/hrodrig/gghstats)** — this repo is **infrastructure only**.
+- **Scope:** Keep PRs focused (one concern per PR when possible).
+
+## Branch protection
+
+**`develop` and `main` are protected.** GitHub rejects direct pushes (`git push origin develop` / `git push origin main`). Every change — including maintainer work and post-release sync — must land through a **pull request**.
+
+| Change | How |
+|--------|-----|
+| Feature, pin, docs | Branch from **`develop`** → PR **into `develop`** |
+| Infra release | PR **`develop` → `main`**. After GitHub merge: pull **`main`**, annotated tag **`v<VERSION>`**, `git push origin v…` (tags are allowed; branch pushes are not) |
+| After a release | PR **`main` → `develop`** so `develop` fast-forwards the merge commit. Do **not** push `develop` locally to “sync” |
+| PR out of date with base | GitHub **Update branch** (`gh pr update-branch <N>`). Do **not** merge into `main` or `develop` locally |
+
+**Anti-patterns:** `git checkout main && git merge develop && git push`; committing on `develop`/`main` and pushing; tagging before the `develop` → `main` PR is merged.
 
 ## Checks before submitting
 
@@ -82,7 +96,9 @@ Use the same **`helm template`** flags as in the kubeconform scenarios to exerci
 ## Release flow (this repo)
 
 - **`VERSION`** at the repo root — semver without `v` (e.g. `0.1.12`).
-- Git tags **`v<version>`** on **`main`** after merging from **`develop`**.
+- Release PR: **`develop` → `main`** (`gh pr create --base main --head develop`). Merge on GitHub when required checks are green.
+- Then on a local checkout of **`main`** (after `git pull`): annotated tag **`v<version>`** and `git push origin v<version>`.
+- Sync: PR **`main` → `develop`** (merge commit only). Same pattern as the app repo after a tag.
 - See **[CHANGELOG.md](CHANGELOG.md)** for notable infra-facing changes.
 
 ### Helm chart on GitHub Pages (maintainers)
@@ -91,7 +107,7 @@ The install path **`helm repo add gghstats https://hrodrig.github.io/gghstats-se
 
 - **Automation:** [**.github/workflows/release-charts.yml**](.github/workflows/release-charts.yml) runs **[helm/chart-releaser-action](https://github.com/helm/chart-releaser-action)** when you **push an annotated tag `v*`** on **`main`** (aligned with the repo’s **`VERSION`** / release tags). It packages the chart, creates a GitHub Release (artifact `.tgz`), and updates **`gh-pages`** with **`index.yaml`**. **`workflow_dispatch`** is available for a manual re-run. Continuous validation before merge: [**helm-lint.yml**](.github/workflows/helm-lint.yml).
 - **One-time setup:** Repository **Settings → Pages → Build and deployment → Source:** branch **`gh-pages`**, folder **`/` (root)**.
-- **Release checklist (chart publish):** When the **chart** changes, bump **`Chart.yaml` `version:`** (semver) and **`appVersion`** if the image story changes. Merge to **`main`**, push **`git tag -a v…`** and **`git push origin v…`**. Confirm [Release Charts](.github/workflows/release-charts.yml) is green; then **`helm repo update`** on a test machine. **Repo `VERSION`** and Git tag **`v*`** snapshot the **whole repository** — they need not equal **`Chart.yaml` `version:`** if this release did not touch the chart.
+- **Release checklist (chart publish):** When the **chart** changes, bump **`Chart.yaml` `version:`** (semver) and **`appVersion`** if the image story changes. Merge the **`develop` → `main`** PR, then **`git tag -a v…`** and **`git push origin v…`**. Confirm [Release Charts](.github/workflows/release-charts.yml) is green; then **`helm repo update`** on a test machine. **Repo `VERSION`** and Git tag **`v*`** snapshot the **whole repository** — they need not equal **`Chart.yaml` `version:`** if this release did not touch the chart.
 - **“No chart changes detected”:** Normal when you tag **`v*`** for a **docs-only or Compose-only** release. chart-releaser only updates **`gh-pages`** / chart packages when **`run/kubernetes/helm/`** has meaningful diffs. **No action required** unless you intended to ship a new **`.tgz`** — then edit the chart, bump **`Chart.yaml` `version:`**, merge, and tag again.
 - **First chart upload failed with `invalid reference: origin/gh-pages`:** Fixed in the workflow by bootstrapping an **orphan `gh-pages`** branch when it does not exist yet; use workflow and chart version **≥ 0.1.2** (or re-tag after pulling that workflow).
 
