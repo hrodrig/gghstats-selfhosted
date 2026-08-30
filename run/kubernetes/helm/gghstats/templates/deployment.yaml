@@ -59,6 +59,8 @@ spec:
               value: {{ .Values.env.filter | quote }}
             - name: GGHSTATS_INCLUDE_PRIVATE
               value: {{ .Values.env.includePrivate | quote }}
+            - name: GGHSTATS_REPORT_PRIVATE
+              value: {{ .Values.env.reportPrivate | default "false" | quote }}
             - name: GGHSTATS_SYNC_INTERVAL
               value: {{ .Values.env.syncInterval | quote }}
             {{- if ne (.Values.env.syncOnStartup | default "") "" }}
