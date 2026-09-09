@@ -1,7 +1,8 @@
 # Agent Guidelines (gghstats-selfhosted)
 
 - Use **English** for all project artifacts (code, comments, commit messages, docs, README).
-- Follow **git flow**: work on `develop`; **`main`** for production snapshots; **annotated tags** `v<semver>` on `main` for infra releases (see root **`VERSION`**).
+- Follow **git flow**: integration on `develop`; **`main`** for production snapshots; **annotated tags** `v<semver>` on `main` for infra releases (see root **`VERSION`**).
+- **`develop` and `main` are protected.** No direct push. Feature/docs/pin: branch → PR **into `develop`**. Release: PR **`develop` → `main`**, then tag. After a release: PR **`main` → `develop`** (do not `git push origin develop` to sync). Out-of-date PR: `gh pr update-branch <N>`. See **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 - **`VERSION`** (repository root): canonical **gghstats-selfhosted** semver (`0.1.0` style, no `v`). When it changes, align the README **Version** badge, optional CHANGELOG, and Git tag **`v…`** on **`main`**. **`Chart.yaml` `version:`** tracks the **Helm chart package** only — bump it when **`run/kubernetes/helm/gghstats/`** changes materially, **not** automatically on every **`VERSION`** bump (see **Versioning** in the root **README**).
 - **`GGHSTATS_VERSION`** in **`${GGHSTATS_HOST_DATA}/.env`** (recommended) or any env file passed to Compose: pins the **application** OCI image (`ghcr.io/hrodrig/gghstats:…`); align with **[gghstats](https://github.com/hrodrig/gghstats)** releases — not the same field as this repo’s **`VERSION`**.
 - This repo has **no** Go `Makefile` or `make release-check`; validation is manifest/docs review and optional `docker compose … config`.

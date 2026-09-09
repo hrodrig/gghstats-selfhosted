@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Default **gghstats** container image tag **`v1.6.0`** ([gghstats v1.6.0](https://github.com/hrodrig/gghstats/releases/tag/v1.6.0) — responsive dashboard UX, gated Settings, bg/ru locales, soft theme starter, #46/#56): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.6.0**, **`version:`** to **0.1.45**.
+- **README:** sync version badge to **0.1.59**.
+
+### Changed
+
 - Default **gghstats** container image tag **`v1.5.1`** ([gghstats v1.5.1](https://github.com/hrodrig/gghstats/releases/tag/v1.5.1) — Featured showcase is not a report surface, #47): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.5.1**, **`version:`** to **0.1.44**.
 - **README:** sync version badge to **0.1.58**.

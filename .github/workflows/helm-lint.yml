@@ -1,4 +1,6 @@
-# Validates the gghstats Helm chart on every PR and on pushes that touch the chart.
+# Validates the gghstats Helm chart on every pull_request (job name `validate` is
+# required by the develop/main ruleset — do not add path filters on pull_request).
+# Pushes to develop/main still skip when the chart is unchanged.
 # helm lint: Chart.yaml, values.schema.json, template syntax.
 # kubeconform: rendered YAML vs Kubernetes OpenAPI schemas (no cluster; kubectl apply --dry-run
 # still talks to localhost:8080 for discovery on recent kubectl — connection refused in CI).
@@ -6,9 +8,6 @@ name: Helm chart
 
 on:
   pull_request:
-    paths:
-      - "run/kubernetes/helm/**"
-      - ".github/workflows/helm-lint.yml"
   push:
     branches: [main, develop]
     paths:
