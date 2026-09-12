@@ -7,11 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.60] - 2026-09-12
+
 ### Changed
 
 - Default **gghstats** container image tag **`v1.6.1`** ([gghstats v1.6.1](https://github.com/hrodrig/gghstats/releases/tag/v1.6.1) — Featured-card chips readable in Midnight/Dark (#60), dark-mode table header contrast (#62), dependency bumps): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.6.1**, **`version:`** to **0.1.46**.
 - **README:** sync version badge to **0.1.60**.
+
+## [0.1.59] - 2026-09-09
 
 ### Changed
 
@@ -19,11 +23,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Helm chart:** bump **`appVersion`** to **1.6.0**, **`version:`** to **0.1.45**.
 - **README:** sync version badge to **0.1.59**.
 
+## [0.1.58] - 2026-08-30
+
 ### Changed
 
 - Default **gghstats** container image tag **`v1.5.1`** ([gghstats v1.5.1](https://github.com/hrodrig/gghstats/releases/tag/v1.5.1) — Featured showcase is not a report surface, #47): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.5.1**, **`version:`** to **0.1.44**.
 - **README:** sync version badge to **0.1.58**.
+
+## [0.1.57] - 2026-08-30
 
 ### Changed
 
@@ -33,17 +41,23 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Helm chart:** bump **`appVersion`** to **1.5.0**, **`version:`** to **0.1.43**.
 - **README:** sync version badge to **0.1.57**.
 
+## [0.1.56] - 2026-08-30
+
 ### Changed
 
 - Default **gghstats** container image tag **`v1.4.0`** ([gghstats v1.4.0](https://github.com/hrodrig/gghstats/releases/tag/v1.4.0) — locale/compact chart formatting, JSONL export filename, stats help tooltips, Rank column headers): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.4.0**, **`version:`** to **0.1.42**.
 - **README:** sync version badge to **0.1.56**.
 
+## [0.1.55] - 2026-08-24
+
 ### Changed
 
 - Default **gghstats** container image tag **`v1.3.0`** ([gghstats v1.3.0](https://github.com/hrodrig/gghstats/releases/tag/v1.3.0) — index clone statistics, `# - %` rank/share column, JSONL export): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.3.0**, **`version:`** to **0.1.41**.
 - **README:** sync version badge to **0.1.55**.
+
+## [0.1.54] - 2026-08-22
 
 ### Changed
 
@@ -529,7 +543,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.53...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.60...HEAD
+[0.1.60]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.59...v0.1.60
+[0.1.59]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.58...v0.1.59
+[0.1.58]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.57...v0.1.58
+[0.1.57]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.56...v0.1.57
+[0.1.56]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.55...v0.1.56
+[0.1.55]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.54...v0.1.55
+[0.1.54]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.53...v0.1.54
 [0.1.53]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.52...v0.1.53
 [0.1.52]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.51...v0.1.52
 [0.1.51]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.50...v0.1.51
