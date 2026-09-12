@@ -9,6 +9,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Default **gghstats** container image tag **`v1.6.1`** ([gghstats v1.6.1](https://github.com/hrodrig/gghstats/releases/tag/v1.6.1) — Featured-card chips readable in Midnight/Dark (#60), dark-mode table header contrast (#62), dependency bumps): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.6.1**, **`version:`** to **0.1.46**.
+- **README:** sync version badge to **0.1.60**.
+
+### Changed
+
 - Default **gghstats** container image tag **`v1.6.0`** ([gghstats v1.6.0](https://github.com/hrodrig/gghstats/releases/tag/v1.6.0) — responsive dashboard UX, gated Settings, bg/ru locales, soft theme starter, #46/#56): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
 - **Helm chart:** bump **`appVersion`** to **1.6.0**, **`version:`** to **0.1.45**.
 - **README:** sync version badge to **0.1.59**.

@@ -63,7 +63,7 @@ spec:
               value: {{ .Values.env.reportPrivate | default "false" | quote }}
             - name: GGHSTATS_SYNC_INTERVAL
               value: {{ .Values.env.syncInterval | quote }}
-            {{- if ne (.Values.env.syncOnStartup | default "") "" }}
+            {{- if .Values.env.syncOnStartup }}
             - name: GGHSTATS_SYNC_ON_STARTUP
               value: {{ .Values.env.syncOnStartup | quote }}
             {{- end }}
@@ -71,11 +71,11 @@ spec:
               value: {{ .Values.env.defaultLocale | quote }}
             - name: GGHSTATS_ENABLED_LOCALES
               value: {{ .Values.env.enabledLocales | quote }}
-            {{- if ne (.Values.env.badgePublic | default "") "" }}
+            {{- if .Values.env.badgePublic }}
             - name: GGHSTATS_BADGE_PUBLIC
               value: {{ .Values.env.badgePublic | quote }}
             {{- end }}
-            {{- if ne (.Values.env.publicUrl | default "") "" }}
+            {{- if .Values.env.publicUrl }}
             - name: GGHSTATS_PUBLIC_URL
               value: {{ .Values.env.publicUrl | quote }}
             {{- end }}
@@ -83,35 +83,35 @@ spec:
             - name: GGHSTATS_API_TOKEN
               value: {{ .Values.env.apiToken | quote }}
             {{- end }}
-            {{- if ne (.Values.env.metrics | default "") "" }}
+            {{- if .Values.env.metrics }}
             - name: GGHSTATS_METRICS
               value: {{ .Values.env.metrics | quote }}
             {{- end }}
-            {{- if ne (.Values.env.metricsPerRepo | default "") "" }}
+            {{- if .Values.env.metricsPerRepo }}
             - name: GGHSTATS_METRICS_PER_REPO
               value: {{ .Values.env.metricsPerRepo | quote }}
             {{- end }}
-            {{- if ne (.Values.env.rateLimitEnabled | default "") "" }}
+            {{- if .Values.env.rateLimitEnabled }}
             - name: GGHSTATS_RATE_LIMIT_ENABLED
               value: {{ .Values.env.rateLimitEnabled | quote }}
             {{- end }}
-            {{- if ne (.Values.env.rateLimitRequests | default "") "" }}
+            {{- if .Values.env.rateLimitRequests }}
             - name: GGHSTATS_RATE_LIMIT_REQUESTS
               value: {{ .Values.env.rateLimitRequests | quote }}
             {{- end }}
-            {{- if ne (.Values.env.rateLimitPeriod | default "") "" }}
+            {{- if .Values.env.rateLimitPeriod }}
             - name: GGHSTATS_RATE_LIMIT_PERIOD
               value: {{ .Values.env.rateLimitPeriod | quote }}
             {{- end }}
-            {{- if ne (.Values.env.rateLimitBurst | default "") "" }}
+            {{- if .Values.env.rateLimitBurst }}
             - name: GGHSTATS_RATE_LIMIT_BURST
               value: {{ .Values.env.rateLimitBurst | quote }}
             {{- end }}
-            {{- if ne (.Values.env.trustedProxies | default "") "" }}
+            {{- if .Values.env.trustedProxies }}
             - name: GGHSTATS_TRUSTED_PROXIES
               value: {{ .Values.env.trustedProxies | quote }}
             {{- end }}
-            {{- if ne (.Values.env.logLevel | default "") "" }}
+            {{- if .Values.env.logLevel }}
             - name: GGHSTATS_LOG_LEVEL
               value: {{ .Values.env.logLevel | quote }}
             {{- end }}
@@ -119,11 +119,11 @@ spec:
             - name: GGHSTATS_CUSTOM_CSS
               value: {{ .Values.env.customCss | quote }}
             {{- end }}
-            {{- if ne (.Values.env.headHTML | default "") "" }}
+            {{- if .Values.env.headHTML }}
             - name: GGHSTATS_HEAD_HTML
               value: {{ .Values.env.headHTML | quote }}
             {{- end }}
-            {{- if ne (.Values.env.reverseProxyRules | default "") "" }}
+            {{- if .Values.env.reverseProxyRules }}
             - name: GGHSTATS_REVERSE_PROXY_RULES
               value: {{ .Values.env.reverseProxyRules | quote }}
             {{- end }}
@@ -135,11 +135,11 @@ spec:
             - name: GGHSTATS_ENABLE_UPDATE_CHECK
               value: {{ .Values.env.enableUpdateCheck | quote }}
             {{- end }}
-            {{- if ne (.Values.env.syncWorkers | default "") "" }}
+            {{- if .Values.env.syncWorkers }}
             - name: GGHSTATS_SYNC_WORKERS
               value: {{ .Values.env.syncWorkers | quote }}
             {{- end }}
-            {{- if ne (.Values.env.demo | default "") "" }}
+            {{- if .Values.env.demo }}
             - name: GGHSTATS_DEMO
               value: {{ .Values.env.demo | quote }}
             {{- end }}
