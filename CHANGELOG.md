@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Default **gghstats** container image tag **`v1.6.4`** ([gghstats v1.6.4](https://github.com/hrodrig/gghstats/releases/tag/v1.6.4) — upstream_stale banner stuck/eligible UX #87): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.6.4**, **`version:`** to **0.1.49**.
+
 ## [0.1.62] - 2026-09-29
 
 ### Changed
