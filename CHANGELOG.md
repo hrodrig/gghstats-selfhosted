@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Default **gghstats** container image tag **`v1.6.3`** ([gghstats v1.6.3](https://github.com/hrodrig/gghstats/releases/tag/v1.6.3) — OPS-upstream-stale #80): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.6.3**, **`version:`** to **0.1.48**; wire `env.upstreamStale*` into the Deployment.
+
+### Added
+
+- **Operator runbook — fleet `upstream_stale`:** root README section + `.env.example` knobs; Compose minimal/Traefik forward `GGHSTATS_UPSTREAM_STALE_*` / dogfood flags; Helm values + alert rule example (`debounce":"once"`).
+
 ## [0.1.61] - 2026-09-27
 
 ### Changed

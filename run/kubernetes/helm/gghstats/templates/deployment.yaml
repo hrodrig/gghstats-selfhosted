@@ -143,6 +143,22 @@ spec:
             - name: GGHSTATS_DEMO
               value: {{ .Values.env.demo | quote }}
             {{- end }}
+            {{- if .Values.env.upstreamStaleDays }}
+            - name: GGHSTATS_UPSTREAM_STALE_DAYS
+              value: {{ .Values.env.upstreamStaleDays | quote }}
+            {{- end }}
+            {{- if .Values.env.upstreamStaleBanner }}
+            - name: GGHSTATS_UPSTREAM_STALE_BANNER
+              value: {{ .Values.env.upstreamStaleBanner | quote }}
+            {{- end }}
+            {{- if .Values.env.demoUpstreamStale }}
+            - name: GGHSTATS_DEMO_UPSTREAM_STALE
+              value: {{ .Values.env.demoUpstreamStale | quote }}
+            {{- end }}
+            {{- if .Values.env.upstreamStaleForce }}
+            - name: GGHSTATS_UPSTREAM_STALE_FORCE
+              value: {{ .Values.env.upstreamStaleForce | quote }}
+            {{- end }}
             {{- if .Values.alerting.enabled }}
             - name: GGHSTATS_ALERTS_ENABLED
               value: "true"

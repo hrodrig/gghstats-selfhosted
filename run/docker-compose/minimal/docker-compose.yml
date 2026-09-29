@@ -7,7 +7,7 @@ x-logging: &default-logging
 
 services:
   gghstats:
-    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v1.6.2}
+    image: ghcr.io/hrodrig/gghstats:${GGHSTATS_VERSION:-v1.6.3}
     container_name: gghstats
     restart: unless-stopped
     environment:
@@ -42,6 +42,11 @@ services:
       - GGHSTATS_SYNC_WORKERS=${GGHSTATS_SYNC_WORKERS:-4}
       - GGHSTATS_ENABLE_COLLECTOR=${GGHSTATS_ENABLE_COLLECTOR:-}
       - GGHSTATS_ENABLE_UPDATE_CHECK=${GGHSTATS_ENABLE_UPDATE_CHECK:-}
+      # Fleet upstream_stale (gghstats >= 1.6.3). Empty = app defaults (DAYS=3, BANNER=true).
+      - GGHSTATS_UPSTREAM_STALE_DAYS=${GGHSTATS_UPSTREAM_STALE_DAYS:-}
+      - GGHSTATS_UPSTREAM_STALE_BANNER=${GGHSTATS_UPSTREAM_STALE_BANNER:-}
+      - GGHSTATS_DEMO_UPSTREAM_STALE=${GGHSTATS_DEMO_UPSTREAM_STALE:-}
+      - GGHSTATS_UPSTREAM_STALE_FORCE=${GGHSTATS_UPSTREAM_STALE_FORCE:-}
       - GGHSTATS_ALERTS_ENABLED=${GGHSTATS_ALERTS_ENABLED:-false}
       - GGHSTATS_ALERT_SINKS=${GGHSTATS_ALERT_SINKS:-}
       - GGHSTATS_ALERT_RULES=${GGHSTATS_ALERT_RULES:-}
