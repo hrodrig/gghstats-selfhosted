@@ -1,6 +1,6 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.61-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.62-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
@@ -29,6 +29,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Kubernetes Helm](#kubernetes-helm)
 - [Recommended VPS baseline (optional)](#recommended-vps-baseline-optional)
 - [Opt-in alerts](#opt-in-alerts)
+- [Fleet upstream_stale (gghstats ≥ 1.6.3)](#fleet-upstream_stale-gghstats--163)
 - [Persistent data and secrets](#persistent-data-and-secrets)
 - [Custom UI theme (optional)](#custom-ui-theme-optional)
 - [Repository layout](#repository-layout)
@@ -97,7 +98,7 @@ docker run -d \
   -p 8080:8080 \
   -v "${GGHSTATS_HOST_DATA}:/data" \
   --name gghstats \
-  ghcr.io/hrodrig/gghstats:v1.6.2
+  ghcr.io/hrodrig/gghstats:v1.6.3
 ```
 
 Use an image tag that exists on GHCR ([releases](https://github.com/hrodrig/gghstats/releases)); match **`GGHSTATS_VERSION`** in [`run/common/.env.example`](run/common/.env.example).
@@ -391,6 +392,69 @@ Full rule/sink contract: [gghstats SPEC §8](https://github.com/hrodrig/gghstats
 
 ---
 
+## Fleet upstream_stale (gghstats ≥ 1.6.3)
+
+When GitHub’s traffic API returns **200** but the fleet observed window **stops advancing** for several days, **gghstats** surfaces fleet status **`upstream_stale`** (`since`, `days_stuck`) on **`/api/v1/healthz`** and index JSON — **not** the same as freshness `delayed` / `missing` / `failed`. Normative contract: [gghstats SPEC §4.8 / §8.7](https://github.com/hrodrig/gghstats/blob/main/SPEC.md). Historical freeze evidence (docs only): [Community discussions search](https://github.com/orgs/community/discussions?discussions_q=repository+traffic) (e.g. [#208852](https://github.com/orgs/community/discussions/208852)).
+
+| Knob | Default | Effect |
+|------|---------|--------|
+| `GGHSTATS_UPSTREAM_STALE_DAYS` | `3` | Days stuck before active; **`0`** = detect off |
+| `GGHSTATS_UPSTREAM_STALE_BANNER` | `true` | HTML banner on index + repo; **`false`** = JSON/alerts only |
+| Alert rule `event=upstream_stale` | off | Opt-in; use **`debounce":"once"`** (once per freeze episode) |
+
+Banner and alerts are **independent**: notify-only is supported; banner-only is the default without alerts.
+
+### Compose example
+
+In **`${GGHSTATS_HOST_DATA}/.env`** (then **`up -d`**, not `restart` alone):
+
+```bash
+# Optional — empty leaves binary defaults (DAYS=3, BANNER=true)
+GGHSTATS_UPSTREAM_STALE_DAYS=3
+GGHSTATS_UPSTREAM_STALE_BANNER=true
+
+# Optional Slack warn once per freeze episode (requires sinks + ALERTS_ENABLED):
+GGHSTATS_ALERTS_ENABLED=true
+GGHSTATS_ALERT_SINKS='[{"type":"slack","webhook_url_env":"GGHSTATS_SLACK_WEBHOOK_URL"}]'
+GGHSTATS_ALERT_RULES='[{"kind":"ops","event":"upstream_stale","op":"gte","value":1,"level":"warn","debounce":"once"}]'
+```
+
+Minimal and Traefik Compose **forward** these variables from the env file (see [`run/common/.env.example`](run/common/.env.example)).
+
+Check after a sync:
+
+```bash
+curl -sS "https://${GGHSTATS_HOSTNAME}/api/v1/healthz" | jq '.upstream_stale // empty'
+```
+
+### Helm example
+
+```yaml
+env:
+  upstreamStaleDays: "3"       # or "0" to disable
+  upstreamStaleBanner: "true"  # "false" = hide HTML banner
+alerting:
+  enabled: true
+  existingSecret: gghstats-alerts
+  sinks: '[{"type":"slack","webhook_url_env":"GGHSTATS_SLACK_WEBHOOK_URL"}]'
+  rules: '[{"kind":"ops","event":"upstream_stale","op":"gte","value":1,"level":"warn","debounce":"once"}]'
+```
+
+### Dogfood (non-production)
+
+With a **demo** or throwaway instance only:
+
+| Env | Purpose |
+|-----|---------|
+| `GGHSTATS_DEMO_UPSTREAM_STALE=true` | With `GGHSTATS_DEMO=true`, freeze demo watermarks for UI check |
+| `GGHSTATS_UPSTREAM_STALE_FORCE=true` | Force `upstream_stale` active (banner/alert path) |
+
+Do **not** set these on production traffic stacks.
+
+**[↑ Contents](#table-of-contents)**
+
+---
+
 ## Persistent data and secrets
 
 *Recommended on servers:* colocate SQLite and env files outside the clone (see below).
@@ -403,7 +467,7 @@ Keep **SQLite**, **`${GGHSTATS_HOST_DATA}/.env`**, and **`${GGHSTATS_HOST_DATA}/
 
 ## Custom UI theme (optional)
 
-**Requires** a [gghstats](https://github.com/hrodrig/gghstats) image **0.2.0** or newer (this repo’s Compose defaults use **`v1.6.2`**). The app serves an extra stylesheet at **`GET /theme/custom.css`** when **`GGHSTATS_CUSTOM_CSS`** points at a **regular `.css` file readable inside the container**.
+**Requires** a [gghstats](https://github.com/hrodrig/gghstats) image **0.2.0** or newer (this repo’s Compose defaults use **`v1.6.3`**). The app serves an extra stylesheet at **`GET /theme/custom.css`** when **`GGHSTATS_CUSTOM_CSS`** points at a **regular `.css` file readable inside the container**.
 
 ### Where the theme file must live (bind mount vs PVC)
 
@@ -422,7 +486,7 @@ After install, common options are **`kubectl cp`** a file into the running pod�
 
 **Compose / Traefik or minimal (steps)**
 
-1. Pin the image: set **`GGHSTATS_VERSION=v1.6.2`** in **`${GGHSTATS_HOST_DATA}/.env`** (see [`run/common/.env.example`](run/common/.env.example)).
+1. Pin the image: set **`GGHSTATS_VERSION=v1.6.3`** in **`${GGHSTATS_HOST_DATA}/.env`** (see [`run/common/.env.example`](run/common/.env.example)).
 2. Copy a starter from **[`gghstats` `contrib/themes/`](https://github.com/hrodrig/gghstats/tree/main/contrib/themes)** (or write your own) into the **host directory** that is bind-mounted to **`/data`** (same as [Persistent data and secrets](#persistent-data-and-secrets)), e.g. **`${GGHSTATS_HOST_DATA}/custom-theme.css`**.
 3. Set **`GGHSTATS_CUSTOM_CSS=/data/custom-theme.css`** in that **`.env`**.
 4. Recreate the app container so env and mounts apply: **`docker compose … up -d`** (not **`restart`** alone if you also changed **`GGHSTATS_VERSION`** — see [Versioning](#versioning)).
@@ -491,7 +555,7 @@ Use this checklist from the **repository clone root** after editing **`GGHSTATS_
      -f run/docker-compose/traefik/docker-compose.yml config \
      | grep -E 'image:|gghstats'
    ```
-   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v1.6.2`**).
+   You should see **`ghcr.io/hrodrig/gghstats:<your-tag>`** (e.g. **`v1.6.3`**).
 4. **Pull** and **recreate** the service (do not rely on **`restart`** alone):
    ```bash
    ./run/scripts/compose-stack.sh traefik pull

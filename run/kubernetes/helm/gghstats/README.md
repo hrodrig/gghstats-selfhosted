@@ -50,6 +50,8 @@ alerting:
 
 Supported sink families: Slack, generic webhook (Discord / Teams / n8n), Loki, and SMTP. See [gghstats SPEC §8](https://github.com/hrodrig/gghstats/blob/main/SPEC.md#8-opt-in-alerts--notification-rules).
 
+**Fleet `upstream_stale` (gghstats ≥ 1.6.3):** set `env.upstreamStaleDays` / `env.upstreamStaleBanner` in values (empty = app defaults). Optional ops rule `event=upstream_stale` with **`debounce":"once"`**. Operator runbook: [root README — Fleet upstream_stale](../../../../README.md#fleet-upstream_stale-gghstats--163).
+
 ### Install from a git clone (sources and templates)
 
 From the **repository root** of [gghstats-selfhosted](https://github.com/hrodrig/gghstats-selfhosted):

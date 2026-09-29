@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v1.6.2"
+  tag: "v1.6.3"
   pullPolicy: IfNotPresent
 
 service:
@@ -72,6 +72,13 @@ env:
   # Demo UI with sample data (gghstats >= 0.9.0). Set "true" for no GitHub token/sync.
   # empty = off. For production leave empty and set githubToken.
   demo: ""
+  # Fleet upstream_stale (gghstats >= 1.6.3). Empty = app defaults (DAYS=3, BANNER=true).
+  # Set days "0" to disable detect. Banner independent of alerting.*.
+  upstreamStaleDays: ""
+  upstreamStaleBanner: ""
+  # Dogfood only (with demo / force). Leave empty in production.
+  demoUpstreamStale: ""
+  upstreamStaleForce: ""
 
 
 # Opt-in alerts (gghstats >= 0.10.0; SMTP >= 0.10.2).
