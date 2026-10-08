@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.65] - 2026-10-07
+
+### Changed
+
+- Default **gghstats** container image tag **`v1.6.6`** ([gghstats v1.6.6](https://github.com/hrodrig/gghstats/releases/tag/v1.6.6) — keep `golang.org/x/net v0.57.0` pin after Dependabot sqlite 1.60.1 bump): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.6.6**, **`version:`** to **0.1.51**.
+- **README:** sync version badge to **0.1.65**.
+
 ## [0.1.64] - 2026-09-30
 
 ### Changed
@@ -579,7 +587,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.64...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.65...HEAD
+[0.1.65]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.64...v0.1.65
 [0.1.64]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.63...v0.1.64
 [0.1.63]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.62...v0.1.63
 [0.1.62]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.61...v0.1.62
