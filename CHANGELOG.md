@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.66] - 2026-10-14
+
 ### Added
 
 - **Helm chart `0.1.52`:** wire missing app env knobs — `env.apiOnly`, `corsOrigins`, `csp`, `repo`, `githubApiBaseUrl`, `badgeCacheSeconds`, `whitelist`, `whitelistPaths`, `compactNumbers`; sync `enabledLocales` default with app (`bg,ru`).
