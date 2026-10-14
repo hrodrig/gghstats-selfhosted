@@ -91,6 +91,10 @@ spec:
               value: {{ .Values.env.defaultLocale | quote }}
             - name: GGHSTATS_ENABLED_LOCALES
               value: {{ .Values.env.enabledLocales | quote }}
+            {{- if .Values.env.compactNumbers }}
+            - name: GGHSTATS_COMPACT_NUMBERS
+              value: {{ .Values.env.compactNumbers | quote }}
+            {{- end }}
             {{- if .Values.env.badgePublic }}
             - name: GGHSTATS_BADGE_PUBLIC
               value: {{ .Values.env.badgePublic | quote }}

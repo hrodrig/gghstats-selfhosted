@@ -39,6 +39,8 @@ env:
   # UI i18n (gghstats >= 0.6.0); API/CLI stay English.
   defaultLocale: "en"
   enabledLocales: "en,es,de,fr,pt-br,bg,ru"
+  # Compact large numbers in UI (GGHSTATS_COMPACT_NUMBERS). Empty = app default (false).
+  compactNumbers: ""
   # Optional (gghstats >= 0.3.0): badge embeds and public base URL behind ingress.
   badgePublic: ""
   # Badge SVG Cache-Control max-age seconds (empty = app default 300).
