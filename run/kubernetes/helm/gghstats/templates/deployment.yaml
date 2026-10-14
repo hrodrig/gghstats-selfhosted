@@ -55,6 +55,26 @@ spec:
               value: {{ .Values.env.dbPath | quote }}
             - name: TMPDIR
               value: /tmp
+            {{- if .Values.env.apiOnly }}
+            - name: GGHSTATS_API_ONLY
+              value: {{ .Values.env.apiOnly | quote }}
+            {{- end }}
+            {{- if .Values.env.corsOrigins }}
+            - name: GGHSTATS_CORS_ORIGINS
+              value: {{ .Values.env.corsOrigins | quote }}
+            {{- end }}
+            {{- if .Values.env.csp }}
+            - name: GGHSTATS_CSP
+              value: {{ .Values.env.csp | quote }}
+            {{- end }}
+            {{- if .Values.env.githubApiBaseUrl }}
+            - name: GGHSTATS_GITHUB_API_BASE_URL
+              value: {{ .Values.env.githubApiBaseUrl | quote }}
+            {{- end }}
+            {{- if .Values.env.repo }}
+            - name: GGHSTATS_REPO
+              value: {{ .Values.env.repo | quote }}
+            {{- end }}
             - name: GGHSTATS_FILTER
               value: {{ .Values.env.filter | quote }}
             - name: GGHSTATS_INCLUDE_PRIVATE
@@ -71,17 +91,39 @@ spec:
               value: {{ .Values.env.defaultLocale | quote }}
             - name: GGHSTATS_ENABLED_LOCALES
               value: {{ .Values.env.enabledLocales | quote }}
+            {{- if .Values.env.compactNumbers }}
+            - name: GGHSTATS_COMPACT_NUMBERS
+              value: {{ .Values.env.compactNumbers | quote }}
+            {{- end }}
             {{- if .Values.env.badgePublic }}
             - name: GGHSTATS_BADGE_PUBLIC
               value: {{ .Values.env.badgePublic | quote }}
+            {{- end }}
+            {{- if .Values.env.badgeCacheSeconds }}
+            - name: GGHSTATS_BADGE_CACHE_SECONDS
+              value: {{ .Values.env.badgeCacheSeconds | quote }}
             {{- end }}
             {{- if .Values.env.publicUrl }}
             - name: GGHSTATS_PUBLIC_URL
               value: {{ .Values.env.publicUrl | quote }}
             {{- end }}
-            {{- if .Values.env.apiToken }}
+            {{- if or .Values.apiToken.existingSecret .Values.apiToken.value }}
+            - name: GGHSTATS_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default .Values.apiToken.secretName .Values.apiToken.existingSecret }}
+                  key: {{ .Values.apiToken.secretKey }}
+            {{- else if .Values.env.apiToken }}
             - name: GGHSTATS_API_TOKEN
               value: {{ .Values.env.apiToken | quote }}
+            {{- end }}
+            {{- if .Values.env.whitelist }}
+            - name: GGHSTATS_WHITELIST
+              value: {{ .Values.env.whitelist | quote }}
+            {{- end }}
+            {{- if .Values.env.whitelistPaths }}
+            - name: GGHSTATS_WHITELIST_PATHS
+              value: {{ .Values.env.whitelistPaths | quote }}
             {{- end }}
             {{- if .Values.env.metrics }}
             - name: GGHSTATS_METRICS

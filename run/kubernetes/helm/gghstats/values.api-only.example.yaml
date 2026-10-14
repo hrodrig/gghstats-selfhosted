@@ -1,0 +1,26 @@
+# Example: headless gghstats API for gghstats-xui (or other API clients).
+#
+#   helm upgrade --install gghstats-api gghstats/gghstats -n main \
+#     -f values.api-only.example.yaml
+#
+# Pair with gghstats-xui: gghstats.enabled=false + xui.env.apiBase=http://gghstats-api-gghstats:8080
+# (Service name = <release>-gghstats; confirm with kubectl get svc).
+
+env:
+  apiOnly: "true"
+  # Narrow sync — do not use "*" with a broad PAT unless intentional.
+  filter: "owner/repo1,owner/repo2"
+  # Behind Traefik / ingress controller:
+  # trustedProxies: "10.0.0.0/8"
+
+githubToken:
+  existingSecret: gghstats-secret
+  # secretKey: github-token
+
+apiToken:
+  existingSecret: gghstats-api-secret
+  # secretKey: api-token
+
+persistence:
+  enabled: true
+  size: 5Gi
