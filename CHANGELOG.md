@@ -7,6 +7,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Helm chart `0.1.52`:** wire missing app env knobs — `env.apiOnly`, `corsOrigins`, `csp`, `repo`, `githubApiBaseUrl`, `badgeCacheSeconds`, `whitelist`, `whitelistPaths`, `compactNumbers`; sync `enabledLocales` default with app (`bg,ru`).
+- **Helm `apiToken` Secret** (top-level `apiToken.existingSecret` / `value`) for `GGHSTATS_API_TOKEN` — preferred over plain `env.apiToken` (still supported).
+- Example [`values.api-only.example.yaml`](run/kubernetes/helm/gghstats/values.api-only.example.yaml) for headless API + gghstats-xui.
+
 ## [0.1.65] - 2026-10-07
 
 ### Changed

@@ -18,16 +18,28 @@ helm install gghstats gghstats/gghstats -n gghstats --create-namespace -f my-val
 
 Use **`helm show values gghstats/gghstats`** to dump defaults. If **`helm repo add`** fails, the index may not be published yet — use **from a git clone** below.
 
-### GitHub token (Kubernetes secret)
+### GitHub token + API token (Kubernetes secrets)
 
-Prefer **not** storing the PAT in **`my-values.yaml`**. Defaults in **`values.yaml`** expect a Secret named **`gghstats-secret`** with key **`github-token`**. Create it before **`helm install`** (replace **`YOUR_GITHUB_TOKEN`**):
+Prefer **not** storing tokens in **`my-values.yaml`**. Defaults expect:
+
+| Secret | Key | values key |
+|--------|-----|------------|
+| `gghstats-secret` | `github-token` | `githubToken.existingSecret` |
+| `gghstats-api-secret` | `api-token` | `apiToken.existingSecret` |
 
 ```bash
 kubectl create namespace gghstats
-kubectl create secret generic gghstats-secret \
-  -n gghstats \
-  --from-literal=github-token=YOUR_GITHUB_TOKEN
+kubectl create secret generic gghstats-secret -n gghstats \
+  --from-literal=github-token="${GGHSTATS_GITHUB_TOKEN}"
+kubectl create secret generic gghstats-api-secret -n gghstats \
+  --from-literal=api-token="${GGHSTATS_API_TOKEN}"
 ```
+
+Legacy: plain `env.apiToken` in values still works if `apiToken.*` is unset.
+
+### API-only (headless) for gghstats-xui
+
+Set `env.apiOnly: "true"` and a shared `apiToken` Secret. Example: [`values.api-only.example.yaml`](values.api-only.example.yaml). Pair with **[gghstats-xui-selfhosted](https://github.com/hrodrig/gghstats-xui-selfhosted)** (`gghstats.enabled: false` + `xui.env.apiBase` → this chart’s ClusterIP Service).
 
 Leave **`githubToken.value`** empty so the chart does not render the token into release manifests. If **`githubToken.existingSecret`** is set, it overrides the Secret name the Deployment mounts (see **`templates/deployment.yaml`**).
 
