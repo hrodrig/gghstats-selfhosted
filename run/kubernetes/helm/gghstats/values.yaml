@@ -19,7 +19,17 @@ env:
   port: "8080"
   # SQLite path — must be under the /data volume (only writable mount besides /tmp).
   dbPath: "/data/gghstats.db"
+  # API-only (no HTML dashboard). Empty = app default (false). Set "true" for headless API (e.g. behind gghstats-xui).
+  apiOnly: ""
+  # Comma-separated CORS Origins for authenticated JSON. Empty = app default (*). Prefer explicit origins with apiOnly.
+  corsOrigins: ""
+  # CSP mode: empty = app default (report-only). Set "enforce" when headHTML is empty.
+  csp: ""
   filter: "*"
+  # Optional single-repo override (GGHSTATS_REPO). Empty = use filter discovery.
+  repo: ""
+  # GitHub Enterprise / alternate API base (GGHSTATS_GITHUB_API_BASE_URL).
+  githubApiBaseUrl: ""
   includePrivate: "false"
   # Optional (gghstats >= 1.5.0): include inherited private repos in reports. Separate from includePrivate.
   reportPrivate: "false"
@@ -28,14 +38,14 @@ env:
   syncOnStartup: ""
   # UI i18n (gghstats >= 0.6.0); API/CLI stay English.
   defaultLocale: "en"
-  enabledLocales: "en,es,de,fr,pt-br"
+  enabledLocales: "en,es,de,fr,pt-br,bg,ru"
   # Optional (gghstats >= 0.3.0): badge embeds and public base URL behind ingress.
   badgePublic: ""
+  # Badge SVG Cache-Control max-age seconds (empty = app default 300).
+  badgeCacheSeconds: ""
   publicUrl: ""
-  # API token for protected endpoints and sync UI. REQUIRED for the "Sync now"
-  # button to appear in the dashboard sidebar. Can be any string; the same value
-  # is sent as x-api-token header. If empty, the sync button is hidden and
-  # /api/ endpoints return 404.
+  # DEPRECATED for new installs: prefer top-level apiToken.existingSecret / apiToken.value.
+  # Still honored when apiToken.* is unset (backward compatible).
   apiToken: ""
   # Optional: path inside container to a .css file under /data (gghstats >= 0.2.0). Example: "/data/custom-theme.css".
   customCss: ""
@@ -50,6 +60,9 @@ env:
   rateLimitRequests: ""
   rateLimitPeriod: ""
   rateLimitBurst: ""
+  # IP/CIDR allow-list (empty = all). Optional path-prefix scope via whitelistPaths.
+  whitelist: ""
+  whitelistPaths: ""
   # Trusted reverse-proxy peers for X-Forwarded-For / X-Real-IP (gghstats >= 0.10.2).
   # Empty = ignore forwarded headers. Behind Ingress/Traefik set the proxy CIDR(s).
   trustedProxies: ""
@@ -95,6 +108,14 @@ githubToken:
   existingSecret: ""
   secretName: gghstats-secret
   secretKey: github-token
+  value: ""
+
+# Shared API token (x-api-token). Prefer existingSecret — needed for gghstats-xui and protected /api.
+# If unset, falls back to env.apiToken (legacy plain value in Helm values).
+apiToken:
+  existingSecret: ""
+  secretName: gghstats-api-secret
+  secretKey: api-token
   value: ""
 
 persistence:
