@@ -7,6 +7,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **CSP:** document `GGHSTATS_CSP=enforce` for public production when `HEAD_HTML` is empty; pass `GGHSTATS_CSP` through Traefik and minimal Compose; clarify Helm `env.csp` and VPS-recommended notes.
+
 ## [0.1.67] - 2026-11-21
 
 ### Changed
