@@ -282,6 +282,8 @@ sudo fail2ban-client status sshd
 
 Tools such as Nikto or website scanners report **missing response headers**. Those are usually configured on **your reverse proxy** (for example Traefik middleware in [`run/docker-compose/traefik/`](../docker-compose/traefik/)) or in your CDN — **not** by this playbook. This baseline reduces **host** risk; it does not make a external scanner “green” by itself.
 
+**gghstats CSP:** the app sends a Report-Only baseline by default. For public production, set **`GGHSTATS_CSP=enforce`** in **`${GGHSTATS_HOST_DATA}/.env`** when **`GGHSTATS_HEAD_HTML`** is empty (Compose Traefik/minimal and Helm `env.csp` pass it through). With HeadHTML set, the app stays Report-Only.
+
 ## After the host is sane
 
 Pick a gghstats path from the [repository README](../../README.md#pick-a-path). Examples in the root README often use **Compose** (`minimal`, Traefik, observability); extrapolate the same ideas to any mode:
