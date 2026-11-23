@@ -11,6 +11,8 @@ services:
     container_name: gghstats
     restart: unless-stopped
     environment:
+      # CVE-2026-98432: kernel patch is primary; GODEBUG + gghstats >= v1.6.9 are defense in depth.
+      - GODEBUG=${GODEBUG:-multipathtcp=0}
       - GGHSTATS_GITHUB_TOKEN=${GGHSTATS_GITHUB_TOKEN:-}
       - GGHSTATS_DEMO=${GGHSTATS_DEMO:-}
       - GGHSTATS_HOST=0.0.0.0

@@ -1,17 +1,20 @@
 # gghstats-selfhosted
 
-[![Version](https://img.shields.io/badge/version-0.1.68-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
+[![Version](https://img.shields.io/badge/version-0.1.69-blue)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![Release](https://img.shields.io/github/v/release/hrodrig/gghstats-selfhosted?label=release)](https://github.com/hrodrig/gghstats-selfhosted/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![App image on GHCR](https://img.shields.io/badge/image-ghcr.io%2Fhrodrig%2Fgghstats-2496ED?logo=github)](https://github.com/hrodrig/gghstats/pkgs/container/gghstats)
 [![gghstats app](https://img.shields.io/badge/app-hrodrig%2Fgghstats-181717?logo=github)](https://github.com/hrodrig/gghstats)
 [![gghstats clones](https://gghstats.hermesrodriguez.com/api/v1/badge/hrodrig/gghstats-selfhosted?metric=clones)](https://gghstats.hermesrodriguez.com/hrodrig/gghstats-selfhosted)
+[![Alt UI demo](https://img.shields.io/badge/demo-xui.hermesrodriguez.com-0d7377)](https://xui.hermesrodriguez.com/)
 
 ![gghstats-selfhosted — Docker, Compose, Helm, run/](assets/gghstats-selfhosted-hero.png)
 
 Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** — Compose, Helm, `docker run`, optional observability. **App source and releases:** [github.com/hrodrig/gghstats](https://github.com/hrodrig/gghstats).
 
-**Demo:** [gghstats.hermesrodriguez.com](https://gghstats.hermesrodriguez.com) · Observability example: [gghstats-obs.hermesrodriguez.com](https://gghstats-obs.hermesrodriguez.com)
+**Demo (built-in UI):** [gghstats.hermesrodriguez.com](https://gghstats.hermesrodriguez.com) · Observability example: [gghstats-obs.hermesrodriguez.com](https://gghstats-obs.hermesrodriguez.com)
+
+**Alternate frontend (API-only):** [xui.hermesrodriguez.com](https://xui.hermesrodriguez.com/) — reference UI **[gghstats-xui](https://github.com/hrodrig/gghstats-xui)**; deploy with **[gghstats-xui-selfhosted](https://github.com/hrodrig/gghstats-xui-selfhosted)** (or your own BFF). Helm `env.apiOnly` + shared `apiToken` pair with that stack — see [`values.api-only.example.yaml`](run/kubernetes/helm/gghstats/values.api-only.example.yaml). The point of api-only: **anyone can build another interface** on the same JSON API.
 
 **Policies:** [Community and policies](#community-and-policies), [community standards](#community-standards) — changelog, contributing, security, code of conduct, agent guidelines.
 
@@ -35,6 +38,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 - [Repository layout](#repository-layout)
 - [Versioning](#versioning)
 - [Validate gghstats image upgrade (Compose / Traefik)](#validate-gghstats-image-upgrade-compose--traefik)
+- [Linux MPTCP / CVE-2026-98432 (operators)](#linux-mptcp--cve-2026-98432-operators)
 - [Community and policies](#community-and-policies)
 - [Community standards](#community-standards)
 - [License](#license)
@@ -55,6 +59,7 @@ Deployment manifests for **[gghstats](https://github.com/hrodrig/gghstats)** —
 | **Kubernetes** | [Kubernetes Helm](#kubernetes-helm) |
 | **Harden a fresh VPS** (optional, agnostic Ansible; recommendations only) | [Recommended VPS baseline](#recommended-vps-baseline-optional) |
 | **Simpler or custom dashboard look** (CSS overlay) | [Custom UI theme (optional)](#custom-ui-theme-optional) |
+| **Separate frontend** on API-only (reference: gghstats-xui) | [gghstats-xui-selfhosted](https://github.com/hrodrig/gghstats-xui-selfhosted) · live [xui.hermesrodriguez.com](https://xui.hermesrodriguez.com/) |
 
 Shared env template for Compose: copy **[`run/common/.env.example`](run/common/.env.example)** to **`${GGHSTATS_HOST_DATA}/.env`**, set **`GGHSTATS_HOST_DATA`** inside that file, and pass **`--env-file "${GGHSTATS_HOST_DATA}/.env"`** to Compose. Deeper walkthroughs: **[`run/README.md`](run/README.md)**.
 
@@ -292,6 +297,8 @@ See **[`values.yaml`](run/kubernetes/helm/gghstats/values.yaml)** in-tree for de
 ```bash
 helm uninstall gghstats -n gghstats
 ```
+
+**API-only + alternate UI:** set `env.apiOnly: true` and a shared `apiToken` Secret — example [`values.api-only.example.yaml`](run/kubernetes/helm/gghstats/values.api-only.example.yaml). Pair with **[gghstats-xui-selfhosted](https://github.com/hrodrig/gghstats-xui-selfhosted)** (Path B two-chart) or any BFF. Live reference: [xui.hermesrodriguez.com](https://xui.hermesrodriguez.com/).
 
 **More:** [run/kubernetes/helm/gghstats/README.md](run/kubernetes/helm/gghstats/README.md) · [run/kubernetes/manifests](run/kubernetes/manifests/README.md)
 
@@ -577,6 +584,24 @@ Use this checklist from the **repository clone root** after editing **`GGHSTATS_
 
 ---
 
+## Linux MPTCP / CVE-2026-98432 (operators)
+
+Long-lived **`serve`** / daemon HTTP profiles in this repo listen on TCP (Compose/Helm/systemd, typically **:8080**). On Linux, Go **1.24+** may open that socket with **Multipath TCP** by default — the exposure path discussed for **[CVE-2026-98432](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)** (kernel IPv4 TCP UAF). See the [Go Security Team note](https://groups.google.com/g/golang-announce/c/PCoQcdxoScw) and [GODEBUG `multipathtcp`](https://go.dev/doc/godebug#go-124).
+
+| Priority | Action |
+|----------|--------|
+| **1 — required** | **Patch the Linux kernel** on every host and Kubernetes node that runs listeners. |
+| **2 — image** | Run **gghstats ≥ v1.6.9** (binary sets `godebug multipathtcp=0` and disables MPTCP on the dashboard listener). |
+| **3 — env** | Keep **`GODEBUG=multipathtcp=0`** in [`run/common/.env.example`](run/common/.env.example), Compose, Helm `env.godebug`, and bare-metal `/etc/gghstats/gghstats.env` (see below). Recreate/restart after changes. |
+
+**Fragile:** env/app mitigations are **incomplete**. Another Go process on the same host that still opens an MPTCP listener keeps the PoC path open. Prefer **`GGHSTATS_HOST=127.0.0.1`** on bare metal behind a local proxy ([linux README](run/standalone/linux/README.md)) — that shrinks public bind surface; it does **not** turn MPTCP off.
+
+Policy + reporting: [`SECURITY.md`](SECURITY.md).
+
+**[↑ Contents](#table-of-contents)**
+
+---
+
 ## Community and policies
 
 | Document | Purpose |
@@ -584,7 +609,7 @@ Use this checklist from the **repository clone root** after editing **`GGHSTATS_
 | **[CHANGELOG.md](CHANGELOG.md)** | Release history and notable changes to **this** repository (manifests, docs, layout). |
 | **[CONTRIBUTING.md](CONTRIBUTING.md)** | How to open issues/PRs, branch policy (`develop` → `main`), and checks before submitting. |
 | **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** | Community standards (Contributor Covenant). |
-| **[SECURITY.md](SECURITY.md)** | How to report security vulnerabilities responsibly. |
+| **[SECURITY.md](SECURITY.md)** | How to report security vulnerabilities responsibly (includes CVE-2026-98432 operator note). |
 | **[AGENTS.md](AGENTS.md)** | Guidelines for AI coding agents (Cursor, etc.) working in this repo. |
 
 **Application** issues (bugs, features in the Go app or UI) belong in **[gghstats](https://github.com/hrodrig/gghstats)** — not here.
