@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/hrodrig/gghstats
-  tag: "v1.6.9"
+  tag: "v1.6.10"
   pullPolicy: IfNotPresent
 
 service:
@@ -23,7 +23,8 @@ env:
   apiOnly: ""
   # Comma-separated CORS Origins for authenticated JSON. Empty = app default (*). Prefer explicit origins with apiOnly.
   corsOrigins: ""
-  # CSP mode: empty = app default (report-only). Set "enforce" when headHTML is empty.
+  # CSP mode: empty = app default (report-only).
+  # Production: set "enforce" when headHTML is empty (enforce is ignored while headHTML is set).
   csp: ""
   filter: "*"
   # Optional single-repo override (GGHSTATS_REPO). Empty = use filter discovery.

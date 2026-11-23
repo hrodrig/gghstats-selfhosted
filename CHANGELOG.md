@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.68] - 2026-11-22
+
+### Changed
+
+- Default **gghstats** container image tag **`v1.6.10`** ([gghstats v1.6.10](https://github.com/hrodrig/gghstats/releases/tag/v1.6.10) — index ranks/select/H2H/a11y #126–#129 + export/XFF hardening): Compose, Helm, `.env.example`, Linux standalone `.deb`/`.rpm` examples, platform-test defaults.
+- **Helm chart:** bump **`appVersion`** to **1.6.10**, **`version:`** to **0.1.54**.
+- **README:** sync version badge to **0.1.68**.
+- **CSP:** document `GGHSTATS_CSP=enforce` for public production when `HEAD_HTML` is empty; pass `GGHSTATS_CSP` through Traefik and minimal Compose; clarify Helm `env.csp` and VPS-recommended notes.
+
 ## [0.1.67] - 2026-11-21
 
 ### Changed
@@ -603,7 +612,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.67...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.68...HEAD
+[0.1.68]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.67...v0.1.68
 [0.1.67]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.66...v0.1.67
 [0.1.66]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.65...v0.1.66
 [0.1.65]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.64...v0.1.65
