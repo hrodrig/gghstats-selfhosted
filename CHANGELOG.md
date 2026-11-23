@@ -7,6 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.69] - 2026-11-22
+
+### Security
+
+- **CVE-2026-98432 (operators):** document kernel patch as primary fix; ship `GODEBUG=multipathtcp=0` in Compose / `.env.example` / Helm `env.godebug` (chart **0.1.55**); systemd drop-in + loopback guidance in bare-metal Linux README; links in root README + `SECURITY.md` (#45).
+
+### Changed
+
+- **README:** sync version badge to **0.1.69**.
+
 ## [0.1.68] - 2026-11-22
 
 ### Changed
@@ -612,7 +622,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **`VERSION`** file and **Version** badge for this repository (distinct from **`GGHSTATS_VERSION`** / container image tag).
 - **`data/.keep`** with gitignore rules so runtime DB files under `data/` are not committed.
 
-[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.68...HEAD
+[Unreleased]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.69...HEAD
+[0.1.69]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.68...v0.1.69
 [0.1.68]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.67...v0.1.68
 [0.1.67]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.66...v0.1.67
 [0.1.66]: https://github.com/hrodrig/gghstats-selfhosted/compare/v0.1.65...v0.1.66

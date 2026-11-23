@@ -18,6 +18,8 @@
 
 **Threat model (short):** if the VPS is compromised (weak SSH, open admin ports, stolen `.env` on disk), attackers get your **GitHub PAT**, **SQLite**, and **API token** — that is **host security**, not an HTTP header missing on the app. See [gghstats](https://github.com/hrodrig/gghstats) for application issues; use this tree for **your** server.
 
+**Kernel / MPTCP:** keep the host **patched**. **[CVE-2026-98432](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)** is a Linux kernel issue demonstrated via MPTCP listeners; app/`GODEBUG` mitigations are incomplete alone. Operator checklist: [Linux MPTCP / CVE-2026-98432](../../README.md#linux-mptcp--cve-2026-98432-operators).
+
 **Layout and accounts (recommended):**
 
 - **Keep the git clone separate from runtime config.** Clone **[gghstats-selfhosted](https://github.com/hrodrig/gghstats-selfhosted)** under something like `/opt/src/gghstats-selfhosted` (or only on your laptop) and keep **SQLite**, **`.env`**, and **`.env.observability`** under a **different** directory (e.g. `/var/lib/gghstats-data/` or your home) — see [Persistent data and secrets](../../README.md#persistent-data-and-secrets). Do not store live secrets inside the repository tree; a leaked clone path should not equal a leaked PAT.

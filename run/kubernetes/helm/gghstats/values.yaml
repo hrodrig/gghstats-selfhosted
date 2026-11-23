@@ -17,6 +17,10 @@ env:
   host: "0.0.0.0"
   # Must match service.targetPort.
   port: "8080"
+  # Go runtime GODEBUG (CVE-2026-98432 belt-and-suspenders). Primary fix = patched Linux kernel on nodes.
+  # gghstats >= v1.6.9 also sets godebug multipathtcp=0 in the binary. Empty = omit the env var.
+  # Default keeps multipathtcp=0 for older images / defense in depth.
+  godebug: "multipathtcp=0"
   # SQLite path — must be under the /data volume (only writable mount besides /tmp).
   dbPath: "/data/gghstats.db"
   # API-only (no HTML dashboard). Empty = app default (false). Set "true" for headless API (e.g. behind gghstats-xui).

@@ -76,7 +76,7 @@ This path is the **same chart** as the published package; use it to read **`temp
 
 **Namespace:** the chart does **not** set a default namespace in `values.yaml`. You choose it at install time with **`-n` / `--namespace`** (example: **`gghstats`**). Use **`--create-namespace`** if that namespace does not exist yet. All manifests use the **release namespace** Helm applies. Uninstall with the same **`-n`**: `helm uninstall gghstats -n gghstats`.
 
-See **`values.yaml`** for image repository, tag, persistence, **resource requests/limits**, and environment variables (including optional **`env.customCss`** for a [gghstats ≥ 0.2.0](https://github.com/hrodrig/gghstats/releases) dashboard theme). The application’s configuration is documented in the main **[gghstats](https://github.com/hrodrig/gghstats)** repository.
+See **`values.yaml`** for image repository, tag, persistence, **resource requests/limits**, and environment variables (including optional **`env.customCss`** for a [gghstats ≥ 0.2.0](https://github.com/hrodrig/gghstats/releases) dashboard theme). Default **`env.godebug: multipathtcp=0`** sets container **`GODEBUG`** as defense in depth for **[CVE-2026-98432](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)** — **patch cluster nodes** first; see [root README — Linux MPTCP](../../../../README.md#linux-mptcp--cve-2026-98432-operators). The application’s configuration is documented in the main **[gghstats](https://github.com/hrodrig/gghstats)** repository.
 
 ### Optional custom theme (`env.customCss`)
 
