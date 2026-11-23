@@ -85,6 +85,8 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
+      # CVE-2026-98432: kernel patch is primary; GODEBUG + gghstats >= v1.6.9 are defense in depth.
+      GODEBUG: ${GODEBUG:-multipathtcp=0}
       # Production: set GGHSTATS_GITHUB_TOKEN. Demo UI (no token): GGHSTATS_DEMO=true (gghstats >= 0.9.0).
       GGHSTATS_GITHUB_TOKEN: ${GGHSTATS_GITHUB_TOKEN:-}
       GGHSTATS_DEMO: ${GGHSTATS_DEMO:-}

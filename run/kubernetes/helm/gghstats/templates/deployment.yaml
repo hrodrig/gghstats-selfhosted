@@ -47,6 +47,10 @@ spec:
                 secretKeyRef:
                   name: {{ default .Values.githubToken.secretName .Values.githubToken.existingSecret }}
                   key: {{ .Values.githubToken.secretKey }}
+            {{- if .Values.env.godebug }}
+            - name: GODEBUG
+              value: {{ .Values.env.godebug | quote }}
+            {{- end }}
             - name: GGHSTATS_HOST
               value: {{ .Values.env.host | quote }}
             - name: GGHSTATS_PORT

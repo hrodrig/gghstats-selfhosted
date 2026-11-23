@@ -51,7 +51,8 @@ sudo nano /etc/gghstats/gghstats.env
 
 **Recommended values for a server behind nginx or Traefik on the same host:**
 
-- `GGHSTATS_HOST=127.0.0.1` — do not expose `8080` on the public internet without a proxy
+- `GGHSTATS_HOST=127.0.0.1` — do not expose `8080` on the public internet without a proxy (preferred when scrapers/proxy are local; does **not** disable MPTCP)
+- `GODEBUG=multipathtcp=0` — belt-and-suspenders for **[CVE-2026-98432](https://nvd.nist.gov/vuln/detail/CVE-2026-98432)**; **patch the kernel** first. gghstats **≥ v1.6.9** also disables MPTCP in the binary. Fragile if another Go listener on the host still uses MPTCP — see [root README](../../../README.md#linux-mptcp--cve-2026-98432-operators)
 - `GGHSTATS_FILTER` — narrow scope (e.g. `your-user/*,!fork,!archived`); avoid `*` on large accounts
 - `GGHSTATS_SYNC_ON_STARTUP` — `true` for first deploy; `false` if you want the UI up immediately on an existing DB
 
@@ -66,6 +67,18 @@ Variable reference (semantics): [gghstats Configuration](https://github.com/hrod
 Packages install **`gghstats.service`** to `/lib/systemd/system/`. Unit source: [gghstats `contrib/systemd/gghstats.service`](https://github.com/hrodrig/gghstats/blob/main/contrib/systemd/gghstats.service).
 
 Full setup and troubleshooting: [gghstats `contrib/systemd/README.md`](https://github.com/hrodrig/gghstats/blob/main/contrib/systemd/README.md).
+
+The packaged unit loads **`EnvironmentFile=/etc/gghstats/gghstats.env`**. Put **`GODEBUG=multipathtcp=0`** there (same as Compose). Optional drop-in if you prefer not to mix runtime vars in the env file:
+
+```bash
+sudo mkdir -p /etc/systemd/system/gghstats.service.d
+sudo tee /etc/systemd/system/gghstats.service.d/godebug.conf >/dev/null <<'EOF'
+[Service]
+Environment=GODEBUG=multipathtcp=0
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart gghstats
+```
 
 **Enable after editing `/etc/gghstats/gghstats.env`:**
 
